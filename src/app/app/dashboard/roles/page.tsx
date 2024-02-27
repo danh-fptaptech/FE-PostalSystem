@@ -18,8 +18,17 @@ import {
 	Tooltip,
 	Chip,
 	Input,
+	Autocomplete,
+	Checkbox,
+	TextField,
 } from "@mui/material";
-import { CloseOutlined, AddCircle, DeleteOutline } from "@mui/icons-material";
+import {
+	CloseOutlined,
+	AddCircle,
+	DeleteOutline,
+	CheckBoxOutlineBlank,
+	CheckBox,
+} from "@mui/icons-material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import React from "react";
 import { ApiResponse } from "@/types/types";
@@ -43,6 +52,7 @@ export default function RoleManagement() {
 		register: permissionRegister,
 		handleSubmit: permissionHandleSubmit,
 		formState: { errors: permissionErrors },
+		setValue,
 	} = useForm<CreatePermissionRequest>();
 	// fetch data
 	React.useEffect(() => {
@@ -57,6 +67,13 @@ export default function RoleManagement() {
 			setIsLoading(false);
 		});
 	}, []);
+
+	const handlePermissionChange = (event, value) => {
+		setValue(
+			"permissionNames",
+			value.map(v => v.permissionName)
+		); // Update the value of "permissionNames" manually
+	};
 
 	// Add new role
 	async function AddRole(role: CreateRoleRequest) {
@@ -95,12 +112,10 @@ export default function RoleManagement() {
 	};
 	// Add permission into role
 	async function AddPermission(formData: CreatePermissionRequest) {
-		const res = await fetch(
-			`/api/roles/${selectedRoleId}/permission/${formData.permissionId}`,
-			{
-				method: "POST",
-			}
-		);
+		const res = await fetch(`/api/roles/${selectedRoleId}/permission`, {
+			method: "POST",
+			body: JSON.stringify(formData),
+		});
 
 		const payload = (await res.json()) as ApiResponse;
 
@@ -162,10 +177,13 @@ export default function RoleManagement() {
 
 	// Remove permission from role
 
-	const handleDelete = async (roleId: number, permissionId: number) => {
-		const res = await fetch(`/api/roles/${roleId}/permission/${permissionId}`, {
-			method: "DELETE",
-		});
+	const handleDelete = async (roleId: number, permissionName: string) => {
+		const res = await fetch(
+			`/api/roles/${roleId}/permission/${permissionName}`,
+			{
+				method: "DELETE",
+			}
+		);
 
 		const payload = (await res.json()) as ApiResponse;
 
@@ -174,7 +192,7 @@ export default function RoleManagement() {
 				pre.map(role => {
 					if (role.id === roleId) {
 						const index = role.roleHasPermissions.findIndex(
-							rhp => rhp.id === permissionId
+							rhp => rhp === permissionName
 						);
 						role.roleHasPermissions.splice(index, 1);
 					}
@@ -233,14 +251,14 @@ export default function RoleManagement() {
 										</p>
 										{role.roleHasPermissions.map(permission => (
 											<Chip
-												key={permission.id}
-												label={permission.name}
+												key={permission}
+												label={permission}
 												color="default"
 												variant="outlined"
 												size="small"
 												className="text-xs"
 												onDelete={() => {
-													handleDelete(role.id, permission.id);
+													handleDelete(role.id, permission);
 												}}
 											/>
 										))}
@@ -329,7 +347,7 @@ export default function RoleManagement() {
 					<Dialog
 						open={openAddPermisson}
 						onClose={() => setOpenAddPermisson(false)}
-						className="max-w-[500px] mx-auto">
+						className="mx-auto">
 						<Tooltip title="Close">
 							<CloseOutlined
 								onClick={() => setOpenAddPermisson(false)}
@@ -344,10 +362,10 @@ export default function RoleManagement() {
 
 						<DialogContent>
 							<form className="text-xs">
-								<div className="my-3 flex">
+								{/* <div className="my-3 flex">
 									<div>
-										<label className="font-semibold">Permissions:</label>
-										<select
+										<label className="font-semibold">Permissions:</label> */}
+								{/* <select
 											{...permissionRegister("permissionId")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											id="permission">
@@ -355,13 +373,43 @@ export default function RoleManagement() {
 											{permissions.map(p => (
 												<option
 													key={p.id}
-													value={p.id}>
+													value={p.permissionName}>
 													{p.permissionName}
 												</option>
 											))}
-										</select>
-									</div>
-								</div>
+										</select> */}
+								<Autocomplete
+									{...permissionRegister("permissionNames")}
+									multiple
+									id="checkboxes-tags-demo"
+									options={permissions}
+									disableCloseOnSelect
+									getOptionLabel={option => option.permissionName}
+									renderOption={(props, option, { selected }) => (
+										<li
+											key={option.permissionName}
+											{...props}>
+											<Checkbox
+												icon={<CheckBoxOutlineBlank fontSize="small" />}
+												checkedIcon={<CheckBox fontSize="small" />}
+												style={{ marginRight: 8 }}
+												checked={selected}
+											/>
+											{option.permissionName}
+										</li>
+									)}
+									style={{ width: 500 }}
+									renderInput={params => (
+										<TextField
+											{...params}
+											label="Checkboxes"
+											placeholder="Favorites"
+										/>
+									)}
+									onChange={handlePermissionChange}
+								/>
+								{/* </div>
+								</div> */}
 
 								<div className="flex justify-around mb-2 mt-10">
 									<Button

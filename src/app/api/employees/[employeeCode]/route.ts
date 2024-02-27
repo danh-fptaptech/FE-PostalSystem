@@ -20,7 +20,6 @@ export async function GET(
 		let data = null;
 		if (res.ok) {
 			data = await res.json();
-			console.log(data);
 		}
 
 		if (res.ok) {
@@ -47,13 +46,15 @@ export async function GET(
 	}
 }
 
-export async function PUT(req: NextApiRequest) {
-	const { employeeId } = req.query;
-	const updatedEmployee = await req.body;
+export async function PUT(
+	req: NextRequest,
+	{ params }: { params: { employeeCode: string } }
+) {
+	const updatedEmployee = await req.json();
 	updatedEmployee.avatar = "updatedAvatar";
 	try {
-		const response = await fetch(
-			process.env.NEXT_PUBLIC_API_URL + `/Employee/${employeeId}`,
+		const res = await fetch(
+			process.env.NEXT_PUBLIC_API_URL + `/Employee/${params.employeeCode}`,
 			{
 				method: "PUT",
 				headers: {
@@ -63,9 +64,12 @@ export async function PUT(req: NextApiRequest) {
 			}
 		);
 
-		const data = await response.json();
+		let data = null;
+		if (res.ok) {
+			data = await res.json();
+		}
 
-		if (response.ok) {
+		if (res.ok) {
 			return NextResponse.json({
 				ok: true,
 				status: "success",
@@ -79,6 +83,11 @@ export async function PUT(req: NextApiRequest) {
 			message: "Failed to update employee !",
 		});
 	} catch (error) {
-		return console.log("Error update employee: ", error);
+		console.log(error);
+		return NextResponse.json({
+			ok: false,
+			status: "Server error",
+			message: "Failed to update employee",
+		});
 	}
 }

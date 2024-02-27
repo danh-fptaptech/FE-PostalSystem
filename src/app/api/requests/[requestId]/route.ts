@@ -18,7 +18,7 @@ export async function PUT(
 		);
 
 		const data = await apiResponse.json();
-		console.log(data);
+
 		if (apiResponse.ok) {
 			return NextResponse.json({
 				ok: true,

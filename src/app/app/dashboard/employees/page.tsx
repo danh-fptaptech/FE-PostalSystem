@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Loading from "@/app/components/Loading";
 import {
@@ -49,6 +50,20 @@ const columns = [
 	{ title: "" },
 ];
 
+const SCHEME = z.object({
+	employeeCode: z.string(),
+	fullname: z.string(),
+	avatar: z.string(),
+	email: z.string().email(),
+	password: z.string(),
+	phoneNumber: z.string(),
+	address: z.string(),
+	province: z.string(),
+	district: z.string(),
+	branchId: z.number(),
+	roleId: z.number(),
+});
+
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);
 	const [employee, setEmployee] = React.useState<Employee>();
@@ -91,7 +106,7 @@ export default function EmployeeManagement() {
 			const [employeeRes, branchRes, roleRes, locationRes] = data;
 
 			if (employeeRes.ok) {
-				setEmployees(employeeRes.data);
+				setEmployees(employeeRes.data.reverse());
 			}
 
 			if (branchRes.ok) {
@@ -116,6 +131,7 @@ export default function EmployeeManagement() {
 	const startIndex = (currentPage - 1) * PAGE_SIZE;
 	const endIndex = startIndex + PAGE_SIZE;
 	const currentEmployees = employees.slice(startIndex, endIndex);
+
 	function handlePageChange(selectedPage: number) {
 		setCurrentPage(selectedPage);
 	}
@@ -201,7 +217,6 @@ export default function EmployeeManagement() {
 
 	// Add employee => còn lỗi select roleId, branchId
 	async function AddEmployee(employee: CreateEmployeeRequest) {
-		console.log(employee);
 		const res = await fetch("/api/employees", {
 			method: "POST",
 			body: JSON.stringify(employee),
@@ -211,7 +226,7 @@ export default function EmployeeManagement() {
 
 		if (payload.ok) {
 			const response = await fetchEmployees();
-			setEmployees(await response.data);
+			setEmployees((await response.data).reverse());
 			setOpenAddForm(false);
 			toast.success(payload.message);
 		} else {
@@ -222,7 +237,7 @@ export default function EmployeeManagement() {
 	// Update Employee
 	async function UpdateEmployee(updatedEmployee: UpdateEmployeeRequest) {
 		try {
-			const res = await fetch(`/api/employees/${employee?.id}`, {
+			const res = await fetch(`/api/employees/${employee?.employeeCode}`, {
 				method: "PUT",
 				body: JSON.stringify(updatedEmployee),
 			});
@@ -297,7 +312,7 @@ export default function EmployeeManagement() {
 						</thead>
 
 						<tbody>
-							{currentEmployees.reverse().map(employee => {
+							{currentEmployees.map(employee => {
 								return (
 									<tr
 										key={employee.id}
@@ -586,7 +601,6 @@ export default function EmployeeManagement() {
 										<select
 											{...register("branchId")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											name="branch"
 											id="branch">
 											{branches.map(branch => (
 												<option
@@ -603,7 +617,6 @@ export default function EmployeeManagement() {
 										<select
 											{...register("roleId")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											name="role"
 											id="role">
 											{roles.map(role => (
 												<option
@@ -672,169 +685,12 @@ export default function EmployeeManagement() {
 									<div className="my-3">
 										<label className="font-semibold">Fullname:</label>
 										<input
-											{...updatedRegister("fullname", {
-												required: "Fullname is required.",
-												minLength: {
-													value: 8,
-													message: "Fullname must be at least 8 chatacters.",
-												},
-												maxLength: {
-													value: 50,
-													message: "Fullname must be less than 50 chatacters.",
-												},
-											})}
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={employee.fullname}
-											placeholder="Fullname"
+											readOnly
 										/>
-										<span className="text-danger ">
-											{errors.fullname?.message}
-										</span>
 									</div>
 
-									<div className="my-3">
-										<label className="font-semibold">Email:</label>
-										<input
-											{...updatedRegister("email", {
-												required: "Email is required.",
-												pattern: {
-													value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-													message: "Invalid email address format.",
-												},
-											})}
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											value={employee.email}
-											placeholder="Email"
-										/>
-										<span className="text-danger ">
-											{errors.email?.message}
-										</span>
-									</div>
-
-									<div className="my-3">
-										<label className="font-semibold">Password:</label>
-										<div className="relative">
-											<input
-												type={showPassword ? "text" : "password"}
-												{...updatedRegister("password", {
-													required: "Password is required.",
-													minLength: {
-														value: 8,
-														message: "Password must be at least 8 characters.",
-													},
-												})}
-												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												value={employee.password}
-												placeholder="Password"
-											/>
-											<div className="absolute inset-y-0 right-0 flex items-center pr-3">
-												<Button
-													type="button"
-													endIcon={
-														showPassword ? (
-															<VisibilityOutlinedIcon fontSize="small" />
-														) : (
-															<VisibilityOffOutlinedIcon fontSize="small" />
-														)
-													}
-													onClick={() => setShowPassword(!showPassword)}
-													className="focus:outline-none"></Button>
-											</div>
-											<span className="text-danger ">
-												{errors.password?.message}
-											</span>
-										</div>
-									</div>
-
-									<div className="my-3">
-										<label className="font-semibold">Phone number:</label>
-										<input
-											{...updatedRegister("phoneNumber", {
-												required: "Phone number is required.",
-												pattern: {
-													value: /^\d{10}$/,
-													message: "Phone number must have 10 digits.",
-												},
-											})}
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											value={employee.phoneNumber}
-											placeholder="Phone number"
-										/>
-										<span className="text-danger ">
-											{errors.phoneNumber?.message}
-										</span>
-									</div>
-
-									<div className="my-3">
-										<label className="font-semibold">Address:</label>
-										<textarea
-											{...updatedRegister("address", {
-												required: "Address is required.",
-											})}
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											value={employee.address}
-											placeholder="Address"></textarea>
-										<span className="text-danger ">
-											{errors.address?.message}
-										</span>
-									</div>
-									{/* Select: district, province */}
-									<div className="my-3 flex">
-										<div className="mr-2">
-											<label className="font-semibold">Province:</label>
-											<select
-												{...updatedRegister("province")}
-												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												name="province"
-												id="province"
-												value={employee.province}>
-												<option>Select province</option>
-												{locations
-													.filter(location => location.locationLevel === 0)
-													.map(province => (
-														<option
-															key={province.id}
-															value={province.locationName}>
-															{province.locationName}
-														</option>
-													))}
-											</select>
-										</div>
-
-										<div>
-											<label className="font-semibold">District:</label>
-											<select
-												{...updatedRegister("district")}
-												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												name="district"
-												id="district"
-												value={employee.district}>
-												<option>Select district</option>
-												{locations
-													.filter(location => location.locationLevel === 1)
-													.map(district => (
-														<option
-															key={district.id}
-															value={district.locationName}>
-															{district.locationName}
-														</option>
-													))}
-											</select>
-										</div>
-									</div>
-
-									<div className="my-3">
-										<label className="font-semibold">Upload Avatar:</label>
-										<input
-											type="file"
-											{...updatedRegister("avatar", { required: false })}
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											placeholder="Avatar"
-										/>
-										<span className="text-danger">
-											{errors.avatar?.message}
-										</span>
-									</div>
 									{/* Select branch, role */}
 									<div className="my-3 flex">
 										<div className="mr-2">
@@ -842,9 +698,7 @@ export default function EmployeeManagement() {
 											<select
 												{...updatedRegister("branchId")}
 												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												name="branch"
-												id="branch"
-												value={employee.branchName}>
+												id="branch">
 												{branches.map(branch => (
 													<option
 														key={branch.id}
@@ -860,9 +714,7 @@ export default function EmployeeManagement() {
 											<select
 												{...updatedRegister("roleId")}
 												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												name="role"
-												id="role"
-												value={employee.roleName}>
+												id="role">
 												{roles.map(role => (
 													<option
 														key={role.id}

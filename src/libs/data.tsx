@@ -29,7 +29,7 @@ export interface Branch {
 export interface Role {
 	id: number;
 	name: string;
-	roleHasPermissions: [{ name: string; id: number }];
+	roleHasPermissions: string[];
 	status: number;
 }
 export interface Permission {
@@ -58,6 +58,12 @@ export interface CreateEmployeeRequest {
 	roleId: number;
 }
 export interface UpdateEmployeeRequest {
+	branchId: number;
+	roleId: number;
+}
+export interface AcceptEmployeeRequest {
+	id: number;
+	employeeCode: string;
 	fullname: string;
 	avatar: string;
 	email: string;
@@ -66,19 +72,24 @@ export interface UpdateEmployeeRequest {
 	address: string;
 	province: string;
 	district: string;
-	branchId: number;
+	roleName: string;
 	roleId: number;
+	branchName: string;
+	branchId: number;
+	status: number;
+	submitedInfo: {
+		avatar: string;
+		email: string;
+		phonenumber: string;
+		address: string;
+		province: string;
+		district: string;
+	};
+	selected: boolean | undefined;
 }
-export interface AcceptEmployeeRequest {
-	avatar: string;
-	email: string;
-	phonenumber: string;
-	address: string;
-	province: string;
-	district: string;
-}
+
 export interface CreatePermissionRequest {
-	permissionId: number;
+	permissionNames: string[];
 }
 export interface CreateRoleRequest {
 	name: string;

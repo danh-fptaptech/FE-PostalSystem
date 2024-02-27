@@ -25,16 +25,12 @@ import { ApiResponse } from "@/types/types";
 import { toast } from "sonner";
 
 export default function UpdatedRequestManagement() {
-	const [employees, setEmployees] = React.useState<Employee[]>([]);
+	const [employees, setEmployees] = React.useState<AcceptEmployeeRequest[]>([]);
 	const [currentPage, setCurrentPage] = React.useState(1);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [selectAllChecked, setSelectAllChecked] = React.useState(false);
-	const [openAcceptForm, setOpenAcceptForm] = React.useState(false);
-
-	const {
-		register,
-		formState: { errors },
-	} = useForm<AcceptEmployeeRequest>();
+	const [selectedEmployee, setSelectedEmployee] =
+		React.useState<AcceptEmployeeRequest | null>(null);
 
 	// fetch data
 	React.useEffect(() => {
@@ -42,7 +38,24 @@ export default function UpdatedRequestManagement() {
 			const [employeeRes] = data;
 
 			if (employeeRes.ok) {
-				setEmployees(employeeRes.data);
+				const employees = employeeRes.data as Employee[];
+				const newEmployees = employees.map(employee => {
+					const acceptEmployee: AcceptEmployeeRequest = {
+						...employee,
+					};
+					const infoString = employee.submitedInfo;
+					const infoArray = infoString.split(", ");
+
+					const extractedInfo: Record<string, string> = {};
+					infoArray.forEach(pair => {
+						const [key, value] = pair.split(":");
+						extractedInfo[key.toLowerCase()] = value;
+					});
+					acceptEmployee.submitedInfo = extractedInfo;
+
+					return acceptEmployee;
+				});
+				setEmployees(newEmployees);
 			}
 			setIsLoading(false);
 		});
@@ -108,45 +121,53 @@ export default function UpdatedRequestManagement() {
 	}
 
 	// Accept Updated Request
-	async function AcceptRequest(employeeId: number) {
-		try {
-			const response = await fetch(`/api/requests/${employeeId}`, {
-				method: "PUT",
-			});
+	async function AcceptRequest(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+		if (selectedEmployee) {
+			try {
+				const response = await fetch(`/api/requests/${selectedEmployee.id}`, {
+					method: "PUT",
+					body: JSON.stringify(selectedEmployee),
+				});
 
-			const payload = (await response.json()) as ApiResponse;
-			console.log("payload:" + payload);
-			if (payload.ok) {
-				//const res = await fetchUpdatedRequests();
-				setEmployees(pre => pre.filter(emp => emp.id != employeeId));
-				toast.success(payload.message);
-			} else {
-				toast.error(payload.message);
+				const payload = (await response.json()) as ApiResponse;
+				console.log("payload:" + payload);
+				if (payload.ok) {
+					//const res = await fetchUpdatedRequests();
+					setEmployees(pre => pre.filter(emp => emp.id != selectedEmployee.id));
+					setSelectedEmployee(null);
+					toast.success(payload.message);
+				} else {
+					toast.error(payload.message);
+				}
+			} catch (error) {
+				console.log(error);
 			}
-		} catch (error) {
-			console.log(error);
 		}
 	}
 	// Reject Updated Request
-	async function handleRejectRequest(requestId: number) {
-		try {
-			const res = await fetch(`/api/requests/${requestId}`, {
-				method: "DELETE",
-			});
+	async function handleRejectRequest() {
+		if (selectedEmployee) {
+			try {
+				const res = await fetch(`/api/requests/${selectedEmployee.id}`, {
+					method: "DELETE",
+				});
 
-			const payload = (await res.json()) as ApiResponse;
+				const payload = (await res.json()) as ApiResponse;
 
-			if (payload.ok) {
-				setEmployees(pre => pre.filter(emp => emp.id != requestId));
-				toast.success(payload.message);
-				setOpenAcceptForm(false);
-			} else {
-				toast.error(payload.message);
+				if (payload.ok) {
+					setEmployees(pre => pre.filter(emp => emp.id != selectedEmployee.id));
+					toast.success(payload.message);
+					setSelectedEmployee(null);
+				} else {
+					toast.error(payload.message);
+				}
+			} catch (error) {
+				console.log(error);
 			}
-		} catch (error) {
-			console.log(error);
 		}
 	}
+
 	return (
 		<div className="w-full">
 			{isLoading ? (
@@ -229,7 +250,9 @@ export default function UpdatedRequestManagement() {
 													variant="text"
 													color="success"
 													type="button"
-													onClick={() => setOpenAcceptForm(true)}>
+													onClick={() => {
+														setSelectedEmployee(employee);
+													}}>
 													<DoneOutline className="text-green-700 text-[20px] mr-2" />
 												</Button>
 											</Tooltip>
@@ -267,126 +290,103 @@ export default function UpdatedRequestManagement() {
 						</button>
 					</div>
 
-					{/*  */}
-					{currentEmployees.map(employee => {
-						const infoString = employee.submitedInfo;
-						const infoArray = infoString.split(", ");
+					{selectedEmployee && (
+						<Dialog
+							open
+							className="max-w-[500px] mx-auto">
+							<Tooltip title="Close">
+								<CloseOutlined
+									onClick={() => setSelectedEmployee(null)}
+									color="error"
+									className="text-md absolute top-1 right-1 rounded-full hover:opacity-80 hover:bg-red-200 cursor-pointer"
+								/>
+							</Tooltip>
 
-						const extractedInfo: Record<string, string> = {};
-						infoArray.forEach(pair => {
-							const [key, value] = pair.split(":");
-							extractedInfo[key.toLowerCase()] = value;
-						});
-						//console.log(extractedInfo);
-						return (
-							<Dialog
-								key={employee.id}
-								open={openAcceptForm}
-								onClose={() => setOpenAcceptForm(false)}
-								className="max-w-[500px] mx-auto">
-								<Tooltip title="Close">
-									<CloseOutlined
-										onClick={() => setOpenAcceptForm(false)}
-										color="error"
-										className="text-md absolute top-1 right-1 rounded-full hover:opacity-80 hover:bg-red-200 cursor-pointer"
-									/>
-								</Tooltip>
+							<div className="my-3">
+								<DialogTitle className="text-center">
+									Updated Employee Request
+								</DialogTitle>
+							</div>
 
-								<div className="my-3">
-									<DialogTitle className="text-center">
-										Updated Employee Request
-									</DialogTitle>
-								</div>
+							<DialogContent>
+								<form
+									onSubmit={e => AcceptRequest(e)}
+									className="text-xs">
+									<div className="my-3">
+										<label className="font-semibold">Email:</label>
+										<input
+											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											value={selectedEmployee?.submitedInfo.email}
+											readOnly
+										/>
+									</div>
 
-								<DialogContent>
-									<form
-										onSubmit={() => AcceptRequest(employee.id)}
-										className="text-xs">
-										<div className="my-3">
-											<label className="font-semibold">Email:</label>
+									<div className="my-3">
+										<label className="font-semibold">Phone number:</label>
+										<input
+											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											value={selectedEmployee?.submitedInfo.phonenumber}
+											readOnly
+										/>
+									</div>
+
+									<div className="my-3">
+										<label className="font-semibold">Address:</label>
+										<textarea
+											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											value={selectedEmployee?.submitedInfo.address}
+											readOnly></textarea>
+									</div>
+									{/* Select: district, province */}
+									<div className="my-3 flex">
+										<div className="mr-2">
+											<label className="font-semibold">Province:</label>
 											<input
-												{...register("email")}
-												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												value={extractedInfo.email}
+												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+												name="province"
+												id="province"
+												value={selectedEmployee?.submitedInfo.province}
 												readOnly
 											/>
 										</div>
 
-										<div className="my-3">
-											<label className="font-semibold">Phone number:</label>
+										<div>
+											<label className="font-semibold">District:</label>
 											<input
-												{...register("phonenumber")}
-												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												value={extractedInfo.phonenumber}
+												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+												name="district"
+												id="district"
+												value={selectedEmployee?.submitedInfo.district}
 												readOnly
 											/>
 										</div>
+									</div>
 
-										<div className="my-3">
-											<label className="font-semibold">Address:</label>
-											<textarea
-												{...register("address")}
-												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												value={extractedInfo.address}
-												readOnly></textarea>
-										</div>
-										{/* Select: district, province */}
-										<div className="my-3 flex">
-											<div className="mr-2">
-												<label className="font-semibold">Province:</label>
-												<input
-													{...register("province")}
-													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-													name="province"
-													id="province"
-													value={extractedInfo.province}
-													readOnly
-												/>
-											</div>
+									<div className="my-3">
+										<label className="font-semibold">Upload Avatar:</label>
+										<input
+											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											value={selectedEmployee?.submitedInfo.avatar}
+											readOnly
+										/>
+									</div>
 
-											<div>
-												<label className="font-semibold">District:</label>
-												<input
-													{...register("district")}
-													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-													name="district"
-													id="district"
-													value={extractedInfo.district}
-													readOnly
-												/>
-											</div>
-										</div>
-
-										<div className="my-3">
-											<label className="font-semibold">Upload Avatar:</label>
-											<input
-												{...register("avatar")}
-												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-												value={extractedInfo.avatar}
-												readOnly
-											/>
-										</div>
-
-										<div className="flex justify-around mb-2 mt-10">
-											<Button
-												onClick={() => {
-													AcceptRequest(employee.id);
-												}}
-												type="submit"
-												className="w-full btn btn-success">
-												Accept
-											</Button>
-											<Button
-												onClick={() => handleRejectRequest(employee.id)}
-												className="w-full btn btn-danger">
-												Reject
-											</Button>
-										</div>
-									</form>
-								</DialogContent>
-							</Dialog>
-						);
-					})}
+									<div className="flex justify-around mb-2 mt-10">
+										<Button
+											type="submit"
+											className="w-full btn btn-success">
+											Accept
+										</Button>
+										<Button
+											onClick={() => handleRejectRequest()}
+											className="w-full btn btn-danger">
+											Reject
+										</Button>
+									</div>
+								</form>
+							</DialogContent>
+						</Dialog>
+					)}
 				</div>
 			)}
 		</div>
