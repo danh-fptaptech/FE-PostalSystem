@@ -3,6 +3,7 @@
 import React from "react";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Loading from "@/app/components/Loading";
 import {
 	Employee,
@@ -15,17 +16,22 @@ import {
 	fetchRolesWithPermission,
 	fetchLocations,
 	fetchChangeStatus,
-	fetchUpdateAsync,
 	UpdateEmployeeRequest,
 } from "@/libs/data";
 import {
-	Avatar,
 	Button,
 	Dialog,
 	DialogContent,
 	DialogTitle,
 	Paper,
 	Switch,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TablePagination,
+	TableRow,
 	Tooltip,
 } from "@mui/material";
 import {
@@ -38,17 +44,6 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ApiResponse } from "@/types/types";
 import { toast } from "sonner";
-
-const columns = [
-	{ title: "#" },
-	{ title: "Full name" },
-	{ title: "Email" },
-	{ title: "Phone" },
-	{ title: "Branch" },
-	{ title: "Role" },
-	{ title: "Status" },
-	{ title: "" },
-];
 
 const SCHEME = z.object({
 	employeeCode: z.string(),
@@ -70,13 +65,12 @@ export default function EmployeeManagement() {
 	const [branches, setBranches] = React.useState<Branch[]>([]);
 	const [roles, setRoles] = React.useState<Role[]>([]);
 	const [locations, setLocations] = React.useState<Location[]>([]);
-	const [selectedProvince, setSelectedProvince] = React.useState("");
-	const [currentPage, setCurrentPage] = React.useState(1);
 	const [isLoading, setIsLoading] = React.useState(true);
-	const [selectAllChecked, setSelectAllChecked] = React.useState(false);
 	const [openAddForm, setOpenAddForm] = React.useState(false);
 	const [openUpdateForm, setOpenUpdateForm] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const {
 		register,
 		handleSubmit,
@@ -89,6 +83,20 @@ export default function EmployeeManagement() {
 		handleSubmit: handleUpdatedSubmit,
 		formState: { errors: updatedErrors },
 	} = useForm<UpdateEmployeeRequest>();
+
+	const handleChangePage = (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number
+	) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 
 	// Generate employeeCode
 	function generateEmployeeCode() {
@@ -125,43 +133,6 @@ export default function EmployeeManagement() {
 		});
 	}, []);
 
-	// Handle Pagination
-	const PAGE_SIZE = 5;
-	const totalPages = Math.ceil(employees.length / PAGE_SIZE);
-	const startIndex = (currentPage - 1) * PAGE_SIZE;
-	const endIndex = startIndex + PAGE_SIZE;
-	const currentEmployees = employees.slice(startIndex, endIndex);
-
-	function handlePageChange(selectedPage: number) {
-		setCurrentPage(selectedPage);
-	}
-	// Handle Check All
-	function handleSelectedAll(event: React.ChangeEvent<HTMLInputElement>) {
-		const checked = event.target.checked;
-		setSelectAllChecked(checked);
-
-		const updateEmployees = employees.map(employee => ({
-			...employee,
-			selected: checked,
-		}));
-		setEmployees(updateEmployees);
-	}
-	// Handle Check
-	function handleSelected(employeeId: number) {
-		const updateEmployees = employees.map(employee => {
-			if (employee.id === employeeId) {
-				return {
-					...employee,
-					selected: !employee.selected,
-				};
-			}
-			return employee;
-		});
-		setEmployees(updateEmployees);
-
-		const allSelected = updateEmployees.every(employee => employee.selected);
-		setSelectAllChecked(allSelected);
-	}
 	// Handle Search
 	function handleSearch(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -199,12 +170,13 @@ export default function EmployeeManagement() {
 							...employee,
 							status: 0,
 						};
-					} else {
+					} else if (employee.id === id && employee.status === 0) {
 						return {
 							...employee,
 							status: 1,
 						};
 					}
+					return employee;
 				});
 				setEmployees(updatedEmployees);
 				toast.success("Change status successfully.");
@@ -215,7 +187,7 @@ export default function EmployeeManagement() {
 			});
 	}
 
-	// Add employee => còn lỗi select roleId, branchId
+	// Add employee
 	async function AddEmployee(employee: CreateEmployeeRequest) {
 		const res = await fetch("/api/employees", {
 			method: "POST",
@@ -243,10 +215,11 @@ export default function EmployeeManagement() {
 			});
 
 			const payload = (await res.json()) as ApiResponse;
+			console.log(payload);
 
 			if (payload.ok) {
 				const response = await fetchEmployees();
-				setEmployees(await response.data);
+				setEmployees(await response.data.reverse());
 				setOpenUpdateForm(false);
 				toast.success(payload.message);
 			} else {
@@ -263,12 +236,15 @@ export default function EmployeeManagement() {
 				<Loading />
 			) : (
 				<div>
-					<div className="mb-2 flex justify-between items-center">
-						<button
-							className="btn btn-dark"
+					<div className="mb-3 flex justify-between items-center">
+						<Button
+							color="secondary"
+							variant="contained"
+							className="rounded-md"
+							size="small"
 							onClick={() => setOpenAddForm(true)}>
 							+ Add
-						</button>
+						</Button>
 						{/* Handle Search */}
 						<form
 							onSubmit={handleSearch}
@@ -278,68 +254,82 @@ export default function EmployeeManagement() {
 								type="text"
 								name="search"
 								id="searchInput"
-								className="mr-2 text-[14px] border-slate-400 max-w-[400px] h-[35px] cursor-pointer"
+								className="mr-2 px-2 text-[14px] rounded-md max-w-[400px] h-[30px] cursor-pointer"
 								placeholder="Enter name to search"
 							/>
-							<button className="btn btn-success">Search</button>
+							<Button
+								color="success"
+								variant="contained"
+								size="small"
+								className="rounded-md">
+								Search
+							</Button>
 						</form>
 					</div>
-					{/* Display All Employee */}
-					<table
-						width="100%"
-						className="mr-4 ml-2">
-						<thead className="text-white text-[14px]">
-							<tr>
-								<th>
-									<input
-										type="checkbox"
-										className="ml-1"
-										checked={selectAllChecked}
-										onChange={handleSelectedAll}
-									/>
-								</th>
+					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
+						<Table
+							sx={{ minWidth: 650 }}
+							size="small"
+							aria-label="a dense table">
+							<TableHead>
+								<TableRow>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										#
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Fullname
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Email
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Phone
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Branch
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Role
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Status
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Action
+									</TableCell>
+								</TableRow>
+							</TableHead>
 
-								{columns.map(column => {
-									return (
-										<th
-											key={column.title}
-											align="center">
-											{column.title}
-										</th>
-									);
-								})}
-							</tr>
-						</thead>
-
-						<tbody>
-							{currentEmployees.map(employee => {
-								return (
-									<tr
+							<TableBody>
+								{employees.map(employee => (
+									<TableRow
 										key={employee.id}
-										className="text-slate-500">
-										<td>
-											<input
-												type="checkbox"
-												checked={employee.selected}
-												onChange={() => handleSelected(employee.id)}
-											/>
-										</td>
-										<td>{employee.employeeCode}</td>
-										<td>{employee.fullname}</td>
-										<td>{employee.email}</td>
-										<td>{employee.phoneNumber}</td>
-										<td>{employee.branchName}</td>
-										<td>
-											<span
-												className={
-													employee.roleName === "Admin"
-														? "p-2 bg-green-800 p-2 text-white rounded-md"
-														: "p-2 bg-yellow-600 p-2 text-white rounded-md"
-												}>
-												{employee.roleName}
-											</span>
-										</td>
-										<td>
+										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+										<TableCell align="center">
+											{employee.employeeCode}
+										</TableCell>
+										<TableCell align="center">{employee.fullname}</TableCell>
+										<TableCell align="center">{employee.email}</TableCell>
+										<TableCell align="center">{employee.phoneNumber}</TableCell>
+										<TableCell align="center">{employee.branchName}</TableCell>
+										<TableCell align="center">{employee.roleName}</TableCell>
+										<TableCell align="center">
 											<Switch
 												size="small"
 												color="success"
@@ -347,8 +337,8 @@ export default function EmployeeManagement() {
 												checked={employee.status == 1 ? true : false}
 												onChange={() => handleChangeStatus(employee.id)}
 											/>
-										</td>
-										<td>
+										</TableCell>
+										<TableCell align="center">
 											<Tooltip title="Edit">
 												<Button
 													type="button"
@@ -358,43 +348,22 @@ export default function EmployeeManagement() {
 													onClick={() => {
 														setEmployee(employee);
 														setOpenUpdateForm(true);
-													}}>
-													{/* <DriveFileRenameOutline className="text-green-700 text-[20px]" /> */}
-												</Button>
+													}}></Button>
 											</Tooltip>
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
-
-					{/* Pagination */}
-					<div className="flex justify-center items-center mt-4">
-						<button
-							disabled={currentPage === 1}
-							onClick={() => handlePageChange(currentPage - 1)}
-							className={`${
-								currentPage === 1
-									? "cursor-not-allowed btn-previous"
-									: "btn-previous cursor-pointer hover:opacity-80"
-							}`}>
-							<SkipPrevious fontSize="small" />
-						</button>
-						<span className="text-sm mx-2">
-							Page {currentPage} of {totalPages}
-						</span>
-						<button
-							disabled={currentPage === totalPages}
-							onClick={() => handlePageChange(currentPage + 1)}
-							className={`${
-								currentPage === totalPages
-									? "cursor-not-allowed btn-next"
-									: "btn-next cursor-pointer hover:opacity-80"
-							}`}>
-							<SkipNext fontSize="small" />
-						</button>
-					</div>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
+					<TablePagination
+						component="div"
+						count={employees.length || 0}
+						page={page}
+						onPageChange={handleChangePage}
+						rowsPerPage={rowsPerPage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
 
 					{/* Add New Employee */}
 					<Dialog
@@ -530,6 +499,20 @@ export default function EmployeeManagement() {
 								</div>
 
 								<div className="my-3">
+									<label className="font-semibold">Postal Code:</label>
+									<input
+										{...register("postalCode", {
+											required: "Postal code is required.",
+										})}
+										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+										placeholder="Postal Code"
+									/>
+									<span className="text-danger ">
+										{errors.postalCode?.message}
+									</span>
+								</div>
+
+								<div className="my-3">
 									<label className="font-semibold">Address:</label>
 									<textarea
 										{...register("address", {
@@ -541,14 +524,13 @@ export default function EmployeeManagement() {
 										{errors.address?.message}
 									</span>
 								</div>
-								{/* Select: district, province */}
+
 								<div className="my-3 flex">
 									<div className="mr-2">
 										<label className="font-semibold">Province:</label>
 										<select
 											{...register("province")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											name="province"
 											id="province">
 											<option>Select province</option>
 											{locations
@@ -568,7 +550,6 @@ export default function EmployeeManagement() {
 										<select
 											{...register("district")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											name="district"
 											id="district">
 											<option>Select district</option>
 											{locations
@@ -632,7 +613,10 @@ export default function EmployeeManagement() {
 								<div className="flex justify-around mb-2 mt-10">
 									<Button
 										type="submit"
-										className="w-full btn btn-success">
+										color="success"
+										variant="contained"
+										size="medium"
+										className="w-full">
 										+ Add New
 									</Button>
 								</div>
@@ -640,7 +624,7 @@ export default function EmployeeManagement() {
 						</DialogContent>
 					</Dialog>
 
-					{/* Update Employee Information => còn lỗi */}
+					{/* Update Employee Information */}
 					{employee && (
 						<Dialog
 							open={openUpdateForm}
@@ -654,20 +638,9 @@ export default function EmployeeManagement() {
 								/>
 							</Tooltip>
 
-							<div className="my-3 flex justify-center items-center">
-								<Avatar
-									src={
-										employee.avatar
-											? `/${employee.avatar.toString()}`
-											: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Unknown_person.jpg"
-									}
-									alt={employee.employeeCode}
-									className="aspect-square "
-								/>
-								<DialogTitle className="text-center mt-2">
-									Updated Employee
-								</DialogTitle>
-							</div>
+							<DialogTitle className="text-center mt-2">
+								Updated Employee
+							</DialogTitle>
 
 							<DialogContent>
 								<form
@@ -676,9 +649,10 @@ export default function EmployeeManagement() {
 									<div className="my-3">
 										<label className="font-semibold">Employee Code:</label>
 										<input
-											readOnly
 											value={employee.employeeCode}
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											readOnly
+											disabled
 										/>
 									</div>
 
@@ -688,6 +662,7 @@ export default function EmployeeManagement() {
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={employee.fullname}
 											readOnly
+											disabled
 										/>
 									</div>
 
@@ -698,6 +673,7 @@ export default function EmployeeManagement() {
 											<select
 												{...updatedRegister("branchId")}
 												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+												defaultValue={employee.branchName}
 												id="branch">
 												{branches.map(branch => (
 													<option
@@ -714,6 +690,7 @@ export default function EmployeeManagement() {
 											<select
 												{...updatedRegister("roleId")}
 												className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+												defaultValue={employee.roleName}
 												id="role">
 												{roles.map(role => (
 													<option
@@ -729,7 +706,10 @@ export default function EmployeeManagement() {
 									<div className="flex justify-around mb-2 mt-10">
 										<Button
 											type="submit"
-											className="w-full btn btn-success">
+											color="success"
+											variant="contained"
+											size="medium"
+											className="w-full">
 											Update
 										</Button>
 									</div>

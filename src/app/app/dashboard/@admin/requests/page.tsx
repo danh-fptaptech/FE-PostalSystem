@@ -1,17 +1,21 @@
 "use client";
 
-import React from "react";
-import Loading from "@/app/components/Loading";
 import {
 	AcceptEmployeeRequest,
-	Employee,
 	fetchUpdatedRequests,
+	Employee,
 } from "@/libs/data";
 import {
 	Button,
 	Dialog,
 	DialogContent,
 	DialogTitle,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	Tooltip,
 } from "@mui/material";
 import {
@@ -20,9 +24,10 @@ import {
 	SkipNext,
 	SkipPrevious,
 } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
+import Loading from "@/app/components/Loading";
 import { ApiResponse } from "@/types/types";
 import { toast } from "sonner";
+import React from "react";
 
 export default function UpdatedRequestManagement() {
 	const [employees, setEmployees] = React.useState<AcceptEmployeeRequest[]>([]);
@@ -70,55 +75,28 @@ export default function UpdatedRequestManagement() {
 	function handlePageChange(selectedPage: number) {
 		setCurrentPage(selectedPage);
 	}
-	// Handle Check All
-	function handleSelectedAll(event: React.ChangeEvent<HTMLInputElement>) {
-		const checked = event.target.checked;
-		setSelectAllChecked(checked);
+	// // Handle Search
+	// function handleSearch(event: React.FormEvent<HTMLFormElement>) {
+	// 	event.preventDefault();
+	// 	const nameInput = document.getElementById(
+	// 		"searchInput"
+	// 	) as HTMLInputElement;
+	// 	const name = nameInput.value.trim();
 
-		const updateEmployees = employees.map(employee => ({
-			...employee,
-			selected: checked,
-		}));
-		setEmployees(updateEmployees);
-	}
-	// Handle Check
-	function handleSelected(employeeId: number) {
-		const updateEmployees = employees.map(employee => {
-			if (employee.id === employeeId) {
-				return {
-					...employee,
-					selected: !employee.selected,
-				};
-			}
-			return employee;
-		});
-		setEmployees(updateEmployees);
+	// 	if (name === "") {
+	// 		fetchUpdatedRequests().then(data => {
+	// 			if (data.ok) {
+	// 				setEmployees(data.data);
+	// 			}
+	// 		});
+	// 	} else {
+	// 		const filterEmployees = employees.filter(employee =>
+	// 			employee.fullname.toLowerCase().includes(name.toLowerCase())
+	// 		);
 
-		const allSelected = updateEmployees.every(employee => employee.selected);
-		setSelectAllChecked(allSelected);
-	}
-	// Handle Search
-	function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		const nameInput = document.getElementById(
-			"searchInput"
-		) as HTMLInputElement;
-		const name = nameInput.value.trim();
-
-		if (name === "") {
-			fetchUpdatedRequests().then(data => {
-				if (data.ok) {
-					setEmployees(data.data);
-				}
-			});
-		} else {
-			const filterEmployees = employees.filter(employee =>
-				employee.fullname.toLowerCase().includes(name.toLowerCase())
-			);
-
-			setEmployees(filterEmployees);
-		}
-	}
+	// 		setEmployees(filterEmployees);
+	// 	}
+	// }
 
 	// Accept Updated Request
 	async function AcceptRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -173,78 +151,65 @@ export default function UpdatedRequestManagement() {
 			{isLoading ? (
 				<Loading />
 			) : (
-				<div>
-					{/* Handle Search */}
-					<div className="mx-2">
-						<form
-							onSubmit={handleSearch}
-							method="post"
-							className="flex justify-end items-center py-4 ">
-							<input
-								type="text"
-								name="search"
-								id="searchInput"
-								className="mr-2 text-[14px] border-slate-400 max-w-[200px] h-[35px] cursor-pointer"
-								placeholder="Enter name to search"
-							/>
-							<button className="btn btn-success">Search</button>
-						</form>
-					</div>
-					{/* Display Employees has submitedInfo */}
-					<table
-						width="100%"
-						className="">
-						<thead className="text-white text-xs">
-							<tr>
-								<th>
-									<Tooltip title="Check all">
-										<input
-											type="checkbox"
-											className="ml-1"
-											checked={selectAllChecked}
-											onChange={handleSelectedAll}
-										/>
-									</Tooltip>
-								</th>
-								<th>#</th>
-								<th>Fullname</th>
-								<th>Email</th>
-								<th>Phone number</th>
-								<th>Branch</th>
-								<th>Role</th>
-								<th>Submited Info</th>
-								<th></th>
-							</tr>
-						</thead>
-
-						<tbody>
-							{currentEmployees.map(employee => {
-								return (
-									<tr
+				<div className="mb-3">
+					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
+						<Table
+							sx={{ minWidth: 650 }}
+							size="small"
+							aria-label="a dense table">
+							<TableHead>
+								<TableRow>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Employee Code
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Fullname
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Email
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Phone Number
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Branch
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Role
+									</TableCell>
+									<TableCell
+										align="center"
+										className="text-white text-sm">
+										Action
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{employees.map(employee => (
+									<TableRow
 										key={employee.id}
-										className="text-slate-500">
-										<td>
-											<input
-												type="checkbox"
-												checked={employee.selected}
-												onChange={() => handleSelected(employee.id)}
-											/>
-										</td>
-										<td>{employee.employeeCode}</td>
-										<td>{employee.fullname}</td>
-										<td>{employee.email}</td>
-										<td>{employee.phoneNumber}</td>
-										<td>{employee.branchName}</td>
-										<td>{employee.roleName}</td>
-										<td className="multiline-truncate">
-											<Tooltip
-												title={employee.submitedInfo.toString()}
-												placement="bottom">
-												<p>{employee.submitedInfo ? "YES" : ""}</p>
-											</Tooltip>
-										</td>
-
-										<td>
+										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+										<TableCell align="center">
+											{employee.employeeCode}
+										</TableCell>
+										<TableCell align="center">{employee.fullname}</TableCell>
+										<TableCell align="center">{employee.email}</TableCell>
+										<TableCell align="center">{employee.phoneNumber}</TableCell>
+										<TableCell align="center">{employee.branchName}</TableCell>
+										<TableCell align="center">{employee.roleName}</TableCell>
+										<TableCell align="center">
 											<Tooltip title="Accept">
 												<Button
 													variant="text"
@@ -256,12 +221,12 @@ export default function UpdatedRequestManagement() {
 													<DoneOutline className="text-green-700 text-[20px] mr-2" />
 												</Button>
 											</Tooltip>
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</TableContainer>
 
 					{/* Pagination */}
 					<div className="flex justify-center items-center mt-4">
@@ -331,6 +296,15 @@ export default function UpdatedRequestManagement() {
 									</div>
 
 									<div className="my-3">
+										<label className="font-semibold">Postal Code:</label>
+										<input
+											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+											value={selectedEmployee?.submitedInfo.postalcode}
+											readOnly
+										/>
+									</div>
+
+									<div className="my-3">
 										<label className="font-semibold">Address:</label>
 										<textarea
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
@@ -374,12 +348,18 @@ export default function UpdatedRequestManagement() {
 									<div className="flex justify-around mb-2 mt-10">
 										<Button
 											type="submit"
-											className="w-full btn btn-success">
+											color="success"
+											variant="contained"
+											size="small"
+											className="w-full mr-2">
 											Accept
 										</Button>
 										<Button
+											color="error"
+											variant="contained"
+											size="small"
 											onClick={() => handleRejectRequest()}
-											className="w-full btn btn-danger">
+											className="w-full">
 											Reject
 										</Button>
 									</div>

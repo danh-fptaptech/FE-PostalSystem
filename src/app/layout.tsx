@@ -5,17 +5,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme";
 import { Toaster } from "sonner";
 import "@/styles/globals.css";
+import SessionProvider from "@/contexts/SessionProvider";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<body>
-				<AppRouterCacheProvider options={{ enableCssLayer: true }}>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						{props.children}
-					</ThemeProvider>
-				</AppRouterCacheProvider>
+				<SessionProvider>
+					<AppRouterCacheProvider options={{ enableCssLayer: true }}>
+						<ThemeProvider theme={theme}>
+							<CssBaseline />
+							{props.children}
+						</ThemeProvider>
+					</AppRouterCacheProvider>
+				</SessionProvider>
 				<Toaster
 					closeButton
 					richColors

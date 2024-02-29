@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// API add permissions into role
 export async function POST(
 	req: NextRequest,
 	{

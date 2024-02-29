@@ -2,6 +2,7 @@
 
 import Loading from "@/components/Loading";
 import {
+	CreatePermission,
 	CreatePermissionRequest,
 	CreateRoleRequest,
 	Permission,
@@ -41,7 +42,7 @@ export default function RoleManagement() {
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [openAddPermisson, setOpenAddPermisson] = React.useState(false);
 	const [openAddRole, setOpenAddRole] = React.useState(false);
-	const [openDeleteForm, setOpenDeleteForm] = React.useState(false);
+	const [createPermission, setCreatePermission] = React.useState(false);
 	const {
 		register: roleRegister,
 		handleSubmit: roleHandleSubmit,
@@ -54,6 +55,13 @@ export default function RoleManagement() {
 		formState: { errors: permissionErrors },
 		setValue,
 	} = useForm<CreatePermissionRequest>();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors: errors },
+	} = useForm<CreatePermission>();
+
 	// fetch data
 	React.useEffect(() => {
 		Promise.all([fetchRolesWithPermission(), fetchPermissions()]).then(data => {
@@ -68,11 +76,14 @@ export default function RoleManagement() {
 		});
 	}, []);
 
-	const handlePermissionChange = (event, value) => {
+	const handlePermissionChange = (
+		event: any,
+		value: { permissionName: any }[]
+	) => {
 		setValue(
 			"permissionNames",
-			value.map(v => v.permissionName)
-		); // Update the value of "permissionNames" manually
+			value.map((v: { permissionName: any }) => v.permissionName)
+		);
 	};
 
 	// Add new role
@@ -134,49 +145,30 @@ export default function RoleManagement() {
 			toast.error(payload.message);
 		}
 	}
+	async function createOnePermission(formData: CreatePermission) {
+		const res = await fetch(`/api/permissions`, {
+			method: "POST",
+			body: JSON.stringify(formData),
+		});
 
-	// async function AddPermission(formData: CreatePermissionRequest) {
-	// 	try {
-	// 		const permissionIds = formData.permissionId; // Array of permissionIds
+		const payload = (await res.json()) as ApiResponse;
 
-	// 		const addPermissionPromises = permissionIds.map(async permissionId => {
-	// 			const res = await fetch(
-	// 				`/api/roles/${selectedRoleId}/permission/${permissionId}`,
-	// 				{
-	// 					method: "POST",
-	// 				}
-	// 			);
-	// 			return res.json();
-	// 		});
-
-	// 		const permissionResults = await Promise.all(addPermissionPromises);
-
-	// 		const allRequestsSuccessful = permissionResults.every(
-	// 			result => result.ok
-	// 		);
-
-	// 		if (allRequestsSuccessful) {
-	// 			setRoles(prevRoles => {
-	// 				return prevRoles.map(role => {
-	// 					if (role.id === payload.data.id) {
-	// 						return payload.data;
-	// 					}
-	// 					return role;
-	// 				});
-	// 			});
-	// 			setOpenAddPermisson(false);
-	// 			alert("Permissions added successfully.");
-	// 		} else {
-	// 			console.log("Error when trying to add permissions into role!");
-	// 			alert("Failed to add permissions.");
-	// 		}
-	// 	} catch (error) {
-	// 		console.error("Error adding permissions: ", error);
-	// 	}
-	// }
-
+		if (payload.ok) {
+			setRoles(pre => {
+				return pre.map(role => {
+					if (role.id === payload.data.id) {
+						return payload.data;
+					}
+					return role;
+				});
+			});
+			setCreatePermission(false);
+			toast.success(payload.message);
+		} else {
+			toast.error(payload.message);
+		}
+	}
 	// Remove permission from role
-
 	const handleDelete = async (roleId: number, permissionName: string) => {
 		const res = await fetch(
 			`/api/roles/${roleId}/permission/${permissionName}`,
@@ -212,15 +204,19 @@ export default function RoleManagement() {
 			) : (
 				<div>
 					<div className="mx-2 flex justify-between items-center">
-						<button
-							className="mb-2 btn btn-dark"
+						<Button
+							color="secondary"
+							variant="contained"
+							size="medium"
+							className="mb-2"
 							onClick={() => setOpenAddRole(true)}>
 							<Tooltip title="Add Role">
 								<span>+ Add</span>
 							</Tooltip>
-						</button>
+						</Button>
 					</div>
 
+					{/* Role card */}
 					<div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-x-0 gap-y-10">
 						{roles.map(role => (
 							<div
@@ -323,6 +319,7 @@ export default function RoleManagement() {
 									<Input
 										autoFocus
 										color="info"
+										style={{ width: 350 }}
 										{...roleRegister("name", {
 											required: "Role name is required.",
 										})}
@@ -334,8 +331,11 @@ export default function RoleManagement() {
 
 								<div className="flex justify-around my-3">
 									<Button
+										color="success"
+										variant="contained"
+										size="medium"
 										type="submit"
-										className="w-full btn btn-success">
+										className="w-full">
 										+ Add New
 									</Button>
 								</div>
@@ -362,24 +362,10 @@ export default function RoleManagement() {
 
 						<DialogContent>
 							<form className="text-xs">
-								{/* <div className="my-3 flex">
-									<div>
-										<label className="font-semibold">Permissions:</label> */}
-								{/* <select
-											{...permissionRegister("permissionId")}
-											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											id="permission">
-											<option>Select Permission</option>
-											{permissions.map(p => (
-												<option
-													key={p.id}
-													value={p.permissionName}>
-													{p.permissionName}
-												</option>
-											))}
-										</select> */}
 								<Autocomplete
 									{...permissionRegister("permissionNames")}
+									className="my-2"
+									color="secondary"
 									multiple
 									id="checkboxes-tags-demo"
 									options={permissions}
@@ -396,59 +382,80 @@ export default function RoleManagement() {
 												checked={selected}
 											/>
 											{option.permissionName}
+											<Button
+												onClick={() => setCreatePermission(true)}></Button>
 										</li>
 									)}
-									style={{ width: 500 }}
+									style={{ width: 350 }}
 									renderInput={params => (
 										<TextField
 											{...params}
-											label="Checkboxes"
-											placeholder="Favorites"
+											label="Permissions"
+											placeholder="Add permission"
 										/>
 									)}
 									onChange={handlePermissionChange}
 								/>
-								{/* </div>
-								</div> */}
 
 								<div className="flex justify-around mb-2 mt-10">
 									<Button
 										onClick={permissionHandleSubmit(AddPermission)}
 										type="submit"
-										className="w-full btn btn-success">
-										+ Add
+										color="success"
+										variant="contained"
+										size="medium"
+										className="w-full">
+										+ Add permission
 									</Button>
 								</div>
 							</form>
 						</DialogContent>
 					</Dialog>
 
-					{/* Delete Model */}
 					<Dialog
-						open={openDeleteForm}
-						onClose={() => setOpenDeleteForm(false)}
+						open={createPermission}
+						onClose={() => setCreatePermission(false)}
 						className="max-w-[500px] mx-auto">
 						<Tooltip title="Close">
 							<CloseOutlined
-								onClick={() => setOpenDeleteForm(false)}
+								onClick={() => setCreatePermission(false)}
 								color="error"
 								className="text-md absolute top-1 right-1 rounded-full hover:opacity-80 hover:bg-red-200 cursor-pointer"
 							/>
 						</Tooltip>
 
-						<DialogTitle className="text-center mt-2">
-							Are you sure to remove ?
-						</DialogTitle>
-
 						<DialogContent>
-							<div className="flex justify-around my-3">
-								<Button
-									type="submit"
-									className="w-full btn btn-success">
-									Remove
-								</Button>
-								<Button className="w-full btn btn-success">Remove</Button>
-							</div>
+							<form
+								onSubmit={handleSubmit(createOnePermission)}
+								className="text-xs">
+								<div className="my-3">
+									<div>
+										<label className="font-semibold">Name:</label>
+									</div>
+									<Input
+										autoFocus
+										color="info"
+										style={{ width: 350 }}
+										{...roleRegister("name", {
+											required: "Role name is required.",
+										})}
+										placeholder="Enter role name"
+									/>
+								</div>
+
+								<span className="text-danger">{roleErrors.name?.message}</span>
+
+								<div className="flex justify-around my-3">
+									<Button
+										color="success"
+										variant="contained"
+										size="medium"
+										type="submit"
+										className="w-full">
+										+ Add New
+									</Button>
+								</div>
+							</form>
 						</DialogContent>
 					</Dialog>
 				</div>

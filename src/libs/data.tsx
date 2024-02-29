@@ -1,6 +1,7 @@
 "use server";
 
 import { ApiResponse } from "@/types/types";
+import exp from "constants";
 import { NextResponse } from "next/server";
 
 export interface Employee {
@@ -51,15 +52,37 @@ export interface CreateEmployeeRequest {
 	email: string;
 	password: string;
 	phoneNumber: string;
+	postalCode: string;
 	address: string;
 	province: string;
 	district: string;
 	branchId: number;
 	roleId: number;
 }
+export interface CreatePermissionRequest {
+	permissionNames: string[];
+}
+export interface CreateRoleRequest {
+	name: string;
+}
+export interface CreatePermission {
+	name: string;
+}
 export interface UpdateEmployeeRequest {
 	branchId: number;
 	roleId: number;
+}
+export interface UpdateInfoRequest {
+	email: string;
+	phonenumber: string;
+	postalcode: string;
+	address: string;
+	province: string;
+	district: string;
+	avatar: string;
+}
+export interface UpdatePasswordRequest {
+	password: string;
 }
 export interface AcceptEmployeeRequest {
 	id: number;
@@ -81,18 +104,12 @@ export interface AcceptEmployeeRequest {
 		avatar: string;
 		email: string;
 		phonenumber: string;
+		postalcode: string;
 		address: string;
 		province: string;
 		district: string;
 	};
 	selected: boolean | undefined;
-}
-
-export interface CreatePermissionRequest {
-	permissionNames: string[];
-}
-export interface CreateRoleRequest {
-	name: string;
 }
 
 // fetchData

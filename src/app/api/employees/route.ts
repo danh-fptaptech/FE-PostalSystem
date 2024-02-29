@@ -2,27 +2,36 @@ import { NextResponse } from "next/server";
 
 // GET ALL
 export async function GET() {
-	const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/Employee", {
-		method: "GET",
-		cache: "no-cache",
-	});
+	try {
+		const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/Employee", {
+			method: "GET",
+			cache: "no-cache",
+		});
 
-	const data = await res.json();
+		const data = await res.json();
 
-	if (res.ok) {
+		if (res.ok) {
+			return NextResponse.json({
+				ok: true,
+				status: "success",
+				message: "Get employees successfully.",
+				data,
+			});
+		}
+
 		return NextResponse.json({
-			ok: true,
-			status: "success",
-			message: "Get employees successfully",
-			data,
+			ok: false,
+			status: "error",
+			message: "Fail to get employees.",
+		});
+	} catch (error) {
+		console.log(error);
+		return NextResponse.json({
+			ok: false,
+			status: "Server error",
+			message: "Oops! Error while trying to get employees.",
 		});
 	}
-
-	return NextResponse.json({
-		ok: false,
-		status: "server error",
-		message: "Fail to get employees",
-	});
 }
 
 // POST
@@ -42,7 +51,7 @@ export async function POST(req: Request) {
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Add employee successfully",
+				message: "Add employee successfully.",
 			});
 		}
 
@@ -50,10 +59,15 @@ export async function POST(req: Request) {
 
 		return NextResponse.json({
 			ok: false,
-			status: "server error",
-			message: "Fail to add employee",
+			status: "error",
+			message: "Failed to add employee.",
 		});
 	} catch (error) {
-		return console.log("Error add employee: ", error);
+		console.log("Error add employee: ", error);
+		return NextResponse.json({
+			ok: false,
+			status: "Server error",
+			message: "Oops ! Error while trying to add employee.",
+		});
 	}
 }

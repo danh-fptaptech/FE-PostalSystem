@@ -1,14 +1,14 @@
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET Employee by ID
+// GET Employee by Code
 export async function GET(
 	req: Request,
 	{ params }: { params: { employeeCode: string } }
 ) {
 	try {
 		const code = params.employeeCode;
-		console.log(code);
+
 		const res = await fetch(
 			process.env.NEXT_PUBLIC_API_URL + `/Employee/code/${code}`,
 			{
@@ -46,12 +46,13 @@ export async function GET(
 	}
 }
 
+// API employee update employee
 export async function PUT(
 	req: NextRequest,
 	{ params }: { params: { employeeCode: string } }
 ) {
 	const updatedEmployee = await req.json();
-	updatedEmployee.avatar = "updatedAvatar";
+
 	try {
 		const res = await fetch(
 			process.env.NEXT_PUBLIC_API_URL + `/Employee/${params.employeeCode}`,
@@ -73,21 +74,21 @@ export async function PUT(
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Update employee successfully",
+				message: "Updated successfully.",
 			});
 		}
 
 		return NextResponse.json({
 			ok: false,
-			status: "server error",
-			message: "Failed to update employee !",
+			status: "error",
+			message: "Failed to update !",
 		});
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json({
 			ok: false,
 			status: "Server error",
-			message: "Failed to update employee",
+			message: "Oops! Error while trying to update.",
 		});
 	}
 }

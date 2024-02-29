@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// DELETE
+// API delete role
 export async function DELETE(
 	req: NextRequest,
 	{ params }: { params: { roleId: number } }
@@ -30,8 +30,8 @@ export async function DELETE(
 	} catch (error) {
 		return NextResponse.json({
 			ok: false,
-			status: "server error",
-			message: "Fail to delete role !",
+			status: "Server error",
+			message: "Oops! Error while trying to delete role !",
 		});
 	}
 }
