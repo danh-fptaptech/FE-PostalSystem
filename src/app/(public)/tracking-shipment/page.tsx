@@ -11,7 +11,7 @@ import trackingSvg from '../../../../public/tracking-img.svg'
 import { toast } from 'sonner'
 
 // 2. Type definitions
-import { Data } from '@/components/interfaces'
+import { Data, TrackingData } from '@/components/interfaces'
 
 function Page() {
 
@@ -93,7 +93,6 @@ function Page() {
         toast.error('An error occurred')
       }
     } catch (error) {
-      console.log(error)
       toast.error('An error occurred')
     }
   }
@@ -101,15 +100,14 @@ function Page() {
   const handleButtonClick = () => {
     fetchData()
   }
-
   // 3. Use the useEffect hook to retrieve the data from the local storage
   useEffect(() => {
     const storedData = localStorage.getItem('trackingData')
     if (storedData) {
-      const trackingData = JSON.parse(storedData)
+      const item = JSON.parse(storedData)
       // Check if the data is still valid
-      if (trackingData.expiry > new Date().getTime()) {
-        setData(trackingData.value)
+      if (item.expiry > new Date().getTime()) {
+        setData(item.value)
       }
     }
   }, [])
@@ -118,6 +116,16 @@ function Page() {
   useEffect(() => {
     setTrackingCode(data?.trackingCode || '')
   }, [data?.trackingCode])
+
+  // TrackingBoard code section
+  const [trackingData, setTrackingData] = useState<TrackingData | null>(null)
+
+  useEffect(() => {
+    const data = localStorage.getItem('trackingData')
+    if (data) {
+      setTrackingData(JSON.parse(data))
+    }
+  }, [data])
 
 
   if (!data) {
@@ -262,16 +270,35 @@ function Page() {
         <Box sx={{ backgroundColor:'#ced4da', borderRadius:1, mx:1, my:1 }}>
           <Box sx={{ p:3 }}>
             <ul style={{ borderLeft:'1px', borderColor:'#ddd', letterSpacing: '0.2px', padding:'0 25px' }}>
-              <li>
-                <Typography sx={{ fontWeight:550, color:'red' }}>
-                  Lịch sử vận chuyển
-                </Typography>
-                <span>Test - hmmm</span>
-              </li>
+              {trackingData?.value?.historyLogs?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((log, index) => {
+                const date = new Date(log.createdAt)
+                const day = String(date.getDate()).padStart(2, '0')
+                const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based in JavaScript
+                const year = date.getFullYear()
+                const hours = String(date.getHours()).padStart(2, '0')
+                const minutes = String(date.getMinutes()).padStart(2, '0')
+                const seconds = String(date.getSeconds()).padStart(2, '0')
+                const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+
+                return (
+                  <li key={index} style={{ paddingBottom:'8px' }}>
+                    <Typography sx={{ fontWeight:550, color:'red' }}>
+                      {statusMapping[log.id]}
+                    </Typography>
+                    <span>
+                      {formattedDate} :
+                      {log.step === 0 ? trackingData.value.nameFrom
+                        : log.step === 6 ? trackingData.value.nameTo
+                          : `Employee: ${log.employee.fullname}`}
+                      - {log.historyNote}
+                    </span>
+                  </li>
+                )
+              }) || <div>Loading...</div>}
             </ul>
           </Box>
         </Box>
-      </Box>
+      </Box> 
     </>
   )
 }
