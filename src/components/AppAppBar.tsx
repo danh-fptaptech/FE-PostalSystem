@@ -89,7 +89,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               }}
             >
               <Link href='/' style={{ textDecoration:'none' }}>
-                <Typography sx={{ fontWeight:550, fontSize:24, color:'white', px:2, color:'#ee0033' }}>Tars Postal</Typography>
+                <Typography sx={{ fontWeight:550, fontSize:24, px:2, color:'#ee0033' }}>Tars Postal</Typography>
               </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
@@ -141,26 +141,13 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 alignItems: 'center'
               }}
             >
-              <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                component="a"
-                href="/material-ui/getting-started/templates/sign-in/"
-                target="_blank"
-              >
-                Sign in
-              </Button>
               <Button
                 color="primary"
                 variant="contained"
                 size="small"
                 component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
-                target="_blank"
               >
-                Sign up
+                <Link href='/app' style={{ textDecoration:'none', color:'white' }}>To App</Link>
               </Button>
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
@@ -211,23 +198,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       color="primary"
                       variant="contained"
                       component="a"
-                      href="/material-ui/getting-started/templates/sign-up/"
-                      target="_blank"
                       sx={{ width: '100%' }}
                     >
-                      Sign up
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-in/"
-                      target="_blank"
-                      sx={{ width: '100%' }}
-                    >
-                      Sign in
+                      <Link href='/app' style={{ textDecoration:'none', color:'white' }}>To App</Link>
                     </Button>
                   </MenuItem>
                 </Box>
