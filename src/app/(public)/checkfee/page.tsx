@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Autocomplete, Grid, InputLabel, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Alert, AlertTitle, Autocomplete, Divider, Grid, InputLabel, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
@@ -22,14 +22,30 @@ const EstimatePage: React.FC = () => {
     const [listDistrictsReceiver, setListDistrictsReceiver] = useState<DataLocationType[]>([]);
 
     const [isLoading, SetIsLoading] = useState(true)
+    const [getingFee, setGetingFee] = useState(false);
 
     const [senderProvince, setSenderProvince] = useState<number>(0);
     const [senderDistrict, setSenderDistrict] = useState<number>(0);
     const [receiverProvince, setReceiverProvince] = useState<number>(0);
     const [receiverDistrict, setReceiverDistrict] = useState<number>(0);
+    const [senderDistrictSelected, setSenderDistrictSelected] = useState<DataLocationType | null>(null);
+    const [receiverDistrictSelected, setReceiverDistrictSelected] = useState<DataLocationType | null>(null);
+
     const [weight, setWeight] = useState('');
     const [data, setData] = useState({ postalCodeFrom: '', postalCodeTo: '', weight: 0 });
     const [listFee, setListFee] = useState<DataFeeCustomType[]>([]);
+    const [errors, setErrors] = useState<string[]>([]);
+
+    const validate = () => {
+        let errors = [];
+        if (data.postalCodeFrom == '') {
+            errors.push('Please choice Sender Location');
+        }
+        if (data.postalCodeTo == '') {
+            errors.push('Please choice Receiver Location');
+        }
+        return errors;
+    }
 
     const handleOnchange = (e: SelectChangeEvent<string>) => {
         e.preventDefault();
@@ -47,19 +63,29 @@ const EstimatePage: React.FC = () => {
         e.preventDefault();
         setData({ ...data, weight: +weight });
         getFeeByPostalCodeWeight();
+        setGetingFee(true);
     }
     const getFeeByPostalCodeWeight = async () => {
+        const errors = validate();
+        if (errors.length > 0) {
+            setErrors(errors);
+            return;
+        }
         const url = `/api/FeeCustom/GetFeeByPostalCodeWeight/${data.postalCodeFrom}/${data.postalCodeTo}/${data.weight}`;
         const res = await fetch(url);
         const payload = await res.json();
         const fetchData: DataFeeCustomType[] = payload.data;
         if (res.ok) {
             setListFee(fetchData);
+            setErrors([]);
         } else {
             console.log("api backend error");
         }
-        console.log("fetchData",fetchData);
+        console.log("fetchData", fetchData);
     }
+    useEffect(() => {
+        getFeeByPostalCodeWeight();
+    }, [getingFee])
 
     useEffect(() => {
         if (isLoading) {
@@ -67,7 +93,7 @@ const EstimatePage: React.FC = () => {
                 const level = 'province';
                 const res = await fetch(`/api/Location/GetListLocationByLevel/${level}`);
                 const resData = await res.json();
-                const data:DataLocationType[] = resData.data;
+                const data: DataLocationType[] = resData.data;
                 setListProvinces(data);
                 SetIsLoading(false);
             }
@@ -87,7 +113,10 @@ const EstimatePage: React.FC = () => {
             }
         }
         fetchDistrict();
+        setSenderDistrictSelected(null);
         console.log("listDistricts:", listDistricts);
+        setData({ ...data, postalCodeFrom: '' });
+        setListFee([]);
     }, [senderProvince]);
     useEffect(() => {
         const fetchDistrict = async () => {
@@ -99,7 +128,10 @@ const EstimatePage: React.FC = () => {
             }
         }
         fetchDistrict();
+        setReceiverDistrictSelected(null);
         console.log("setListDistrictsReceiver:", listDistricts);
+        setData({ ...data, postalCodeTo: '' });
+        setListFee([]);
     }, [receiverProvince]);
 
     const renderDistrictSenders = (rows: DataLocationType[]) => {
@@ -153,10 +185,18 @@ const EstimatePage: React.FC = () => {
                     <Grid item container rowSpacing={2} columnSpacing={{ xs: 1, sm: 20, md: 3 }}>
                         <Grid item xs={12}>
                             <InputLabel className='mt-4 mb-4'>
-                                <span><ViewInArIcon /></span>THÔNG TIN BƯU PHẨM
+                                <span><ViewInArIcon /></span>PACKAGE INFORMATION
                             </InputLabel>
-                            <InputLabel className='mt-4 mb-4'>
-                                Khối lượng bưu phẩm
+                            {errors && errors.length > 0 && (
+                                <Alert severity="error">
+                                    <AlertTitle>Error</AlertTitle>
+                                    {errors.map((err, index) => (
+                                        <div key={index}> {err} </div>
+                                    ))}
+                                </Alert>
+                            )}
+                            <InputLabel sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                                Package Weight
                             </InputLabel>
                             <TextField
                                 label="Trọng lượng (kg)"
@@ -168,16 +208,16 @@ const EstimatePage: React.FC = () => {
                         </Grid>
                         <Grid item className="pr-2" xs={6}>
                             <InputLabel className='mt-4 mb-4'>
-                                <span><PersonOutlineIcon /></span>NGƯỜI GỬI
+                                <span><PersonOutlineIcon /></span>SENDER
                             </InputLabel>
                             <Select
-                                label="Tỉnh/Thành phố (người gửi)"
+                                label="Province (sender)"
                                 value={senderProvince !== 0 ? senderProvince.toString() : "99"}
                                 onChange={handleOnchange}
                                 name="senderProvince"
                                 fullWidth
                             >
-                                <MenuItem value="99">Chọn Tỉnh/TP</MenuItem>
+                                <MenuItem value="99">Select Province</MenuItem>
                                 {listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
@@ -187,16 +227,16 @@ const EstimatePage: React.FC = () => {
                         </Grid>
                         <Grid item className="pl-2" xs={6}>
                             <InputLabel className='mt-4 mb-4'>
-                                <span><PersonOutlineIcon /></span>NGƯỜI NHẬN
+                                <span><PersonOutlineIcon /></span>RECEIVER
                             </InputLabel>
                             <Select
-                                label="Tỉnh/Thành phố (người nhận)"
+                                label="Province (receiver)"
                                 value={receiverProvince !== 0 ? receiverProvince.toString() : "99"}
                                 onChange={handleOnchange}
                                 name="receiverProvince"
                                 fullWidth
                             >
-                                <MenuItem value="99">Chọn Tỉnh/TP</MenuItem>
+                                <MenuItem value="99">Select Province</MenuItem>
                                 {listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
@@ -206,7 +246,7 @@ const EstimatePage: React.FC = () => {
                         </Grid>
                         <Grid item className="pr-2" xs={6}>
                             <InputLabel className='mt-4 mb-4'>
-                                Quận/Huyện
+                                Districts
                             </InputLabel>
                             <Autocomplete
                                 style={{ width: '100%', marginTop: '10px' }}
@@ -216,13 +256,17 @@ const EstimatePage: React.FC = () => {
                                 getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
                                 getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
                                 sx={{ width: 300 }}
-                                onChange={(event, value) => handleAutocompleteOnchange(event, value, "listDistrictsSender")}
-                                renderInput={(params) => <TextField {...params} label="Quận/Huyện" />}
+                                value={senderDistrictSelected}
+                                onChange={(event, value) => {
+                                    setSenderDistrictSelected(value);
+                                    handleAutocompleteOnchange(event, value, "listDistrictsSender")
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Districts" />}
                             />
                         </Grid>
                         <Grid item className="pl-2" xs={6}>
                             <InputLabel className='mt-4 mb-4'>
-                                Quận/Huyện
+                                Districts
                             </InputLabel>
                             <Autocomplete
                                 style={{ width: '100%', marginTop: '10px' }}
@@ -232,8 +276,12 @@ const EstimatePage: React.FC = () => {
                                 getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
                                 getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
                                 sx={{ width: 300 }}
-                                onChange={(event, value) => handleAutocompleteOnchange(event, value, "listDistrictsReceiver")}
-                                renderInput={(params) => <TextField {...params} label="Quận/Huyện" />}
+                                value={receiverDistrictSelected}
+                                onChange={(event, value) => {
+                                    setReceiverDistrictSelected(value);
+                                    handleAutocompleteOnchange(event, value, "listDistrictsReceiver")
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Districts" />}
                             />
                         </Grid>
                         <Button type="submit" style={{ marginLeft: '24px', marginTop: '12px' }} variant="outlined" startIcon={<SearchIcon />}>
@@ -245,11 +293,15 @@ const EstimatePage: React.FC = () => {
             </div>
             <div className="m-5 border-2 rounded-lg">
                 <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
-                    Dịch vụ của chúng tôi
+                    <Divider sx={{ marginBottom:'15px', marginTop:'15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
                 </Grid>
                 <Grid className="mt-5 mb-5 p-5">
-                    {listFee.length === 0 && <p>Không có dữ liệu</p>}
-                    {listFee.length > 0 && renderListFee(listFee)}
+                    {listFee.length === 0 && (
+                        <Alert variant="outlined" severity="warning" sx={{ display: 'flex', justifyContent: 'center' }}>
+                            Not Found!!!
+                        </Alert>
+                    )}
+                    {listFee && listFee.length > 0 && renderListFee(listFee)}
                 </Grid>
             </div>
         </div>

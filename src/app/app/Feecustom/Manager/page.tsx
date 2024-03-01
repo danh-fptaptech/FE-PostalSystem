@@ -49,6 +49,8 @@ export default function ManagerFeeCustom() {
     const [listService, setListService] = useState<DataServiceType[]>([]);
     const [listServiceCustom, setListServiceCustom] = useState<listServiceCustomType[]>([]);
     const [distance, setDistance] = useState<number>(0);
+    const [selectedSenderDistrict, setSelectedSenderDistrict] = useState<DataLocationType | null>(null);
+    const [selectedReceiverDistrict, setSelectedReceiverDistrict] = useState<DataLocationType | null>(null);
 
     const [editingItem, setEditingItem] = useState<listServiceCustomType>();
 
@@ -86,7 +88,7 @@ export default function ManagerFeeCustom() {
             fetchProvince();
         }
     }, [isLoading]);
-
+    
     useEffect(() => {
         const fetchDistrict = async () => {
             if (senderProvince !== 0) {
@@ -97,6 +99,7 @@ export default function ManagerFeeCustom() {
             }
         }
         fetchDistrict();
+        setSelectedSenderDistrict(null);
     }, [senderProvince]);
 
     useEffect(() => {
@@ -109,6 +112,7 @@ export default function ManagerFeeCustom() {
             }
         }
         fetchDistrict();
+        setSelectedReceiverDistrict(null);
     }, [receiverProvince]);
 
     useEffect(() => {
@@ -220,6 +224,27 @@ export default function ManagerFeeCustom() {
         newListServiceCustom.splice(index, 1, updatedItem);
         setListServiceCustom(newListServiceCustom);
     }
+    useEffect(() => {
+        setListService([]);
+        setListServiceCustom([]);
+        SetIsLoadService(false);
+        setData({...data, postalCodeFrom:''});
+        setDataId({ ...dataId, postalCodeFromId: ''});
+    },[senderProvince])
+
+    useEffect(() => {
+        setListService([]);
+        setListServiceCustom([]);
+        SetIsLoadService(false);
+        setData({...data, postalCodeTo:''});
+        setDataId({ ...dataId, postalCodeToId: ''});
+    },[receiverProvince])
+
+    useEffect(() => {
+        setListService([]);
+        setListServiceCustom([]);
+        SetIsLoadService(false);
+    },[senderDistrict,receiverDistrict])
 
     return (
         <div>
@@ -236,7 +261,7 @@ export default function ManagerFeeCustom() {
                             <span><PersonOutlineIcon /></span>SENDER
                         </InputLabel>
                         <Select
-                            label="Tỉnh/Thành phố (người gửi)"
+                            label="Province/City (Sender)"
                             value={senderProvince !== 0 ? senderProvince.toString() : "99"}
                             onChange={handleOnchange}
                             name="senderProvince"
@@ -255,7 +280,7 @@ export default function ManagerFeeCustom() {
                             <span><PersonOutlineIcon /></span>RECEIVER
                         </InputLabel>
                         <Select
-                            label="Tỉnh/Thành phố (người nhận)"
+                            label="Province/City (reveiver)"
                             value={receiverProvince !== 0 ? receiverProvince.toString() : "99"}
                             onChange={handleOnchange}
                             name="receiverProvince"
@@ -280,9 +305,13 @@ export default function ManagerFeeCustom() {
                             options={listDistrictsSender}
                             getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
                             getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
+                            value={selectedSenderDistrict}
                             sx={{ width: 300 }}
-                            onChange={(event, value) => handleAutocompleteOnchange(event, value, "listDistrictsSender")}
-                            renderInput={(params) => <TextField {...params} label="Quận/Huyện" />}
+                            onChange={(event, value) => {
+                                setSelectedSenderDistrict(value);
+                                handleAutocompleteOnchange(event, value, "listDistrictsSender")
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Districts" />}
                         />
                     </Grid>
                     <Grid item className="pl-2" xs={6}>
@@ -296,13 +325,17 @@ export default function ManagerFeeCustom() {
                             options={listDistrictsReceiver}
                             getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
                             getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
+                            value={selectedReceiverDistrict}
                             sx={{ width: 300 }}
-                            onChange={(event, value) => handleAutocompleteOnchange(event, value, "listDistrictsReceiver")}
-                            renderInput={(params) => <TextField {...params} label="Quận/Huyện" />}
+                            onChange={(event, value) => {
+                                setSelectedReceiverDistrict(value);
+                                handleAutocompleteOnchange(event, value, "listDistrictsReceiver")
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Districts" />}
                         />
                     </Grid>
                     <Grid container spacing={2} justifyContent="space-between">
-                        {/* Nút Tra Cứu (Search) */}
+
                         <Grid item xs>
                             <Button
                                 style={{ marginLeft: '24px', marginTop: '12px', width: '150px' }}
@@ -310,11 +343,10 @@ export default function ManagerFeeCustom() {
                                 startIcon={<SearchIcon />}
                                 onClick={handleSearchServices}
                             >
-                                Tra Cứu
+                                Get Services
                             </Button>
                         </Grid>
 
-                        {/* Nút Back */}
                         <Grid item>
                             <Button
                                 style={{ marginTop: '12px', width: '150px' }}
