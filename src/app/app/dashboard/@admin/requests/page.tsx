@@ -75,28 +75,6 @@ export default function UpdatedRequestManagement() {
 	function handlePageChange(selectedPage: number) {
 		setCurrentPage(selectedPage);
 	}
-	// // Handle Search
-	// function handleSearch(event: React.FormEvent<HTMLFormElement>) {
-	// 	event.preventDefault();
-	// 	const nameInput = document.getElementById(
-	// 		"searchInput"
-	// 	) as HTMLInputElement;
-	// 	const name = nameInput.value.trim();
-
-	// 	if (name === "") {
-	// 		fetchUpdatedRequests().then(data => {
-	// 			if (data.ok) {
-	// 				setEmployees(data.data);
-	// 			}
-	// 		});
-	// 	} else {
-	// 		const filterEmployees = employees.filter(employee =>
-	// 			employee.fullname.toLowerCase().includes(name.toLowerCase())
-	// 		);
-
-	// 		setEmployees(filterEmployees);
-	// 	}
-	// }
 
 	// Accept Updated Request
 	async function AcceptRequest(e: React.FormEvent<HTMLFormElement>) {
