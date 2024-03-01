@@ -184,18 +184,19 @@ const LocationsPage = () => {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+                    <TableCell style={{ padding: 0 }} colSpan={9}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box sx={{ margin: 1 }}>
+                            <Box>
                                 <Table aria-label="purchases">
                                     <TableHead>
-                                        <TableRow>
+                                        <TableRow sx={{ bgcolor: 'warning.main' }}>
                                             <TableCell />
                                             <TableCell >Districts Id</TableCell>
                                             <TableCell align="right">Districts Name</TableCell>
                                             <TableCell align="right">Zip Code</TableCell>
                                             <TableCell align="right">Level</TableCell>
                                             <TableCell align="right">Status</TableCell>
+                                            <TableCell align="right">Action</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -228,18 +229,19 @@ const LocationsPage = () => {
                                                 </TableRow>
                                                 {child.id === openingWardId && childWards && childWards.length > 0 && (
                                                     <TableRow key={child.id}>
-                                                        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                                        <TableCell style={{ padding: 0 }} colSpan={9}>
                                                             <Collapse in={openWard} timeout="auto" unmountOnExit>
                                                                 <Box >
                                                                     <Table aria-label="purchases">
                                                                         <TableHead>
-                                                                            <TableRow>
+                                                                            <TableRow sx={{ bgcolor: 'text.disabled' }}>
                                                                                 <TableCell />
                                                                                 <TableCell >Ward Id</TableCell>
                                                                                 <TableCell align="right">Ward Name</TableCell>
                                                                                 <TableCell align="right">Ward Zip Code</TableCell>
                                                                                 <TableCell align="right">Level</TableCell>
                                                                                 <TableCell align="right">Status</TableCell>
+                                                                                <TableCell align="right">Action</TableCell>
                                                                             </TableRow>
                                                                         </TableHead>
                                                                         <TableBody>
@@ -286,10 +288,10 @@ const LocationsPage = () => {
             <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5">Locations Management</h1>
             <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} isEditing={isEditing} setIsEditing={setIsEditing} editItem={editItem} setEditItem={setEditItem} />
             <ChangeStatus />
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ marginTop: '10px' }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow sx={{ bgcolor: 'primary.main' }}>
                             <TableCell />
                             <TableCell>Location Id</TableCell>
                             <TableCell align="right">Location Name</TableCell>

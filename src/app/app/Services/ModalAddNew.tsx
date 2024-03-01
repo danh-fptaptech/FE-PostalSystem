@@ -205,7 +205,6 @@ export default function ModalAddNew({
     return (
         <div>
             <Button
-                className="mt-2 mb-2 bg-blue-200 text-black hover:bg-blue-500 hover:text-black"
                 variant="contained"
                 onClick={handleOpen}
             > Add Service</Button>

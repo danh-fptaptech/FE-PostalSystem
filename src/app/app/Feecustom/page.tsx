@@ -85,23 +85,29 @@ export default function FeeCustomPage() {
             <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
             <hr/>
             <Button
-                className="mt-2 mb-2 bg-blue-200 text-black hover:bg-blue-500 hover:text-black"
                 variant="contained"
                 onClick={() => router.push('/app/Feecustom/Manager')}
             > Create/Update</Button>
-            <div style={{ height: 400, width: '100%' }}>
-            <DataGrid
-                rows={data}
-                columns={columns}
-                initialState={{
-                    pagination: {
-                        paginationModel: { page: 0, pageSize: 5 },
-                    },
-                }}
-                pageSizeOptions={[5, 10]}
-                autoHeight
-            />
-        </div>
+            <div style={{ height: '100%', width: '100%', marginTop: '10px' }}>
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    loading={data.length === 0}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                    autoHeight
+                    sx={{
+                        '& .MuiDataGrid-columnHeaders': {
+                            backgroundColor: 'primary.main', 
+                            color: '#ffffff',
+                        },
+                    }}
+                />
+            </div>
         </div>
         
     );

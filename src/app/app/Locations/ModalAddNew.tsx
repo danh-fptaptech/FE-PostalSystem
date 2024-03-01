@@ -143,12 +143,12 @@ export default function ModalAddNew({
             try {
                 const requestBody = {
                     locationName: locationName,
-                    postalCode: postalCode,
+                    postalCode: locationLevel==2?postalCode:null,
                     locationLevel: locationLevel,
                     locationOf: locationOf,
                     status: status
                 };
-                let checkValidate = validateLocation(locationName, postalCode);
+                let checkValidate = validateLocation(locationName, postalCode,locationLevel);
                 if(checkValidate.length > 0){
                     setErrors(checkValidate);
                     return;
@@ -314,7 +314,8 @@ export default function ModalAddNew({
                                     onChange={handleChangeInput}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            {locationLevel !=2 &&(
+                                <Grid item xs={6}>
                                 <TextField
                                     fullWidth
                                     label="postalCode"
@@ -324,6 +325,7 @@ export default function ModalAddNew({
                                     onChange={handleChangeInput}
                                 />
                             </Grid>
+                            )}
                         </Grid>
                         <FormControl variant="standard" sx={{ width: '100%' }}>
                             <InputLabel id="demo-simple-select-standard-label">Location Level</InputLabel>
@@ -408,13 +410,15 @@ export default function ModalAddNew({
     );
 }
 
-function validateLocation (locationName:string, postalCode:string){
+function validateLocation (locationName:string, postalCode:string, locationLevel:number){
     const errors = [];
     if(locationName.length === 0){
         errors.push('Location Name is required');
     }
-    if(postalCode.length === 0){
-        errors.push('Postal Code is required');
+    if(locationLevel < 2){
+        if(postalCode.length === 0){
+            errors.push('Postal Code is required');
+        }
     }
     return errors;
 }

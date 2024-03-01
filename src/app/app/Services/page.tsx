@@ -182,9 +182,10 @@ export default function Page({
             <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
             <hr />
             <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} data={data} setData={setData} />
-            <Grid container spacing={1}>
+            
+            <Grid container spacing={1} sx={{ marginTop :'5px' }} >
                 {isError && (
-                    <Grid item xs={12}>
+                    <Grid item xs={12} >
                         <div className="error-message">
                             {errorMessages.map((msg, i) => (
                                 <Alert severity="success" color="warning" key={i}>
@@ -198,7 +199,7 @@ export default function Page({
                     <TableContainer>
                         <Table>
                             <TableHead>
-                                <TableRow>
+                                <TableRow sx={{ bgcolor: 'primary.main' }}>
                                     <TableCell>ID</TableCell>
                                     <TableCell>Service Name</TableCell>
                                     <TableCell>Service Description</TableCell>
