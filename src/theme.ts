@@ -30,12 +30,19 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ ownerState }) => ({
           ...(ownerState.severity === 'info' && {
-            backgroundColor: '#60a5fa'
-          })
-        })
+            backgroundColor: '#60a5fa',
+          }),
+        }),
+      },
+    },
+      MuiPaper:{
+        styleOverrides: {
+          root: {
+             boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
+          },
+      },
       }
-    }
-  }
-})
+  },
+});
 
 export default theme
