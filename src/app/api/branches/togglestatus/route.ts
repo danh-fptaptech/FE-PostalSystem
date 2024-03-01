@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
       }
       return NextResponse.json({ data: false,error: "Something wrong!!!", status: response.status});
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ data: false, error: "api backend error", status: 500});
     }
   }
+    export async function GET(req: NextRequest) {
+        return NextResponse.json({ error: "api not found" });
+    }
