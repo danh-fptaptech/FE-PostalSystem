@@ -69,11 +69,11 @@ const Layout = ({ children }: any) => {
                     <Typography sx={{ fontWeight:'550', fontSize:28 }}>Quick Links</Typography>
                     <Divider sx={{ mb:2, mr:4, backgroundColor:'white' }}/>
 
-                    <Box><a href="">Home</a></Box>
-                    <Box><a href="">About Us</a></Box>
-                    <Box><a href="">Contact Us</a></Box>
-                    <Box><a href="">Blogs</a></Box>
-                    <Box><a href="">Sitemaps</a></Box>
+                    <Box><Link href="">Home</Link></Box>
+                    <Box><Link href="">About Us</Link></Box>
+                    <Box><Link href="">Contact Us</Link></Box>
+                    <Box><Link href="">Blogs</Link></Box>
+                    <Box><Link href="">Sitemaps</Link></Box>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -81,10 +81,10 @@ const Layout = ({ children }: any) => {
                     <Typography sx={{ fontWeight:'550', fontSize:28 }}>Shop Now</Typography>
                     <Divider sx={{ mb:2, mr:4, backgroundColor:'white' }}/>
 
-                    <Box><a href="">Collections</a></Box>
-                    <Box><a href="">Trending Products</a></Box>
-                    <Box><a href="">New Arrivals</a></Box>
-                    <Box><a href="">Featured Products</a></Box>
+                    <Box><Link href="">Collections</Link></Box>
+                    <Box><Link href="">Trending Products</Link></Box>
+                    <Box><Link href="">New Arrivals</Link></Box>
+                    <Box><Link href="">Featured Products</Link></Box>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -98,14 +98,14 @@ const Layout = ({ children }: any) => {
                       </p>
                     </Box>
                     <Box>
-                      <a href="">
+                      <Link href="">
                         <i></i> +84 888-XXX-XXXX
-                      </a>
+                      </Link>
                     </Box>
                     <Box>
-                      <a href="">
+                      <Link href="">
                         <i></i> @gmail.com
-                      </a>
+                      </Link>
                     </Box>
                   </Box>
                 </Grid>

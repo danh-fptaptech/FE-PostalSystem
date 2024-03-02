@@ -200,7 +200,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       component="a"
                       sx={{ width: '100%' }}
                     >
-                      <Link href='/app' style={{ textDecoration:'none', color:'white' }}>To App</Link>
+                      <Link href={"/app"} style={{ textDecoration:'none', color:'white' }}>To App</Link>
                     </Button>
                   </MenuItem>
                 </Box>

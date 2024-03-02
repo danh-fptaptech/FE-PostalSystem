@@ -25,7 +25,7 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
 
 
     const handleDrawerToggle = () => {
-            setMobileOpen(!mobileOpen);
+        setMobileOpen(!mobileOpen);
     };
     return (
         <Box sx={{display: "flex"}}>
@@ -64,25 +64,25 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
                 aria-label="mailbox folders"
             ><MenuContext.Provider value={{handleDrawerClose}}>
                 <Drawer
-                container={
-                    props.window !== undefined ? () => window.document.body : undefined
-                }
-                variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerClose}
-                ModalProps={{
-                    keepMounted: true,
-                }}
-                sx={{
-                    display: {xs: "block", md: "none"},
-                    "& .MuiDrawer-paper": {
-                        boxSizing: "border-box",
-                        width: drawerWidth,
-                    },
-                }}
-            >
-                <DrawerMenu/>
-            </Drawer>
+                    container={
+                        props.window !== undefined ? () => window.document.body : undefined
+                    }
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerClose}
+                    ModalProps={{
+                        keepMounted: true,
+                    }}
+                    sx={{
+                        display: {xs: "block", md: "none"},
+                        "& .MuiDrawer-paper": {
+                            boxSizing: "border-box",
+                            width: drawerWidth,
+                        },
+                    }}
+                >
+                    <DrawerMenu/>
+                </Drawer>
                 <Drawer
                     variant="permanent"
                     sx={{

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -11,6 +11,7 @@ import box from '../../../public/ic-box.png'
 import { Grid } from '@mui/material'
 import Image from 'next/image'
 import CountUp from 'react-countup'
+import Link from "next/link";
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -73,15 +74,14 @@ export default function Home() {
               Post office network in 63 provinces
             </Typography>
             <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-evenly' }}>
-              <a href="https://apps.apple.com/us/app/viettelpost-chuy%E1%BB%83n-ph%C3%A1t-nhanh/id1398283517">
-                <img style={{ paddingTop:'10px' }} src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/app.png" alt=""/>
-              </a>
-              <a href="https://play.google.com/store/apps/details?id=com.viettel.ViettelPost">
-                <img src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/gg.png" alt=""/>
-              </a>
+                <img src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/app.png" alt="My Image"/>
+                <img src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/gg.png"
+                     alt="My Image"/>
             </Box>
           </Grid>
-          <Grid item xs={12} md={4} sx={{ backgroundColor:'#ee0033', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center' }}>
+          <Grid item xs={12} md={4} sx={{
+            backgroundColor: '#ee0033',
+            display: 'flex', flexDirection:'row', alignItems:'center', justifyContent:'center' }}>
             <Box sx={{ justifyContent:'center' }}>
               <Image src={people} alt='people' style={{ width: '80%', height:'auto' }}/>
             </Box>
