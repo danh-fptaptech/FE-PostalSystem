@@ -12,12 +12,9 @@ import {
 } from "@mui/icons-material";
 import * as React from "react";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
-import {usePathname} from 'next/navigation'
 import MenuGroup from "@/components/MenuGroup";
 
 export default function DrawerMenu() {
-
-    const path = usePathname();
 
     // @ts-ignore
     function createMenu(name: string, icon: OverridableComponent<any>, path: string, permission: [string], children?: any[{

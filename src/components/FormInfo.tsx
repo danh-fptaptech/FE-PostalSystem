@@ -12,7 +12,6 @@ const FormInfo = (props: any) => {
     const [districts, setDistricts] = useState<{ locationName: string, id: number }[]>([]);
     const [wards, setWards] = useState<{ locationName: string, id: number }[]>([]);
 
-
     const fetchProvinces = async () => {
         const res = await fetch(`/api/locations/getlistprovince`);
         const data = await res.json();

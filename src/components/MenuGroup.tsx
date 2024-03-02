@@ -1,3 +1,4 @@
+"use client";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -8,8 +9,6 @@ import List from "@mui/material/List";
 import {usePathname, useRouter} from "next/navigation";
 import {useContext, useEffect} from "react";
 import MenuContext from "@/context/MenuContext";
-import {Simulate} from "react-dom/test-utils";
-import select = Simulate.select;
 
 
 export default function MenuGroup(props: { item: any }) {
@@ -29,7 +28,7 @@ export default function MenuGroup(props: { item: any }) {
                 }
             })
         }
-    }, [open]);
+    }, []);
     return (
         (!item.children ? (
                 <ListItemButton

@@ -238,8 +238,8 @@ const CreatePackage = () => {
                       }}
                 >
                     <Typography
-                        sx={{textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px'}}>
-                        Total Fee
+                        sx={{my: 1, fontSize: '15px'}}>
+                        Weight
                     </Typography>
                     <Typography sx={{
                         textAlign: 'center',
