@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const url = process.env.NEXT_PUBLIC_API_URL + "/Users/Login";
+const url = process.env.NEXT_PUBLIC_API_URL + "/Auth/Login";
 
 export const authOptions = {
 	// Configure one or more authentication providers
@@ -11,6 +11,7 @@ export const authOptions = {
 			credentials: {
 				username: { label: "Username", type: "text" },
 				password: { label: "Password", type: "password" },
+				role: { label: "Role" },
 			},
 			async authorize(credentials, req) {
 				try {
@@ -22,6 +23,7 @@ export const authOptions = {
 						body: JSON.stringify({
 							userId: credentials?.username,
 							password: credentials?.password,
+							role: credentials?.role,
 						}),
 					});
 
@@ -67,8 +69,10 @@ export const authOptions = {
 						},
 					}
 				);
+
 				if (res.ok) {
 					const data = await res.json();
+
 					session.user = data;
 					if (!data.role) {
 						session.user.role = {

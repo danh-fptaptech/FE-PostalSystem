@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "@/theme";
 import { Toaster } from "sonner";
+import "@/styles/globals.css";
 import SessionProvider from "@/contexts/SessionProvider";
 
 export default function RootLayout(props: { children: React.ReactNode }) {

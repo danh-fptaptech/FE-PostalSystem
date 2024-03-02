@@ -7,6 +7,7 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
+		//console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;
@@ -16,8 +17,10 @@ export default withAuth(
 			const path = paths.find(p => {
 				if (dynamicPaths.some(dp => p.path.includes(dp))) {
 					const regex = new RegExp(p.path.replace(/\[.*?\]/g, ".*"));
+
 					return regex.test(pathname);
 				}
+
 				return p.path === pathname;
 			});
 
@@ -69,18 +72,18 @@ export const config = {
 const paths = [
 	{
 		path: "/app",
-		permission: ["User"],
+		permission: ["home.access"],
 	},
 	{
 		path: "/app/users",
-		permission: ["User"],
+		permission: ["user.access", "user.all", "home.access"],
 	},
 	{
 		path: "/app/dashboard",
-		permission: ["User"],
+		permission: ["user.access", "Admin"],
 	},
 	{
 		path: "/app/branchs",
-		permission: ["User"],
+		permission: ["user.access", "Admin"],
 	},
 ];

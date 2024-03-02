@@ -4,26 +4,28 @@ import React from "react";
 import { useSession } from "next-auth/react";
 
 export default function DashboardLayout({
-	users,
+	user,
 	employees,
+	admin,
+	children,
 }: {
-	users: React.ReactNode;
+	user: React.ReactNode;
 	employees: React.ReactNode;
+	admin: React.ReactNode;
+	children: React.ReactNode;
 }) {
-	const { data: session, status, update } = useSession();
-
-	if (status !== "authenticated") {
-		return <div>unauuthenticated</div>;
-	}
-
-	if (session.user.role) {
+	const { data: session, status } = useSession();
+	if (status === "authenticated") {
 		if (session?.user.role.name === "User") {
-			return <div>{users}</div>;
+			return <div>{user}</div>;
 		}
 		if (session?.user.role.name === "Employee") {
 			return <div>{employees}</div>;
 		}
+		if (session?.user.role.name === "Admin") {
+			return <div>{admin}</div>;
+		}
 	}
 
-	return null;
+	return <div>{children}</div>;
 }
