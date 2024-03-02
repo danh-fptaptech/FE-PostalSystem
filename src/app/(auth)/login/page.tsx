@@ -4,6 +4,7 @@ import UserLoginForm from "./UserLoginForm";
 import Tab from "@mui/material/Tab";
 import React from "react";
 import { useSession } from "next-auth/react";
+import EmployeeLoginForm from "./EmployeeLoginForm";
 
 export default function LoginPage() {
 	const [value, setValue] = React.useState(0);
@@ -24,6 +25,7 @@ export default function LoginPage() {
 			</Tabs>
 
 			{value === 0 && <UserLoginForm />}
+			{value === 1 && <EmployeeLoginForm />}
 		</>
 	);
 }

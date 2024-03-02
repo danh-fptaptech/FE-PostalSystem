@@ -19,6 +19,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const schema = z
 	.object({
@@ -61,34 +62,26 @@ export default function UserChangePasswordForm() {
 	} = useForm<Schema>({
 		resolver: zodResolver(schema),
 	});
-	const [error, setError] = React.useState("");
 
 	const onSubmit = async (formData: Schema) => {
-		try {
-			const res = await fetch(
-				`/api/users/${session?.user.id}/change-password`,
-				{
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${session?.token.accessToken}`,
-					},
-					body: JSON.stringify({
-						oldPassword: formData.oldPassword,
-						newPassword: formData.newPassword,
-					}),
-				}
-			);
+		const res = await fetch(`/api/users/${session?.user.id}/change-password`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${session?.token.accessToken}`,
+			},
+			body: JSON.stringify({
+				oldPassword: formData.oldPassword,
+				newPassword: formData.newPassword,
+			}),
+		});
 
-			const data = (await res.json()) as ApiResponse;
+		const data = (await res.json()) as ApiResponse;
 
-			if (data.ok) {
-				setError("");
-			} else {
-				setError(data.message);
-			}
-		} catch (error: any) {
-			setError(error);
+		if (data.ok) {
+			toast.success(data.message);
+		} else {
+			toast.error(data.message);
 		}
 	};
 
@@ -115,12 +108,6 @@ export default function UserChangePasswordForm() {
 				backgroundColor: "white",
 			}}
 		>
-			{error && (
-				<Alert severity="error">
-					<AlertTitle>Error</AlertTitle>
-					{error}
-				</Alert>
-			)}
 			<Typography
 				variant="h5"
 				component="div"

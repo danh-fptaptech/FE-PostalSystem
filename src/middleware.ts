@@ -7,7 +7,6 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
-		//console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;

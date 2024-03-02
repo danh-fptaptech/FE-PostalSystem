@@ -6,13 +6,12 @@ export async function PUT(
 ) {
 	try {
 		const formData = await req.json();
-
+		console.log(req.headers);
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}`,
 			{
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
+				cache: "no-cache",
 				method: req.method,
 				body: JSON.stringify(formData),
 			}
@@ -121,7 +120,7 @@ export async function GET(
 			message: "Error to get user",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in get user", error);
+		//console.log("Unhandled client-side error in get user", error);
 
 		return NextResponse.json({
 			ok: false,
