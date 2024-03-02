@@ -7,11 +7,12 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
+		//console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;
 
-			const dynamicPaths = ["[id]", "[token]", "[employeeCode]"];
+			const dynamicPaths = ["[id]", "[token]"];
 			// Find a matching path with dynamic path handling
 			const path = paths.find(p => {
 				if (dynamicPaths.some(dp => p.path.includes(dp))) {
@@ -78,23 +79,7 @@ const paths = [
 		permission: ["user.access", "user.all", "home.access"],
 	},
 	{
-		path: "/app/[employeeCode]",
-		permission: ["user.access", "user.all", "home.access"],
-	},
-	{
 		path: "/app/dashboard",
-		permission: ["user.access", "Admin"],
-	},
-	{
-		path: "/app/dashboard/employees",
-		permission: ["user.access", "Admin"],
-	},
-	{
-		path: "/app/dashboard/roles",
-		permission: ["user.access", "Admin"],
-	},
-	{
-		path: "/app/dashboard/requests",
 		permission: ["user.access", "Admin"],
 	},
 	{

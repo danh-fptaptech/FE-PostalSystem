@@ -56,10 +56,11 @@ export async function POST(req: Request) {
 			});
 		}
 		const data = await res.json();
+		console.log(data);
 
 		return NextResponse.json({
 			ok: false,
-			status: "server error",
+			status: "error",
 			message: "Failed to add permission ! The permission has already existed.",
 		});
 	} catch (error) {

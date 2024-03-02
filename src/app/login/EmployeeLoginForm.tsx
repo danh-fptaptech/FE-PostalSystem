@@ -69,7 +69,7 @@ const EmployeeLoginForm = () => {
 				username: data.userId,
 				password: data.password,
 				role: "Employee",
-				//			callbackUrl,
+				// callbackUrl,
 			});
 
 			if (!res?.error) {
@@ -153,7 +153,7 @@ const EmployeeLoginForm = () => {
 				color="error"
 				fullWidth
 				sx={{ mt: 2 }}>
-				{isLoading ? "Loading" : "Login"}
+				Login
 			</Button>
 			<Box sx={{ mt: 2, textAlign: "center" }}>
 				<Link

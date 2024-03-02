@@ -21,7 +21,18 @@ export interface Employee {
 	branchId: number;
 	status: number;
 	submitedInfo: string;
-	selected: boolean | undefined;
+	historyLogs: [
+		{
+			id: number;
+			packageId: number;
+			step: number;
+			historyNote: string;
+			photos: string;
+			createdAt: string;
+			updatedAt: string;
+			status: number;
+		}
+	];
 }
 export interface Branch {
 	id: number;
@@ -109,7 +120,6 @@ export interface AcceptEmployeeRequest {
 		province: string;
 		district: string;
 	};
-	selected: boolean | undefined;
 }
 
 // fetchData

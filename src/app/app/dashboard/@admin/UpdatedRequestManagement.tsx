@@ -129,7 +129,7 @@ export default function UpdatedRequestManagement() {
 			{isLoading ? (
 				<Loading />
 			) : (
-				<div className="mb-3">
+				<div className="mt-4">
 					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
 						<Table
 							sx={{ minWidth: 650 }}

@@ -121,7 +121,25 @@ export default function RoleManagement() {
 			toast.error(payload.message);
 		}
 	};
-	// Add permission into role
+	//Create permission
+	async function createOnePermission(formData: CreatePermission) {
+		const res = await fetch(`/api/permissions`, {
+			method: "POST",
+			body: JSON.stringify(formData),
+		});
+
+		const payload = (await res.json()) as ApiResponse;
+
+		if (payload.ok) {
+			const response = await fetchPermissions();
+			setPermissions(await response.data);
+			setCreatePermission(false);
+			toast.success(payload.message);
+		} else {
+			toast.error(payload.message);
+		}
+	}
+	// Add permissions into role
 	async function AddPermission(formData: CreatePermissionRequest) {
 		const res = await fetch(`/api/roles/${selectedRoleId}/permission`, {
 			method: "POST",
@@ -145,29 +163,7 @@ export default function RoleManagement() {
 			toast.error(payload.message);
 		}
 	}
-	async function createOnePermission(formData: CreatePermission) {
-		const res = await fetch(`/api/permissions`, {
-			method: "POST",
-			body: JSON.stringify(formData),
-		});
 
-		const payload = (await res.json()) as ApiResponse;
-
-		if (payload.ok) {
-			setRoles(pre => {
-				return pre.map(role => {
-					if (role.id === payload.data.id) {
-						return payload.data;
-					}
-					return role;
-				});
-			});
-			setCreatePermission(false);
-			toast.success(payload.message);
-		} else {
-			toast.error(payload.message);
-		}
-	}
 	// Remove permission from role
 	const handleDelete = async (roleId: number, permissionName: string) => {
 		const res = await fetch(
@@ -202,7 +198,7 @@ export default function RoleManagement() {
 			{isLoading ? (
 				<Loading />
 			) : (
-				<div>
+				<div className="mt-4">
 					<div className="mx-2 flex justify-between items-center">
 						<Button
 							color="secondary"
@@ -217,7 +213,7 @@ export default function RoleManagement() {
 					</div>
 
 					{/* Role card */}
-					<div className="grid sm:grid-cols-3 lg:grid-cols-4 gap-x-0 gap-y-10">
+					<div className="grid sm:grid-cols-3 lg:grid-cols-3 gap-x-0 gap-y-10">
 						{roles.map(role => (
 							<div
 								key={role.id}
@@ -396,6 +392,12 @@ export default function RoleManagement() {
 									)}
 									onChange={handlePermissionChange}
 								/>
+								<Button
+									color="secondary"
+									variant="text"
+									onClick={() => setCreatePermission(true)}>
+									Add other permission
+								</Button>
 
 								<div className="flex justify-around mb-2 mt-10">
 									<Button
@@ -412,6 +414,7 @@ export default function RoleManagement() {
 						</DialogContent>
 					</Dialog>
 
+					{/* Create one permission */}
 					<Dialog
 						open={createPermission}
 						onClose={() => setCreatePermission(false)}
@@ -436,10 +439,10 @@ export default function RoleManagement() {
 										autoFocus
 										color="info"
 										style={{ width: 350 }}
-										{...roleRegister("name", {
-											required: "Role name is required.",
+										{...register("name", {
+											required: "Permission name is required.",
 										})}
-										placeholder="Enter role name"
+										placeholder="Enter permission name"
 									/>
 								</div>
 

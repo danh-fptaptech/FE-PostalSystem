@@ -112,6 +112,7 @@ export default function EmployeeManagement() {
 			fetchLocations(),
 		]).then(data => {
 			const [employeeRes, branchRes, roleRes, locationRes] = data;
+			console.log(employeeRes);
 
 			if (employeeRes.ok) {
 				setEmployees(employeeRes.data.reverse());
