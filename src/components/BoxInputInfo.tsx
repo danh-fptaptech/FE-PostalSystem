@@ -14,7 +14,7 @@ import {
 import Box from "@mui/material/Box";
 import FormInfo from "@/components/FormInfo";
 import {PackageCreateContext} from "@/context/PackageCreateContext";
-import MenuItem from "@mui/material/MenuItem";
+import splitAddressAndWard from "@/helper/splitAddressAndWard";
 
 const BoxInputInfo = (props: any) => {
     const {typeBox, xs} = props;
@@ -31,7 +31,6 @@ const BoxInputInfo = (props: any) => {
 
     React.useEffect(() => {
         fetchAddress().then(r => setListAddress(r));
-        handleFormChange({target: {name: `type_${typeBox}`, value: "select"}});
     }, []);
 
     // @ts-ignore
@@ -65,17 +64,22 @@ const BoxInputInfo = (props: any) => {
                             onChange={(e) => { // @ts-ignore
                                 setChooseAddress(e.target.value)
                                 if (e.target.value === 'true') {
-                                    handleFormChange({target: {name: `type_${typeBox}`, value: "select"}});
+                                    handleFormChange({target: {name: `type_${typeBox}`, value: "new"}});
                                     return;
                                 }
-                                handleFormChange({target: {name: `type_${typeBox}`, value: "new"}});
+                                handleFormChange({target: {name: `type_${typeBox}`, value: "select"}});
                             }}
                         >
-                            <FormControlLabel value='true' control={<Radio/>} label="List Sender Address"/>
-                            <FormControlLabel value='false' control={<Radio/>} label="New Sender"/>
+                            <FormControlLabel value='true' control={<Radio/>}
+                                              label={typeBox === "sender" ? "New Sender" : "New Receiver"}/>
+                            <FormControlLabel value='false' control={<Radio/>}
+                                              label={typeBox === "sender" ? "List Sender Address" : "List Receiver Address"}/>
                         </RadioGroup>
                         {chooseAddress === 'true' ?
-                            /*<TextField
+                            <FormInfo type={typeBox}/>
+                            :
+                            <>
+                                {/*<TextField
                                 id="outlined-select"
                                 select
                                 label="Choose sender address"
@@ -95,30 +99,36 @@ const BoxInputInfo = (props: any) => {
                                         {option.label}
                                     </MenuItem>
                                 ))}
-                            </TextField>*/
-                            <Autocomplete
-                                id="autocomplete-select"
-                                options={listAddress}
-                                getOptionLabel={(option: { value: any, label: any }) => option.label}
-                                onChange={(event, value) => {
-                                    handleFormChange({target: {name: `select_${typeBox}`, value: value}});
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Choose sender address"
-                                        required={true}
-                                        {...register(`select_${typeBox}`, {
-                                            required: "Please select an address",
-                                        })}
-                                        error={!!(errors[`select_${typeBox}`])}
-                                        helperText={errors[`select_${typeBox}`]?.message}
-                                        fullWidth={true}
-                                    />
-                                )}
-                            />
-                            :
-                            <FormInfo type={typeBox}/>
+                            </TextField>*/}
+                                <Autocomplete
+                                    id="autocomplete-select"
+                                    options={listAddress}
+                                    disableClearable={true}
+                                    getOptionLabel={(option) => {
+                                        // @ts-ignore
+                                        return `${option.fullName} - ${option.phoneNumber} - ${option.address}, District: ${option.district}, Province: ${option.province}`;
+                                    }}
+                                    onChange={(event, value) => {
+                                        // @ts-ignore
+                                        const {address, ward} = splitAddressAndWard(value.address);
+                                        // @ts-ignore
+                                        handleFormChange({target: {name: `select_${typeBox}`, value: {...value, address: address, ward: ward}}});
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Choose sender address"
+                                            required={true}
+                                            {...register(`select_${typeBox}`, {
+                                                required: "Please select an address",
+                                            })}
+                                            error={!!(errors[`select_${typeBox}`])}
+                                            helperText={errors[`select_${typeBox}`]?.message}
+                                            fullWidth={true}
+                                        />
+                                    )}
+                                />
+                            </>
                         }
                     </>
                     :

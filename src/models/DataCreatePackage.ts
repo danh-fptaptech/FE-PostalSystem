@@ -33,4 +33,8 @@ export interface DataCreatePackage {
         length: string;
     };
     size_convert: string;
+
+
+
+    package_note: string;
 }

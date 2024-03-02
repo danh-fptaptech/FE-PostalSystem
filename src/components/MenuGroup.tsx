@@ -5,22 +5,36 @@ import * as React from "react";
 import {KeyboardArrowDown, KeyboardArrowRight} from "@mui/icons-material";
 import {Collapse} from "@mui/material";
 import List from "@mui/material/List";
-import {useRouter} from "next/navigation";
-import {useContext} from "react";
+import {usePathname, useRouter} from "next/navigation";
+import {useContext, useEffect} from "react";
 import MenuContext from "@/context/MenuContext";
+import {Simulate} from "react-dom/test-utils";
+import select = Simulate.select;
 
 
 export default function MenuGroup(props: { item: any }) {
     const {handleDrawerClose} = useContext(MenuContext);
     const router = useRouter();
+    const path = usePathname();
     const {item} = props;
     const [open, setOpen] = React.useState(false);
     const handleClick = () => {
         setOpen(!open);
     };
+    useEffect(() => {
+        if (item.children) {
+            item.children.forEach((child: any) => {
+                if (path === child.path) {
+                    setOpen(true);
+                }
+            })
+        }
+    }, [open]);
     return (
         (!item.children ? (
-                <ListItemButton onClick={()=>{
+                <ListItemButton
+                    selected={path === item.path}
+                    onClick={()=>{
                     router.push(item.path);
                     handleDrawerClose();
                 }}>
@@ -31,7 +45,8 @@ export default function MenuGroup(props: { item: any }) {
                 </ListItemButton>
         ) : (
             <>
-                <ListItemButton onClick={handleClick}>
+                <ListItemButton
+                    onClick={handleClick}>
                     <ListItemIcon>
                         <item.icon/>
                     </ListItemIcon>

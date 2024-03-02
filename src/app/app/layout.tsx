@@ -6,11 +6,10 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import {Menu} from "@mui/icons-material";
-import {Card, Container} from "@mui/material";
+import {Container} from "@mui/material";
 import AvatarMenu from "@/components/AvatarMenu";
 import DrawerMenu from "@/components/DrawerMenu";
 import MenuContext from "@/context/MenuContext";
-import Paper from "@mui/material/Paper";
 
 
 
