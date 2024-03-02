@@ -27,5 +27,5 @@ export default function DashboardLayout({
 		}
 	}
 
-	return <div>{children}</div>;
+	return <div>{null}</div>;
 }

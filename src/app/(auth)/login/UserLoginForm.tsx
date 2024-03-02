@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import LinkBehaviour from "../../../components/LinkBehaviour";
+import LinkBehaviour from "@/components/LinkBehaviour";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -70,6 +70,7 @@ const UserLoginForm = () => {
 				redirect: false,
 				username: data.userId,
 				password: data.password,
+				role: "User",
 				//			callbackUrl,
 			});
 
@@ -95,8 +96,7 @@ const UserLoginForm = () => {
 				borderRadius: "8px",
 				boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
 				backgroundColor: "white",
-			}}
-		>
+			}}>
 			{error && (
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -106,9 +106,8 @@ const UserLoginForm = () => {
 			<Typography
 				variant="h5"
 				component="div"
-				sx={{ mb: 2 }}
-			>
-				Login Form
+				sx={{ mb: 2 }}>
+				Login Your Account
 			</Typography>
 			<TextField
 				fullWidth
@@ -124,8 +123,7 @@ const UserLoginForm = () => {
 				fullWidth
 				variant="outlined"
 				margin="normal"
-				error={!!errors.password}
-			>
+				error={!!errors.password}>
 				<InputLabel htmlFor="password">Password</InputLabel>
 				<OutlinedInput
 					label="Password"
@@ -142,8 +140,7 @@ const UserLoginForm = () => {
 								onClick={handleClickShowPassword}
 								onMouseDown={handleMouseEvents}
 								onMouseUp={handleMouseEvents}
-								edge="end"
-							>
+								edge="end">
 								{showPassword ? <VisibilityOff /> : <Visibility />}
 							</IconButton>
 						</InputAdornment>
@@ -157,24 +154,21 @@ const UserLoginForm = () => {
 				variant="contained"
 				color="error"
 				fullWidth
-				sx={{ mt: 2 }}
-			>
+				sx={{ mt: 2 }}>
 				Login
 			</Button>
 			<Box sx={{ mt: 2, textAlign: "center" }}>
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2"
-				>
+					variant="body2">
 					Forgot Password?
 				</Link>
 				<Box mt={1}>
 					<Link
 						component={LinkBehaviour}
 						href="/register"
-						variant="body2"
-					>
+						variant="body2">
 						Don&apos;t have an account? Sign Up
 					</Link>
 				</Box>

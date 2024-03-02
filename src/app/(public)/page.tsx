@@ -1,7 +1,5 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
-("use client");
-import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
 const Home = () => {

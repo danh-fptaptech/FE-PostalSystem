@@ -10,9 +10,7 @@ export async function PUT(
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Change-password`,
 			{
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 				body: JSON.stringify(formData),
 			}
@@ -25,7 +23,6 @@ export async function PUT(
 				message: "Success to change password",
 			});
 		}
-		console.log(res);
 
 		const data = await res.json();
 

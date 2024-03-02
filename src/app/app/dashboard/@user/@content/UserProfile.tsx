@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import TextField from "@mui/material/TextField";
 import { Box, Alert, AlertTitle, Typography, Button } from "@mui/material";
+import { toast } from "sonner";
 
 const schema = z.object({
 	fullname: z
@@ -36,7 +37,6 @@ type Schema = z.infer<typeof schema>;
 const UserProfile = () => {
 	const { data: session, status } = useSession();
 
-	const [error, setError] = React.useState("");
 	const {
 		register,
 		handleSubmit,
@@ -57,8 +57,9 @@ const UserProfile = () => {
 
 		const payload = await res.json();
 		if (payload.ok) {
+			toast.success(payload.message);
 		} else {
-			setError(payload.message);
+			toast.error(payload.message);
 		}
 	};
 
@@ -75,12 +76,6 @@ const UserProfile = () => {
 				backgroundColor: "white",
 			}}
 		>
-			{error && (
-				<Alert severity="error">
-					<AlertTitle>Error</AlertTitle>
-					{error}
-				</Alert>
-			)}
 			<Typography
 				variant="h5"
 				component="div"
