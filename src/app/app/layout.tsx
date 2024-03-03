@@ -14,12 +14,32 @@ import Toolbar from "@mui/material/Toolbar";
 import { DeleteOutline, Menu } from "@mui/icons-material";
 import { Card, Container } from "@mui/material";
 import AvatarMenu from "@/components/AvatarMenu";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
+const AppLayout = (props: {
+	window?: Window;
+	user: React.ReactNode;
+	employees: React.ReactNode;
+	admin: React.ReactNode;
+}) => {
 	const drawerWidth = 300;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	const [isClosing, setIsClosing] = React.useState(false);
+
+	const { data: session, status } = useSession();
+	const [role, setRole] = React.useState<React.ReactNode | null>(null);
+
+	React.useEffect(() => {
+		if (status === "authenticated") {
+			if (session?.user?.role?.name === "User") {
+				setRole(props.user);
+			} else if (session?.user?.role?.name !== "Admin") {
+				setRole(props.employees);
+			} else if (session?.user?.role?.name === "Admin") {
+				setRole(props.admin);
+			}
+		}
+	}, [status, session?.user?.role?.name, props]);
 
 	const handleDrawerClose = () => {
 		setIsClosing(true);
@@ -130,7 +150,7 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
 				}}>
 				<Toolbar />
 				<Container>
-					<Card sx={{ padding: 2 }}>{props.children}</Card>
+					<Card sx={{ padding: 2 }}>{role}</Card>
 				</Container>
 			</Box>
 		</Box>

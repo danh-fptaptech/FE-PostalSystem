@@ -157,30 +157,22 @@ export default function EmployeeManagement() {
 			});
 	}
 
-	const [errorMsg, setErrorMsg] = React.useState("");
 	// Add employee
 	async function AddEmployee(employee: CreateEmployeeRequest) {
-		try {
-			const res = await fetch("/api/employees", {
-				method: "POST",
-				body: JSON.stringify(employee),
-			});
+		const res = await fetch("/api/employees", {
+			method: "POST",
+			body: JSON.stringify(employee),
+		});
 
-			console.log(res);
+		const payload = (await res.json()) as ApiResponse;
 
-			const payload = (await res.json()) as ApiResponse;
-
-			if (payload.ok) {
-				const response = await fetchEmployees();
-				setEmployees((await response.data).reverse());
-				setOpenAddForm(false);
-				toast.success(payload.message);
-			} else {
-				toast.error(payload.message);
-			}
-		} catch (error) {
-			console.error(error);
-			toast.error("An error occurred while adding the employee.");
+		if (payload.ok) {
+			const response = await fetchEmployees();
+			setEmployees((await response.data).reverse());
+			setOpenAddForm(false);
+			toast.success(payload.message);
+		} else {
+			toast.error(payload.message);
 		}
 	}
 
@@ -362,15 +354,16 @@ export default function EmployeeManagement() {
 								))}
 							</TableBody>
 						</Table>
+
+						<TablePagination
+							component="div"
+							count={employees.length || 0}
+							page={page}
+							onPageChange={handleChangePage}
+							rowsPerPage={rowsPerPage}
+							onRowsPerPageChange={handleChangeRowsPerPage}
+						/>
 					</TableContainer>
-					<TablePagination
-						component="div"
-						count={employees.length || 0}
-						page={page}
-						onPageChange={handleChangePage}
-						rowsPerPage={rowsPerPage}
-						onRowsPerPageChange={handleChangeRowsPerPage}
-					/>
 
 					{/* Add New Employee */}
 					<Dialog
@@ -464,12 +457,6 @@ export default function EmployeeManagement() {
 													value: 8,
 													message: "Password must be at least 8 characters.",
 												},
-												// pattern: {
-												// 	value:
-												// 		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-												// 	message:
-												// 		"Password must have at least one lowercase letter, one uppercase letter, one number and one special character.",
-												// },
 											})}
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											placeholder="Password"

@@ -12,6 +12,7 @@ export interface Employee {
 	email: string;
 	password: string;
 	phoneNumber: string;
+	postalCode: string;
 	address: string;
 	province: string;
 	district: string;
@@ -25,12 +26,11 @@ export interface Employee {
 		{
 			id: number;
 			packageId: number;
-			step: number;
+			photos: string[];
 			historyNote: string;
-			photos: string;
-			createdAt: string;
+			step: number;
+			prcessStep: number[];
 			updatedAt: string;
-			status: number;
 		}
 	];
 }

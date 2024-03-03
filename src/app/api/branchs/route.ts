@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
 // }
 
 export async function GET() {
-	const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/Branch", {
+	const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/Branch/All", {
 		method: "GET",
 		next: {
 			revalidate: 1,

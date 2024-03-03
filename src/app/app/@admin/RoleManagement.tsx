@@ -203,7 +203,7 @@ export default function RoleManagement() {
 						<Button
 							color="secondary"
 							variant="contained"
-							size="medium"
+							size="small"
 							className="mb-2"
 							onClick={() => setOpenAddRole(true)}>
 							<Tooltip title="Add Role">
@@ -229,8 +229,8 @@ export default function RoleManagement() {
 											<p
 												className={
 													role.name === "Admin"
-														? "text-sm text-green-700 font-semibold"
-														: "text-sm text-orange-400"
+														? "text-green-700 font-semibold"
+														: "text-orange-400"
 												}>
 												{role.name}
 											</p>
@@ -239,7 +239,7 @@ export default function RoleManagement() {
 
 									<div className="min-h-[200px] my-3">
 										<p className="text-xs">
-											The role has 0{role.roleHasPermissions.length} permission
+											Permissions: {role.roleHasPermissions.length}
 										</p>
 										{role.roleHasPermissions.map(permission => (
 											<Chip

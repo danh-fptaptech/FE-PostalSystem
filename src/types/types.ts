@@ -1,4 +1,5 @@
 export interface ApiResponse {
+	json(): unknown;
 	ok: boolean;
 	status: string;
 	message: string;

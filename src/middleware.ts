@@ -7,7 +7,7 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
-		//console.log(token);
+		console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;
@@ -40,9 +40,14 @@ export default withAuth(
 
 			return NextResponse.next();
 		} else {
-			if (req.nextUrl.pathname === "/login") return NextResponse.next();
+			if (
+				req.nextUrl.pathname === "/login"
+				// ||
+				// req.nextUrl.pathname === "/login/employee"
+			)
+				return NextResponse.next();
 			else if (req.nextUrl.pathname.startsWith("/app/dashboard")) {
-				return NextResponse.redirect(new URL("/login", req.url));
+				return NextResponse.redirect(new URL("/?login=false", req.url));
 			}
 		}
 	},
@@ -72,7 +77,7 @@ export const config = {
 const paths = [
 	{
 		path: "/app",
-		permission: ["home.access"],
+		permission: ["Admin", "Employee"],
 	},
 	{
 		path: "/app/users",

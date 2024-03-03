@@ -17,11 +17,14 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { CircularProgress } from "@mui/material";
+import Loading from "@/components/Loading";
 
 const schema = z.object({
 	userId: z.string({
@@ -39,8 +42,6 @@ type Schema = z.infer<typeof schema>;
 
 const EmployeeLoginForm = () => {
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [isLoading, setIsLoading] = React.useState(false);
-
 	const [error, setError] = React.useState("");
 	const router = useRouter();
 	const {
@@ -74,7 +75,7 @@ const EmployeeLoginForm = () => {
 
 			if (!res?.error) {
 				//router.push(callbackUrl);
-				router.push("/app/dashboard");
+				router.push("/app");
 			} else {
 				setError("Invalid email or password");
 			}
