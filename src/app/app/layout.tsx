@@ -2,18 +2,15 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import { DeleteOutline, Menu } from "@mui/icons-material";
-import { Card, Container } from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import { Container } from "@mui/material";
 import AvatarMenu from "@/components/AvatarMenu";
+import DrawerMenu from "@/components/DrawerMenu";
+import MenuContext from "@/context/MenuContext";
+
 import { useSession } from "next-auth/react";
 
 const AppLayout = (props: {
