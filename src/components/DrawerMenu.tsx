@@ -7,7 +7,8 @@ import {
     DomainAddOutlined,
     DomainOutlined,
     HomeWorkOutlined,
-    Inventory2Outlined
+    Inventory2Outlined,
+    NoteAddOutlined
 } from "@mui/icons-material";
 import * as React from "react";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
@@ -30,9 +31,10 @@ export default function DrawerMenu() {
 
     const menu = [
         createMenu("Dashboard", AppsOutlined, "/app", ["app.view"]),
-        createMenu("Branches", HomeWorkOutlined, "/app/branches", ["branches"], [
-            createMenu("List Branches", DomainOutlined, "/app/branches", ["branches.view"]),
-            createMenu("Create Branch", DomainAddOutlined, "/app/branches/create", ["branches.create"]),
+        createMenu("Create Package", NoteAddOutlined, "/app/create-package", ["package.create"]),
+        createMenu("Branches", HomeWorkOutlined, "/app/branches", ["branch"], [
+            createMenu("List Branches", DomainOutlined, "/app/branches", ["branch.view"]),
+            createMenu("Create Branch", DomainAddOutlined, "/app/branches/create", ["branch.create"]),
         ]),
         createMenu("Packages", Inventory2Outlined, "/app/packages", ["package.view"]),
     ]

@@ -1,12 +1,18 @@
 'use client'
 import {Box, Button, Card, Grid, InputAdornment, TextField, Tooltip, Typography} from '@mui/material'
-import {useContext} from 'react'
+import {useContext, useState} from 'react'
 import Divider from '@mui/material/Divider'
 import {PackageCreateContext} from "@/context/PackageCreateContext";
 import {Item} from "@/models/Item";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
+import InfoIcon from '@mui/icons-material/Info';
+import BalanceIcon from '@mui/icons-material/Balance';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import {toast} from "sonner";
+import CustomDialogContent from "@/components/CustomDialogContent";
 
 function FormGoodsInfo() {
 
@@ -25,24 +31,44 @@ function FormGoodsInfo() {
 
     const {
         // @ts-ignore
-        handleFormChange,
-        // @ts-ignore
-        formData,
-        // @ts-ignore
-        createItem,
-        // @ts-ignore
-        removeItem,
-        // @ts-ignore
-        updateItem,
-        // @ts-ignore
-        register,
-        // @ts-ignore
-        errors
-    } = useContext(PackageCreateContext)
+        handleFormChange, formData, createItem, removeItem, updateItem, register, errors, trigger, handleChangeSize
+    } = useContext(PackageCreateContext);
 
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const [rateConvert, setRateConvert] = useState(5);
+    const [limitSize, setLimitSize] = useState(50);
+    const [limitWeight, setLimitWeight] = useState(6);
+
+    const contentDialog = (
+        <Box>
+            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
+                The size of the package is calculated based on the length, width, and height of the package.
+                Volumetric Weight is a calculation that reflects the density of a package. A less dense item generally.
+                The calculation formula is as follows:
+            </Typography>
+            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
+                The calculation formula is as follows:
+            </Typography>
+            <Typography variant="body1" sx={{fontSize: '15px', textAlign: 'center', fontWeight: 550, py:2}}>
+                (Length x Width x Height) / {rateConvert * 1000} = Volumetric Weight (kg)
+            </Typography>
+            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
+                If any element of size (weight,width,length) is greater than {limitSize}cm or Volumetric Weight is greater than {limitWeight}KG.
+            </Typography>
+            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
+                The results are compared with the actual weight of the package to determine which weight is greater.
+                Volumetric weight or actual weight. The larger weight is used to calculate shipping costs.
+            </Typography>
+        </Box>
+    );
 
     return (
-        <Card sx={{my: 3}}>
+        <Card sx={{
+            my: 3,
+            borderRadius: "10px",
+            boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
+        }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -56,23 +82,20 @@ function FormGoodsInfo() {
                     p: 1,
                     display: 'fit-content',
                     color: "#fff"
-                }}>
-                    Item Information
-                </Typography>
+                }}>Item Information</Typography>
             </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column'
-                }}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                p: 2
+            }}>
+                {/*Radio*/}
                 <Box>
                     <Typography variant='h6'
                                 sx={{
                                     fontSize: '14px',
                                     fontWeight: 550,
                                     display: 'fit-content',
-                                    mx: 2,
-                                    pt: 1
                                 }}
                     >
                         Type of Package
@@ -80,9 +103,8 @@ function FormGoodsInfo() {
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-around',
+                        justifyContent: 'space-between',
                         my: 2,
-                        mx: 2,
                     }}>
                         {typePackage.map((type, index) => (
                             <Tooltip key={index} title={type.content} placement="bottom">
@@ -109,12 +131,12 @@ function FormGoodsInfo() {
                         ))}
                     </Box>
                 </Box>
-                <Divider sx={{my: 2, borderColor: '#C7C8CC'}} variant="middle"/>
+                <Divider sx={{my: 1, borderColor: '#C7C8CC'}} variant="middle"/>
+                {/*List Item*/}
                 <Box component={"li"} sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     listStyleType: 'none',
-                    px: 3
                 }}>
                     {formData.list_items.map((item: Item, index: any) => (
                         <Box key={index}>
@@ -124,10 +146,9 @@ function FormGoodsInfo() {
                                 alignItems: 'center',
                             }}>
                                 <Typography variant="h6" sx={{
-                                    p: 1,
                                     display: 'fit-content',
                                     fontSize: '15px',
-                                    fontWeight: 550,
+                                    fontWeight: 400,
                                 }}>
                                     Item {index + 1} :
                                 </Typography>
@@ -145,7 +166,7 @@ function FormGoodsInfo() {
                                 {...register(`itemName_${index}`, {
                                     required: "Name item is required",
                                     pattern: {
-                                        value: /^[a-zA-Z\s]+$/gu,
+                                        value: /^[a-zA-Z0-9\s]+$/gu,
                                         message: "Name item must be alphabet"
                                     },
                                 })}
@@ -157,15 +178,16 @@ function FormGoodsInfo() {
                                 helperText={errors[`itemName_${index}`]?.message}
                                 size={"small"}
                                 fullWidth={true}
+                                autoComplete={"off"}
                             />
                             <Grid container spacing={2} columns={12}>
                                 <Grid item xs={4}>
-                                    <Tooltip title="Item Quantity">
+                                    <Tooltip title="Item Quantity (Unit)">
                                         <TextField
                                             margin="dense"
                                             label="Quantity"
                                             defaultValue={1}
-                                            type="number"
+                                            type="text"
                                             required={true}
                                             {...register(`itemQuantity_${index}`, {
                                                 required: "Quantity item is required",
@@ -180,24 +202,26 @@ function FormGoodsInfo() {
                                             })}
 
                                             InputProps={{
-                                                startAdornment: <ClearAllIcon></ClearAllIcon>,
-                                                disableIncrement: true,
-                                                disableDecrement: true,
+                                                startAdornment: <ClearAllIcon fontSize={"small"}></ClearAllIcon>,
                                             }}
-                                            onChange={(e) => updateItem(index, e)}
+                                            onChange={(e) => {
+                                                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                                updateItem(index, e)
+                                            }}
                                             error={!!(errors[`itemQuantity_${index}`])}
                                             helperText={errors[`itemQuantity_${index}`]?.message}
                                             size={"small"}
                                             fullWidth={true}
+                                            autoComplete={"off"}
                                         />
                                     </Tooltip>
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <Tooltip title="Item Weight(gram)">
+                                    <Tooltip title="Item Weight (gram)">
                                         <TextField
                                             margin="dense"
                                             label="Weight"
-                                            type="number"
+                                            type="text"
                                             required={true}
                                             {...register(`itemWeight_${index}`, {
                                                 required: "Weight item is required",
@@ -211,24 +235,26 @@ function FormGoodsInfo() {
                                                 }
                                             })}
                                             InputProps={{
-                                                endAdornment: <InputAdornment position="end">g</InputAdornment>,
-                                                disableIncrement: true,
-                                                disableDecrement: true,
+                                                startAdornment: <BalanceIcon fontSize={"small"}></BalanceIcon>,
                                             }}
-                                            onChange={(e) => updateItem(index, e)}
+                                            onChange={(e) => {
+                                                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                                updateItem(index, e)
+                                            }}
                                             error={!!(errors[`itemWeight_${index}`])}
                                             helperText={errors[`itemWeight_${index}`]?.message}
                                             size={"small"}
                                             fullWidth={true}
+                                            autoComplete={"off"}
                                         />
                                     </Tooltip>
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <Tooltip title="Item value">
+                                    <Tooltip title="Item value ($)">
                                         <TextField
                                             margin="dense"
                                             label="Value"
-                                            type="number"
+                                            type="text"
                                             {...register(`itemValue_${index}`, {
                                                 max: {
                                                     value: 100000,
@@ -240,15 +266,17 @@ function FormGoodsInfo() {
                                                 }
                                             })}
                                             InputProps={{
-                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                                disableIncrement: true,
-                                                disableDecrement: true,
+                                                startAdornment: <LocalAtmIcon fontSize={"small"}></LocalAtmIcon>,
                                             }}
-                                            onChange={(e) => updateItem(index, e)}
+                                            onChange={(e) => {
+                                                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                                updateItem(index, e)
+                                            }}
                                             error={!!(errors[`itemValue_${index}`])}
                                             helperText={errors[`itemValue_${index}`]?.message}
                                             size={"small"}
                                             fullWidth={true}
+                                            autoComplete={"off"}
                                         />
                                     </Tooltip>
                                 </Grid>
@@ -257,10 +285,64 @@ function FormGoodsInfo() {
                         </Box>
                     ))}
                 </Box>
-
-                {/* Add form button */}
-                <Box sx={{mx: 2, my: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-                    <Typography onClick={createItem}>
+                {/*Add Item*/}
+                <Box sx={{my: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                    <Typography
+                        /*onClick={async () => {
+                            let errorCounter = 0;
+                            for (let i = 0; i < formData.list_items.length; i++) {
+                                await trigger(`itemName_${i}`).then((res:any) => {
+                                    if (res === false) {
+                                        errorCounter++;
+                                    }
+                                });
+                                await trigger(`itemQuantity_${i}`).then((res:any) => {
+                                    if (res === false) {
+                                        errorCounter++;
+                                    }
+                                });
+                                await trigger(`itemWeight_${i}`).then((res:any) => {
+                                    if (res === false) {
+                                        errorCounter++;
+                                    }
+                                });
+                                await trigger(`itemValue_${i}`).then((res:any) => {
+                                    if (res === false) {
+                                        errorCounter++;
+                                    }
+                                });
+                            }
+                            if (errorCounter === 0) {
+                                createItem()
+                            }
+                        }}*/
+                        /*onClick={async () => {
+                            const results = [];
+                            for (let i = 0; i < formData.list_items.length; i++) {
+                                const itemName = await trigger(`itemName_${i}`);
+                                const itemQuantity = await trigger(`itemQuantity_${i}`);
+                                const itemWeight = await trigger(`itemWeight_${i}`);
+                                const itemValue = await trigger(`itemValue_${i}`);
+                                results.push(itemName, itemQuantity, itemWeight, itemValue);
+                            }
+                            const hasErrors = results.some(i => i === false);
+                            if (!hasErrors) {
+                                createItem(); // Pass all results at once
+                            }
+                        }}*/
+                        onClick={async () => {
+                            if (formData.list_items.length >= 5) {
+                                toast.error('You can only add up to 5 items');
+                                return;
+                            }
+                            let checkName = await trigger(`itemName_${formData.list_items.length - 1}`);
+                            let checkQuantity = await trigger(`itemQuantity_${formData.list_items.length - 1}`);
+                            let checkWeight = await trigger(`itemWeight_${formData.list_items.length - 1}`);
+                            let checkValue = await trigger(`itemValue_${formData.list_items.length - 1}`);
+                            if (checkName && checkQuantity && checkWeight && checkValue) {
+                                createItem();
+                            }
+                        }}>
                         <Button sx={{
                             border: 1,
                             py: 1,
@@ -273,8 +355,8 @@ function FormGoodsInfo() {
                     </Typography>
                 </Box>
                 <Divider sx={{mx: 2, my: 1, borderColor: '#C7C8CC'}} variant="middle"/>
-
-                <Box sx={{mx: 2, my: 1, display: 'flex', flexDirection: 'row'}}>
+                {/*Total Value - Total Weight*/}
+                <Box sx={{my: 1, display: 'flex', flexDirection: 'row'}}>
                     <Grid container>
                         <Grid item xs={6}>
                             <Typography variant='body1'
@@ -295,24 +377,19 @@ function FormGoodsInfo() {
                                 width: '100%',
                                 fontWeight: 550,
                                 color: 'red'
-                            }}>{formData.total_weight.toLocaleString()||0} gram</Typography>
-                        </Grid>
+                            }}>{formData.total_weight.toLocaleString() || 0} gram</Typography>
+                        </Grid><Grid item xs={6}>
+                        <Typography variant='body1'
+                                    sx={{
+                                        py: 1,
+                                        textAlign: 'left',
+                                        fontSize: '16px'
+                                    }}
+                        >
+                            Total value:
+                        </Typography>
                     </Grid>
-                </Box>
-                <Box sx={{mx: 2, my: 1, display: 'flex', flexDirection: 'row'}}>
-                    <Grid container>
-                        <Grid item xs={3}>
-                            <Typography variant='body1'
-                                        sx={{
-                                            py: 1,
-                                            textAlign: 'left',
-                                            fontSize: '16px'
-                                        }}
-                            >
-                                Total value:
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={6}>
                             <Typography variant='h6' sx={{
                                 py: 1,
                                 textAlign: 'right',
@@ -320,92 +397,151 @@ function FormGoodsInfo() {
                                 width: '100%',
                                 fontWeight: 550,
                                 color: 'red'
-                            }}>${formData.total_value.toLocaleString()||0}</Typography>
+                            }}>${formData.total_value.toLocaleString() || 0}</Typography>
                         </Grid>
                     </Grid>
                 </Box>
-                <Divider sx={{mx: 2, my: 2, borderColor: '#C7C8CC'}} variant="middle"/>
-                <Box sx={{mx: 2, my: 1, display: 'flex', flexDirection: 'row'}}>
-
-                    {/*<Grid container spacing={2} columns={12}>
-                        <Grid item xs={4}>
-                            <Tooltip title="Item Quantity">
-                                <TextField
-                                    margin="dense"
-                                    label="Quantity"
-                                    defaultValue={1}
-                                    type="text"
-                                    required={true}
-                                    InputProps={{
-                                        startAdornment: <ClearAllIcon></ClearAllIcon>,
+                <Divider sx={{mx: 2, my: 1, borderColor: '#C7C8CC'}} variant="middle"/>
+                {/*Package Size*/}
+                <Box sx={{my: 1, display: 'flex', flexDirection: 'column'}}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                        <Typography variant='h6'
+                                    sx={{
+                                        fontSize: '14px',
+                                        fontWeight: 550,
+                                        display: 'fit-content',
                                     }}
-                                    onChange={(e) => updateItem(index, e)}
-                                    error={!!(errors[`itemQuantity_${index}`])}
-                                    helperText={errors[`itemQuantity_${index}`]?.message}
-                                    size={"small"}
-                                    fullWidth={true}
-                                />
-                            </Tooltip>
+                        >
+                            Package Size
+                        </Typography>
+                        <Tooltip title="All items will be packed into one package" placement={"right"}>
+                            <IconButton color={"info"} size={"small"}>
+                                <InfoIcon fontSize={"small"}></InfoIcon>
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    <Grid container spacing={2} columns={12}>
+                        <Grid item xs={4}>
+                            <TextField
+                                margin="dense"
+                                label="Width"
+                                type="text"
+                                {...register("width", {
+                                    max: {
+                                        value: 500,
+                                        message: "Width must be less than 500 cm"
+                                    },
+                                    min: {
+                                        value: 1,
+                                        message: "Width must be more than 1 cm"
+                                    }
+                                })}
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+                                }}
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                    handleChangeSize(e)
+                                }}
+                                error={!!(errors.width)}
+                                helperText={errors.width?.message}
+                                size={"small"}
+                                fullWidth={true}
+                                autoComplete={"off"}
+                            />
                         </Grid>
                         <Grid item xs={4}>
-                            <Tooltip title="Item Weight(gram)">
-                                <TextField
-                                    margin="dense"
-                                    label="Weight"
-                                    type="text"
-                                    required={true}
-                                    {...register(`itemWeight_${index}`, {
-                                        required: "Weight item is required",
-                                        max: {
-                                            value: 1000000,
-                                            message: "Weight item must be less than 1000000 gram"
-                                        },
-                                        min: {
-                                            value: 1,
-                                            message: "Weight item must be more than 1 gram"
-                                        }
-                                    })}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">g</InputAdornment>,
-                                    }}
-                                    onChange={(e) => updateItem(index, e)}
-                                    error={!!(errors[`itemWeight_${index}`])}
-                                    helperText={errors[`itemWeight_${index}`]?.message}
-                                    size={"small"}
-                                    fullWidth={true}
-                                />
-                            </Tooltip>
+                            <TextField
+                                margin="dense"
+                                label="Height"
+                                type="text"
+                                {...register("height", {
+                                    max: {
+                                        value: 500,
+                                        message: "Height must be less than 500 cm"
+                                    },
+                                    min: {
+                                        value: 1,
+                                        message: "Height must be more than 1 cm"
+                                    }
+                                })}
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+                                }}
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                    handleChangeSize(e)
+                                }}
+                                error={!!(errors.height)}
+                                helperText={errors.height?.message}
+                                size={"small"}
+                                fullWidth={true}
+                                autoComplete={"off"}
+                            />
                         </Grid>
                         <Grid item xs={4}>
                             <Tooltip title="Item value">
                                 <TextField
                                     margin="dense"
-                                    label="Value"
+                                    label="Length"
                                     type="text"
-                                    {...register(`itemValue_${index}`, {
+                                    {...register("length", {
                                         max: {
-                                            value: 100000,
-                                            message: "Value item must be less than 100000 $"
+                                            value: 500,
+                                            message: "Length item must be less than 500 cm"
                                         },
                                         min: {
                                             value: 1,
-                                            message: "Value item must be more than 1 $"
+                                            message: "Length item must be more than 1 cm"
                                         }
                                     })}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        endAdornment: <InputAdornment position="end">cm</InputAdornment>,
                                     }}
-                                    onChange={(e) => updateItem(index, e)}
-                                    error={!!(errors[`itemValue_${index}`])}
-                                    helperText={errors[`itemValue_${index}`]?.message}
+                                    onChange={(e) => {
+                                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                        handleChangeSize(e)
+                                    }}
+                                    error={!!(errors.length)}
+                                    helperText={errors.length?.message}
                                     size={"small"}
                                     fullWidth={true}
+                                    autoComplete={"off"}
                                 />
                             </Tooltip>
                         </Grid>
-                    </Grid>*/}
+                    </Grid>
+                    {Number(formData.size_convert) > 0 && (
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <Typography variant='subtitle1'
+                                        sx={{
+                                            fontSize: '15px',
+                                            fontWeight: 500,
+                                            display: 'fit-content',
+                                        }}
+                            >
+                                Volumetric Weight: {(Number(formData.size_convert.toFixed(0))).toLocaleString()} gram
+                            </Typography>
+                            <Tooltip title="All items will be packed into one package" placement={"right"}>
+                                <IconButton color={"warning"} size={"medium"} onClick={() => {
+                                    setOpenDialog(true)
+                                }}>
+                                    <HelpOutlineIcon fontSize={"medium"}></HelpOutlineIcon>
+                                </IconButton>
+                            </Tooltip>
+                        </Box>)}
                 </Box>
             </Box>
+            <CustomDialogContent content={contentDialog} title={"Volumetric Weight"} setIsOpen={setOpenDialog}
+                                 isOpen={openDialog}/>
         </Card>
     )
 }
