@@ -45,6 +45,8 @@ export default function UpdatedRequestManagement() {
 			if (employeeRes.ok) {
 				const employees = employeeRes.data as Employee[];
 				const newEmployees = employees.map(employee => {
+
+					//@ts-ignore
 					const acceptEmployee: AcceptEmployeeRequest = {
 						...employee,
 					};
@@ -56,6 +58,8 @@ export default function UpdatedRequestManagement() {
 						const [key, value] = pair.split(":");
 						extractedInfo[key.toLowerCase()] = value;
 					});
+
+					//@ts-ignore
 					acceptEmployee.submitedInfo = extractedInfo;
 
 					return acceptEmployee;

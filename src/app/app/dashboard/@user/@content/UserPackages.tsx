@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
@@ -131,3 +132,4 @@ export default function UserPackages() {
 		</div>
 	);
 }
+*/

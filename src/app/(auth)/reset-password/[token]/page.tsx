@@ -59,6 +59,7 @@ const RegisterForm = ({ params }: { params: { token: string } }) => {
 	};
 
 	const onSubmit = async (formData: Schema) => {
+		// @ts-ignore
 		const res = await fetch("/api/reset-password/" + params.id, {
 			method: "PUT",
 			body: JSON.stringify(formData),

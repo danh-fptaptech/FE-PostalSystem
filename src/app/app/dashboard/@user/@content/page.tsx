@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { UserContext } from "@/contexts/UserContext";
 import UserChangePasswordForm from "./UserChangePasswordForm";
-import UserPackages from "./UserPackages";
+// import UserPackages from "./UserPackages";
 import UserProfile from "./UserProfile";
 
 const UserPage = () => {
@@ -18,7 +18,7 @@ const UserPage = () => {
 			case "tab2":
 				return <UserChangePasswordForm />;
 			case "tab3":
-				return <UserPackages />;
+				// return <UserPackages />;
 			default:
 				return null;
 		}

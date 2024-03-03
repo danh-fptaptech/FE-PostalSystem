@@ -5,6 +5,8 @@ const url = process.env.NEXT_PUBLIC_API_URL + "/Auth/Login";
 
 export const authOptions = {
 	// Configure one or more authentication providers
+	secret: process.env.NEXTAUTH_SECRET,
+
 	providers: [
 		CredentialsProvider({
 			name: "Credentials",
@@ -45,6 +47,7 @@ export const authOptions = {
 		signIn: "/login",
 	},
 	callbacks: {
+		//@ts-ignore
 		async jwt({ token, user, trigger, session }) {
 			if (user) {
 				token.accessToken = user.token;
@@ -56,6 +59,7 @@ export const authOptions = {
 			return token;
 		},
 
+		//@ts-ignore
 		async session({ session, token, user }) {
 			session.token = token;
 			try {
@@ -93,8 +97,12 @@ export const authOptions = {
 			return session;
 		},
 	},
+
+
+
 };
 
+//@ts-ignore
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

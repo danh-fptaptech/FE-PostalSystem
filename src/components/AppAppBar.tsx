@@ -13,11 +13,6 @@ import MenuIcon from '@mui/icons-material/Menu'
 import ToggleColorMode from './ToggleColorMode'
 import Link from 'next/link'
 
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  cursor: 'pointer'
-}
 
 interface AppAppBarProps {
   mode: PaletteMode
@@ -51,7 +46,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
         position="fixed"
         sx={{
           boxShadow: 0,
-          bgcolor: 'transparent',
+          backgroundColor: 'transparent',
           backgroundImage: 'none',
           mt: 2
         }}
@@ -65,7 +60,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               justifyContent: 'space-between',
               flexShrink: 0,
               borderRadius: '999px',
-              bgcolor:
+              backgroundColor:
                 theme.palette.mode === 'light'
                   ? 'rgba(255, 255, 255, 0.4)'
                   : 'rgba(0, 0, 0, 0.4)',
@@ -147,7 +142,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 size="small"
                 component="a"
               >
-                <Link href='/app' style={{ textDecoration:'none', color:'white' }}>To App</Link>
+                <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
               </Button>
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>

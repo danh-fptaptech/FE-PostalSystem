@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="" />
+    <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(auth)/reset-password/[token]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/reset-password/[token]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/Feecustom/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/Feecustom/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/UserPackages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/UserPackages.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppAppBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppAppBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libs/data.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/libs/data.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Merge-3.3" />
+        <entry key="$PROJECT_DIR$" value="Tai-Dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -34,7 +49,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -52,7 +67,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Long-Dev",
+    "git-widget-placeholder": "Merge-3.3",
     "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/api/locations/getlocationsbyid",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -150,5 +165,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Before Merge 3/3" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>

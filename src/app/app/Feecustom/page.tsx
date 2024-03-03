@@ -1,8 +1,8 @@
+/*
 'use client'
 import { DataFeeCustomType } from "@/helper/interface";
 import { useEffect, useState } from "react"
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button} from "@mui/material";
 import { useRouter } from 'next/navigation'
 
@@ -102,13 +102,13 @@ export default function FeeCustomPage() {
                     autoHeight
                     sx={{
                         '& .MuiDataGrid-columnHeaders': {
-                            backgroundColor: 'primary.main', 
+                            backgroundColor: 'primary.main',
                             color: '#ffffff',
                         },
                     }}
                 />
             </div>
         </div>
-        
+
     );
-}
+}*/

@@ -178,8 +178,9 @@ export const fetchAddPermission = async (
 	);
 };
 export const fetchBranches = async () => {
-	const response = await import("../app/api/branchs/route");
-	return (await response.GET()).json() as Promise<ApiResponse>;
+	const response = await import("../app/api/branches/route");
+	// @ts-ignore
+	return await (await response.GET()).json() as Promise<ApiResponse>;
 };
 export const fetchLocations = async () => {
 	const res = await import("../app/api/locations/route");

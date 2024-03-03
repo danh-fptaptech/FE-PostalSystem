@@ -97,7 +97,9 @@ export default function HistoryLogsPage() {
 							</TableHead>
 
 							<TableBody>
-								{employee?.historyLogs?.length === 0 ? (
+
+								{// @ts-ignore
+									employee?.historyLogs?.length === 0 ? (
 									<TableRow>
 										<TableCell
 											colSpan={6}

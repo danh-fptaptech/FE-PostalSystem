@@ -3,7 +3,6 @@
 import React from "react";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Loading from "@/app/components/Loading";
 import {
 	Employee,
