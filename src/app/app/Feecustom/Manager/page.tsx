@@ -23,7 +23,7 @@ interface listServiceCustomType {
     createdAt: string;
     updatedAt: string;
     status: number;
-    distance: number;
+    overWeightCharge: number;
     feeCharge: number;
     timeProcess: number;
 
@@ -46,9 +46,9 @@ export default function ManagerFeeCustom() {
     const [data, setData] = useState({ postalCodeFrom: '', postalCodeTo: '' });
     const [dataId, setDataId] = useState({ postalCodeFromId: '', postalCodeToId: '' });
     const [listFee, setListFee] = useState<DataFeeCustomType[]>([]);
-    const [listService, setListService] = useState<DataServiceType[]>([]);
+    const [listService, setListService] = useState<any>([]);
     const [listServiceCustom, setListServiceCustom] = useState<listServiceCustomType[]>([]);
-    const [distance, setDistance] = useState<number>(0);
+    // const [overWeightCharge, setOverWeightCharge] = useState<number>(0);
     const [selectedSenderDistrict, setSelectedSenderDistrict] = useState<DataLocationType | null>(null);
     const [selectedReceiverDistrict, setSelectedReceiverDistrict] = useState<DataLocationType | null>(null);
 
@@ -116,7 +116,6 @@ export default function ManagerFeeCustom() {
     }, [receiverProvince]);
 
     useEffect(() => {
-
         const fetchService = async () => {
             const res = await fetch(`/api/services`)
             const resData = await res.json();
@@ -154,17 +153,17 @@ export default function ManagerFeeCustom() {
 
     const mapToServiceCustom = () => {
         let listServiceCustom: listServiceCustomType[] = [];
-        listService && listService.length > 0 && listService.map((service, index) => {
+        listService && listService.length > 0 && listService.map((service:any, index:number) => {
             listServiceCustom.push({
                 id: service.id,
-                serviceName: service.serviceName,
-                serviceDescription: service.serviceDescription,
+                serviceName: service.serviceType.serviceName,
+                serviceDescription: service.serviceType.serviceDescription,
                 weighFrom: service.weighFrom,
                 weighTo: service.weighTo,
                 createdAt: service.createdAt,
                 updatedAt: service.updatedAt,
                 status: service.status,
-                distance: distance,
+                overWeightCharge: service.overWeightCharge,
                 feeCharge: getValueFeeCharge(service.id),
                 timeProcess: getValueTimeProcess(service.id)
             });
@@ -195,7 +194,7 @@ export default function ManagerFeeCustom() {
             serviceId: item.id,
             locationIdFrom: parseInt(dataId.postalCodeFromId),
             locationIdTo: parseInt(dataId.postalCodeToId),
-            distance: distance,
+            overWeightCharge: item.overWeightCharge,
             feeCharge: item.feeCharge,
             timeProcess: item.timeProcess,
             status: 1
@@ -218,6 +217,9 @@ export default function ManagerFeeCustom() {
         }
         if (name === 'timeProcess') {
             updatedItem.timeProcess = +value;
+        }
+        if(name === 'overWeightCharge'){
+            updatedItem.overWeightCharge = +value;
         }
         const index = listServiceCustom.findIndex((item) => item.id === updatedItem.id);
         const newListServiceCustom = [...listServiceCustom];
@@ -334,8 +336,7 @@ export default function ManagerFeeCustom() {
                             renderInput={(params) => <TextField {...params} label="Districts" />}
                         />
                     </Grid>
-                    <Grid container spacing={2} justifyContent="space-between">
-
+                    <Grid container spacing={2} justifyContent="space-between" sx={{marginBottom:'12px'}}>
                         <Grid item xs>
                             <Button
                                 style={{ marginLeft: '24px', marginTop: '12px', width: '150px' }}
@@ -360,25 +361,16 @@ export default function ManagerFeeCustom() {
                     </Grid>
                 </Grid>
             </div>
-            <div className="m-5 border-2 rounded-lg">
+            <div>
                 <Grid item >
                     <TableContainer>
                         <Table>
                             <TableHead style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
                                 <TableRow>
                                     <TableCell style={{ width: '50px' }}>ID</TableCell>
-                                    <TableCell>Service Name</TableCell>
-                                    <TableCell>Service Description</TableCell>
+                                    <TableCell>Service</TableCell>
                                     <TableCell>Type Service</TableCell>
-                                    <TableCell style={{ width: '100px' }}>
-                                        <TextField
-                                            label="Distance"
-                                            variant="standard"
-                                            name='distance'
-                                            value={distance}
-                                            onChange={(e) => setDistance(+e.target.value)}
-                                        />
-                                    </TableCell>
+                                    <TableCell>Over Weight Charge</TableCell>
                                     <TableCell>Fee Charge</TableCell>
                                     <TableCell>Time Process</TableCell>
                                     <TableCell>Action</TableCell>
@@ -389,10 +381,25 @@ export default function ManagerFeeCustom() {
                                     return (
                                         <TableRow key={item.id} >
                                             <TableCell>{item.id}</TableCell>
-                                            <TableCell>{item.serviceName}</TableCell>
-                                            <TableCell>{item.serviceDescription}</TableCell>
+                                            <TableCell>
+                                                {item.serviceName}
+                                                <br />
+                                                <span style={{ display: 'block', fontSize: 'smaller', fontStyle: 'italic' }}>
+                                                    {item.serviceDescription}
+                                                </span>
+                                            </TableCell>
                                             <TableCell>{item.weighFrom}g - {item.weighTo}g</TableCell>
-                                            <TableCell>{distance}</TableCell>
+                                            <TableCell>
+                                                <TextField
+                                                    error={item.overWeightCharge === 0 || item.overWeightCharge === undefined}
+                                                    type='number'
+                                                    label="overWeightCharge"
+                                                    variant="standard"
+                                                    name='overWeightCharge'
+                                                    value={item.overWeightCharge}
+                                                    onChange={(e) => handleOnChange(e, item)}
+                                                />
+                                            </TableCell>
                                             <TableCell>
                                                 <TextField
                                                     error={item.feeCharge === 0}

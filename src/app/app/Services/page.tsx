@@ -22,7 +22,7 @@ export default function Page({
 }) {
     let query = searchParams?.query || '';
 
-    const [data, setData] = useState<DataServiceType[]>([]);
+    const [data, setData] = useState<any>([]);
     const [editItemId, setEditItemId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -64,7 +64,6 @@ export default function Page({
     }, [query]);
 
     const handleEdit = (rowData:any) => {
-        console.log(rowData.id);
         setEditItemId(rowData.id);
         setOpenModalNew(true);
     };
@@ -81,7 +80,7 @@ export default function Page({
     const handleSearch = (query: string) => {
         if (query.length > 0) {
             const dataFilter = data.filter(
-                (item) =>
+                (item:any) =>
                     item.serviceType.serviceName.toLowerCase().includes(query.toLowerCase()) ||
                     item.serviceType.serviceDescription.toLowerCase().includes(query.toLowerCase())
             );
@@ -219,7 +218,7 @@ export default function Page({
                             <TableBody>
                                 {data
                                     .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
-                                    .map((row) => renderRow(row) || null)}
+                                    .map((row:any) => renderRow(row) || null)}
                             </TableBody>
                         </Table>
                     </TableContainer>

@@ -8,7 +8,13 @@ import {
     DomainOutlined,
     HomeWorkOutlined,
     Inventory2Outlined,
-    NoteAddOutlined
+    NoteAddOutlined,
+    LocationOn,
+    Lan,
+    TypeSpecimen,
+    Paid,
+    LocalAtm,
+    FormatListBulleted
 } from "@mui/icons-material";
 import * as React from "react";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
@@ -37,6 +43,14 @@ export default function DrawerMenu() {
             createMenu("Create Branch", DomainAddOutlined, "/app/branches/create", ["branch.create"]),
         ]),
         createMenu("Packages", Inventory2Outlined, "/app/packages", ["package.view"]),
+        createMenu("Service Type", TypeSpecimen, "/app/ServiceType", ["servicetype.view"]),
+        createMenu("Services", Lan, "/app/Services", ["services.view"]),
+        createMenu("Locations", LocationOn, "/app/Locations", ["locations.view"]),
+        createMenu("Check Fee", Paid, "/app/Feecustom/checkfee", ["checkFee.view"]),
+        createMenu("Fee Custom", Paid, "/app/Feecustom", ["feecustom"], [
+            createMenu("List Branches", FormatListBulleted, "/app/Feecustom", ["feecustom.view"]),
+            createMenu("Create Branch", LocalAtm, "/app/Feecustom/Manager", ["feecustom.create"]),
+        ]),
     ]
 
     return (

@@ -57,6 +57,10 @@ const LocationsPage = () => {
         fetchProvince();
     }, []);
 
+    useEffect(() => {
+        fetchProvince();
+    }, [openModalNew]);
+
     const handleEdit = (item: DataLocationType) => {
         setOpenModalNew(true);
         setIsEditing(true);
@@ -304,7 +308,7 @@ const LocationsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {listProvince.map((row) => (
+                        {listProvince && listProvince.map((row) => (
                             <Row key={row.id} row={row} />
                         ))}
                     </TableBody>

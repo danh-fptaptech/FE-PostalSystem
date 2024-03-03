@@ -35,7 +35,6 @@ export default function Page({
         try {
             const response = await fetch("/api/ServiceType");
             const responseData = await response.json();
-            console.log("abc",responseData.data);
             if (Array.isArray(responseData.data)) {
                 setData(responseData.data);
             } else {
@@ -99,17 +98,17 @@ export default function Page({
     }
     const fetchStatus = async () => {
         try {
-            const response = await fetch(`/api/services/changeStatus/${changeStatusId}`);
+            const response = await fetch(`/api/ServiceType/changeStatus/${changeStatusId}`);
             console.log('response:', response);
             if (response.ok) {
                 if (Array.isArray(data)) {
-                    const updatedListService = data.map((item: DataServiceType) => {
+                    const updatedListServiceType = data.map((item: any) => {
                         if (item.id === changeStatusId) {
                             item.status = item.status === 1 ? 0 : 1;
                         }
                         return item;
                     });
-                    setData(updatedListService);
+                    setData(updatedListServiceType);
                 } else {
                     console.error("Data is not an array:", data);
                 }
@@ -150,12 +149,12 @@ export default function Page({
         );
     }
 
-    const renderRow = (row: DataServiceType) => {
+    const renderRow = (row: any) => {
         return (
             <TableRow key={row.id} >
                 <TableCell>{row.id}</TableCell>
-                <TableCell>{row.serviceType.serviceName}</TableCell>
-                <TableCell>{row.serviceType.serviceDescription}</TableCell>
+                <TableCell>{row.serviceName}</TableCell>
+                <TableCell>{row.serviceDescription}</TableCell>
                 <TableCell>
                     <span>
                         <Chip onClick={() => handleChangeStatus(row.id)} label={row.status === 1 ? 'Active' : 'Inactive'} color={row.status === 1 ? 'success' : 'error'} />
@@ -174,9 +173,9 @@ export default function Page({
         <div className="App">
             <ChangeStatus />
 
-            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
+            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Service Types Managerment</h1>
             <hr />
-            <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} data={data} setData={setData} />
+            <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} />
 
             <Grid container spacing={1} sx={{ marginTop: '5px' }} >
                 {isError && (
@@ -222,16 +221,4 @@ export default function Page({
             </Grid>
         </div>
     );
-}
-
-
-export function formatDate(dateTimeString: string) {
-    const date = new Date(dateTimeString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes} ${year}-${month}-${day}`;
 }
