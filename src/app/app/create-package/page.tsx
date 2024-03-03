@@ -1,5 +1,5 @@
 'use client'
-import {Box, Button, Grid, Typography} from '@mui/material'
+import {Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
 import React, {useEffect, useState} from 'react'
 import BoxInputInfo from "@/components/BoxInputInfo";
 import {useForm} from "react-hook-form";
@@ -7,7 +7,11 @@ import {PackageCreateContext} from "@/context/PackageCreateContext";
 import {DataCreatePackage} from "@/models/DataCreatePackage";
 import FormGoodsInfo from "@/components/FormGoodsInfo";
 import {Item} from "@/models/Item";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import {toast} from "sonner";
 
+// @ts-ignore
 const CreatePackage = () => {
     // Hook Form
     const {
@@ -16,7 +20,8 @@ const CreatePackage = () => {
         formState: {errors},
         control,
         resetField,
-        trigger
+        trigger,
+        reset
     } = useForm({mode: "onBlur",});
     // State
     const [formData, setFormData] = useState<DataCreatePackage>({
@@ -59,7 +64,13 @@ const CreatePackage = () => {
     const [rateConvert, setRateConvert] = useState(5);
     const [limitSize, setLimitSize] = useState(50);
     const [limitWeight, setLimitWeight] = useState(6);
-    const [listService, setListService] = useState([])
+    const [listService, setListService] = useState([]);
+    const [selectedService, setSelectedService] = useState({});
+    const [finalWeight, setFinalWeight] = useState(0);
+    const [cod, setCod] = useState(0);
+    const [fee, setFee] = useState(0);
+    const [packageNote, setPackageNote] = useState("");
+    const [timeProcess, setTimeProcess] = useState(0);
 
     // Function
     const createItem = () => {
@@ -99,22 +110,23 @@ const CreatePackage = () => {
     }
     const handleMultipleFormChange = (changes: any) => {
         const newFormData = {...formData};
-
         for (const change of changes) {
             //@ts-ignore
             newFormData[change.name] = change.value;
         }
-
         // @ts-ignore
         setFormData(newFormData);
     }
-    const onSubmit = (data: any, check?: any) => {
-        if (check) {
-            fetchListService();
-        }
-        if (Object.keys(errors).length === 0) {
-            console.log("Data:", data);
-        }
+    // Call API to get list service
+    const onSubmit = () => {
+        fetchListService().then(r => {
+            setListService(r);
+            if (r.length === 0) {
+                toast.error("No service available");
+                return
+            }
+            setSelectedService(r[0]);
+        });
     };
     const fetchListService = async () => {
         // @ts-ignore
@@ -124,12 +136,9 @@ const CreatePackage = () => {
         // @ts-ignore
         let checkSize = Object.values(formData.package_size).some(value => parseFloat(value) > limitSize) || formData.size_convert / 1000 > limitWeight;
         // @ts-ignore
-        let totalWeight = !checkSize ? formData.total_weight : (formData.size_convert > formData.total_weight ? formData.size_convert : formData.total_weight) ;
-
-        console.log("Total Weight:", totalWeight);
-        console.log("Postal Code Sender:", postalCodeSender);
-        console.log("Postal Code Receiver:", postalCodeReceiver);
-
+        let totalWeight = !checkSize ? formData.total_weight : (formData.size_convert > formData.total_weight ? formData.size_convert : formData.total_weight);
+        // @ts-ignore
+        setFinalWeight(totalWeight);
         const response = await fetch("/api/fee-service", {
             method: "POST",
             headers: {
@@ -141,8 +150,15 @@ const CreatePackage = () => {
                 weight: totalWeight,
             })
         });
-        return await response.json();
+        const data = await response.json();
+        console.log("Data service:", data.data);
+        return data.data;
     }
+
+    const handleReload = () => {
+        window.location.reload(); // This will reload the page
+    }
+
 
     // useEffect
     useEffect(() => {
@@ -183,8 +199,19 @@ const CreatePackage = () => {
     }, [formData?.district_sender]);
 
     useEffect(() => {
-        console.log("Log Value:", formData);
-    }, [formData])
+        // @ts-ignore
+        if (selectedService?.weighTo == 999999999) {
+            // @ts-ignore
+            let feeCalculate = selectedService?.feeCharge + (finalWeight - selectedService?.weighFrom) / 1000 * selectedService?.overWeightCharge;
+            setFee(feeCalculate.toFixed(2));
+            // @ts-ignore
+            setTimeProcess(selectedService?.timeProcess);
+            return
+        }
+        // @ts-ignore
+        setFee(selectedService?.feeCharge);
+    }, [selectedService])
+
 
     return (
         <PackageCreateContext.Provider
@@ -220,74 +247,254 @@ const CreatePackage = () => {
                     <FormGoodsInfo/>
                 </Grid>
             </Grid>
-            <Grid container
-                  columns={12}
-                  sx={{
-                      position: 'sticky',
-                      bottom: 10,
-                      backgroundColor: 'white',
-                      borderRadius: '10px',
-                      boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
-                      zIndex: 100
-                  }}>
-                <Grid item xs={6} lg={2}
-                      sx={{
-                          borderColor: '#C7C8CC',
-                          lg:{borderRight: 1},
-                          xs:{borderBottom: 1,borderRight: 1}
-                      }}
-                >
-                    <Typography
-                        sx={{my: 1, fontSize: '15px'}}>
-                        Weight
-                    </Typography>
-                    <Typography sx={{
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                        my: 1,
-                        fontSize: '15px'
-                    }}> đ</Typography>
+            {/*Package Service*/}
+            <Grid container spacing={3} columns={12}>
+                <Grid item lg={6} xs={12}>
+                    <Card sx={{
+                        my: 3,
+                        borderRadius: "10px",
+                        boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
+                    }}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderBottom: 1,
+                            backgroundColor: "primary.light",
+                            borderColor: '#C7C8CC',
+                            borderTopLeftRadius: 2,
+                            borderTopRightRadius: 2
+                        }}
+                        >
+                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                                Package Service
+                            </Typography>
+                        </Box>
+                        <CardContent>
+                            {listService.length > 0 ? (
+                                listService.map((service, index) => {
+                                    return (
+                                        // @ts-ignore
+                                        <Tooltip title={service.serviceDescription} arrow key={index}>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    my: 1,
+                                                    p: 1,
+                                                    borderRadius: 2,
+                                                    backgroundColor: '#F0F0F0',
+                                                    cursor: 'pointer'
+                                                }}
+                                                onClick={() => {
+                                                    setSelectedService(service);
+                                                }}
+                                            >
+                                                <Typography variant="h6" sx={{fontWeight: 550}}>
+                                                    {
+                                                        // @ts-ignore
+                                                        service.serviceName
+                                                    }
+                                                </Typography>
+                                                <Typography variant="h6" sx={{fontWeight: 550}}>
+                                                    ${
+                                                    // @ts-ignore
+                                                    service.feeCharge
+                                                }
+                                                </Typography>
+                                            </Box>
+                                        </Tooltip>
+                                    )
+                                })
+                            ) : (
+                                <Typography
+                                    sx={{textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px'}}>
+                                    No service available
+                                </Typography>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item lg={6} xs={12}>
+                    <Card sx={{
+                        my: 3,
+                        borderRadius: "10px",
+                        boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
+                    }}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderBottom: 1,
+                            backgroundColor: "primary.light",
+                            borderColor: '#C7C8CC',
+                            borderTopLeftRadius: 2,
+                            borderTopRightRadius: 2
+                        }}
+                        >
+                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                                Package Options
+                            </Typography>
+                        </Box>
+                        <CardContent>
+                            <Tooltip title="Cash on Delivery">
+                                <TextField
+                                    margin="dense"
+                                    label="COD"
+                                    type="text"
+                                    InputProps={{
+                                        startAdornment: <LocalAtmIcon fontSize={"small"}></LocalAtmIcon>,
+                                    }}
+                                    onChange={(e) => {
+                                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                        // @ts-ignore
+                                        setCod(e.target.value);
+                                    }}
+                                    size={"small"}
+                                    fullWidth={true}
+                                    autoComplete={"off"}
+                                    sx={{my: 2}}
+                                />
+                            </Tooltip>
+
+                            <TextField
+                                label="Package Note"
+                                multiline
+                                rows={4}
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//,+-]/g, '');
+                                    // @ts-ignore
+                                    setPackageNote(e.target.value);
+                                }}
+                                fullWidth={true}
+                                autoComplete={"off"}
+                                sx={{my: 2}}
+                            />
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+
+            {/*Action Confirm*/}
+            <Grid container columns={12} spacing={2}
+                  sx={{position: 'sticky', bottom: 10, zIndex: 100, backgroundColor: {xs: '#fff', lg: 'transparent'},}}>
+                <Grid item xs={6} lg={2}>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            borderRadius: '5px',
+                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            p: 1,
+                        }}>
+                        <Typography
+                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            Weight
+                        </Typography>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                            my: 1,
+                            fontSize: '15px'
+                        }}>{finalWeight ? finalWeight.toLocaleString() + " gram" : "... gram"}
+                        </Typography>
+                    </Box>
                 </Grid>
 
-                <Grid item xs={2} sx={{borderRight: 1, borderColor: '#C7C8CC'}}>
-                    <Typography
-                        sx={{textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px'}}>Tiền
-                        thu hộ</Typography>
+                <Grid item xs={6} lg={2}>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            borderRadius: '5px',
+                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            p: 1,
+                        }}>
+                        <Typography
+                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            COD
+                        </Typography>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                            my: 1,
+                            fontSize: '15px'
+                        }}>{cod ? "$" + Number(cod).toLocaleString() : "$..."}
+                        </Typography>
+                    </Box>
                 </Grid>
 
-                <Grid item xs={2} sx={{borderRight: 1, borderColor: '#C7C8CC'}}>
+                <Grid item xs={6} lg={2}>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            borderRadius: '5px',
+                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            p: 1,
+                        }}>
+                        <Typography
+                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            Fee
+                        </Typography>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                            my: 1,
+                            fontSize: '15px'
+                        }}>{fee ? "$" + Number(fee).toLocaleString() : "$..."}
+                        </Typography>
+                    </Box>
                 </Grid>
 
-                <Grid item xs={2} sx={{borderRight: 1, borderColor: '#C7C8CC'}}>
-                    <Typography
-                        sx={{textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px'}}>Thời
-                        gian dự kiến</Typography>
+                <Grid item xs={6} lg={2}>
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            borderRadius: '5px',
+                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            p: 1,
+                        }}>
+                        <Typography
+                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            Time Process
+                        </Typography>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                            my: 1,
+                            fontSize: '15px'
+                        }}>{
+                            timeProcess ? (
+                                timeProcess > 24 ? (timeProcess / 24).toFixed(1) + " days" : timeProcess + " hours"
+                            ) : "... hours"
+                        }
+                        </Typography>
+                    </Box>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item lg={4} xs={12}>
                     <Box sx={{
-                        mx: 2,
-                        mt: 1,
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-evenly'
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        height: '100%',
+                        backgroundColor: 'white',
+                        borderRadius: '5px',
+                        boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                        p: 1,
                     }}>
-                        <Typography>
-                            <Button onClick={handleSubmit((data) => {
-                                onSubmit(data, true);
-                            })}>Submit</Button>
-                        </Typography>
-                        <Typography>
-                            <Button sx={{
-                                py: 1,
-                                textAlign: 'center',
-                                fontSize: '13px',
-                                width: '100%',
-                                fontWeight: 550,
-                                color: 'black',
-                                backgroundColor: '#C7C8CC'
-                            }}>Làm mới</Button>
-                        </Typography>
+                        <Button
+                            startIcon={<TextSnippetIcon/>}
+                            variant="outlined"
+                            onClick={handleSubmit(onSubmit)}
+                        >
+                            Get Service
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={handleReload}
+                        >
+                            Reload
+                        </Button>
                     </Box>
                 </Grid>
             </Grid>
