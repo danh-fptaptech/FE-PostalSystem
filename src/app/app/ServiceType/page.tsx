@@ -20,9 +20,7 @@ export default function Page({
         page?: string;
     };
 }) {
-    let query = searchParams?.query || '';
-
-    const [data, setData] = useState<DataServiceType[]>([]);
+    const [data, setData] = useState<any>([]);
     const [editItemId, setEditItemId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,14 +29,13 @@ export default function Page({
 
     const [currentPage, setCurrentPage] = useState(Number(searchParams?.page) || 0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
     const [openModalNew, setOpenModalNew] = React.useState(false);
 
-    const fetchServices = async () => {
+    const fetchServiceTypes = async () => {
         try {
-            const response = await fetch("/api/services");
+            const response = await fetch("/api/ServiceType");
             const responseData = await response.json();
-            console.log(responseData.data);
+            console.log("abc",responseData.data);
             if (Array.isArray(responseData.data)) {
                 setData(responseData.data);
             } else {
@@ -50,21 +47,16 @@ export default function Page({
     }
     useEffect(() => {
         if (!isLoading) {
-            fetchServices();
+            fetchServiceTypes();
             setIsLoading(true);
         }
     }, [isLoading]);
 
     useEffect(() => {
-        fetchServices();
+        fetchServiceTypes();
     }, [openModalNew])
 
-    useEffect(() => {
-        handleSearch(query);
-    }, [query]);
-
     const handleEdit = (rowData:any) => {
-        console.log(rowData.id);
         setEditItemId(rowData.id);
         setOpenModalNew(true);
     };
@@ -81,7 +73,7 @@ export default function Page({
     const handleSearch = (query: string) => {
         if (query.length > 0) {
             const dataFilter = data.filter(
-                (item) =>
+                (item:any) =>
                     item.serviceType.serviceName.toLowerCase().includes(query.toLowerCase()) ||
                     item.serviceType.serviceDescription.toLowerCase().includes(query.toLowerCase())
             );
@@ -164,9 +156,6 @@ export default function Page({
                 <TableCell>{row.id}</TableCell>
                 <TableCell>{row.serviceType.serviceName}</TableCell>
                 <TableCell>{row.serviceType.serviceDescription}</TableCell>
-                <TableCell>{row.weighFrom}g {row.weighTo !== 999999999 ? "- " + row.weighTo + "g" : " over"}</TableCell>
-                <TableCell>{formatDate(row.createdAt)}</TableCell>
-                <TableCell>{formatDate(row.updatedAt)}</TableCell>
                 <TableCell>
                     <span>
                         <Chip onClick={() => handleChangeStatus(row.id)} label={row.status === 1 ? 'Active' : 'Inactive'} color={row.status === 1 ? 'success' : 'error'} />
@@ -209,9 +198,6 @@ export default function Page({
                                     <TableCell>ID</TableCell>
                                     <TableCell>Service Name</TableCell>
                                     <TableCell>Service Description</TableCell>
-                                    <TableCell>Type Service</TableCell>
-                                    <TableCell>CreatedAt</TableCell>
-                                    <TableCell>UpdatedAt</TableCell>
                                     <TableCell>Status</TableCell>
                                     <TableCell>Acction</TableCell>
                                 </TableRow>
@@ -219,7 +205,7 @@ export default function Page({
                             <TableBody>
                                 {data
                                     .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
-                                    .map((row) => renderRow(row) || null)}
+                                    .map((row:any) => renderRow(row) || null)}
                             </TableBody>
                         </Table>
                     </TableContainer>

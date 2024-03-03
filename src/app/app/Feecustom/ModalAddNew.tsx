@@ -284,8 +284,8 @@ export default function ModalAddNew({
                                                 return (
                                                     <TableRow key={service.id} >
                                                         <TableCell>{service.id}</TableCell>
-                                                        <TableCell>{service.serviceName}</TableCell>
-                                                        <TableCell>{service.serviceDescription}</TableCell>
+                                                        <TableCell>{service.serviceType.serviceName}</TableCell>
+                                                        <TableCell>{service.serviceType.serviceDescription}</TableCell>
                                                         <TableCell>{service.weighFrom}g - {service.weighTo}g</TableCell>
                                                         <TableCell>{service.createdAt}</TableCell>
                                                         <TableCell>{service.updatedAt}</TableCell>

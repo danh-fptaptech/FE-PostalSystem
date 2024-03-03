@@ -99,6 +99,7 @@ const EstimatePage: React.FC = () => {
             }
             fetchProvince();
             console.log("listDistricts:", listDistricts);
+            setErrors([]);
         }
     }, [isLoading]);
 
@@ -118,6 +119,7 @@ const EstimatePage: React.FC = () => {
         setData({ ...data, postalCodeFrom: '' });
         setListFee([]);
     }, [senderProvince]);
+
     useEffect(() => {
         const fetchDistrict = async () => {
             if (receiverProvince !== 0) {
@@ -134,13 +136,6 @@ const EstimatePage: React.FC = () => {
         setListFee([]);
     }, [receiverProvince]);
 
-    const renderDistrictSenders = (rows: DataLocationType[]) => {
-        return (
-            rows.map((row: DataLocationType) => (
-                <MenuItem key={row.id} value={row.id}>{row.locationName}</MenuItem>
-            ))
-        );
-    }
     const handleAutocompleteOnchange = (e: any, value: DataLocationType | null, id: string) => {
         e.preventDefault();
         console.log(id, value);
@@ -153,22 +148,24 @@ const EstimatePage: React.FC = () => {
             setData({ ...data, postalCodeTo: value.postalCode });
         }
     }
-    const renderListFee = (data: DataFeeCustomType[]) => {
+    const renderListFee = (data: any) => {
         return (
             <Table>
                 <TableHead>
-                    <TableRow >
+                    <TableRow sx={{ bgcolor: 'primary.main' }}>
                         <TableCell className='font-bold bg-gray-100'>Service Name</TableCell>
+                        <TableCell className='font-bold bg-gray-100'>Over Weight Charge</TableCell>
                         <TableCell className='font-bold bg-gray-100'>Fee Charge</TableCell>
                         <TableCell className='font-bold bg-gray-100'>Time Process</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row, index) => {
+                    {data.map((row:any, index:number) => {
                         return (
                             <TableRow key={index}>
-                                <TableCell>{row.service.serviceName}</TableCell>
-                                <TableCell>{row.feeCharge}</TableCell>
+                                <TableCell>{row.serviceName}</TableCell>
+                                <TableCell>{row.overWeightCharge}$</TableCell>
+                                <TableCell>{row.feeCharge}$</TableCell>
                                 <TableCell>{row.timeProcess}</TableCell>
                             </TableRow>
                         )
