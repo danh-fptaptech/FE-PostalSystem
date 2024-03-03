@@ -25,7 +25,9 @@ const Layout = ({ children }: any) => {
         </AppBar>
       </header>
       <Toolbar />
-      <main>{children}</main>
+      <main>
+          {children}
+      </main>
       <footer>
         <Container>
           <p>&copy; {new Date().getFullYear()} Tars Postal</p>
