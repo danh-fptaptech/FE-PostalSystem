@@ -83,7 +83,10 @@ const FormInfo = (props: any) => {
                     {...register(`address_${type}`, {
                         required: "Address is required",
                     })}
-                    onChange={handleFormChange}
+                    onChange={(e)=>{
+                        e.target.value = e.target.value.replace(/[^0-9a-zA-Z//,+-]/g, '');
+                        handleFormChange(e);
+                    }}
                     error={!!(errors[`address_${type}`])}
                     helperText={errors[`address_${type}`]?.message}
                     size={"small"}
