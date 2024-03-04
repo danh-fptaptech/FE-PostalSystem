@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { VisibilityOff, Visibility, Update } from "@mui/icons-material";
 import {
 	FormControl,
 	InputLabel,
@@ -13,6 +13,7 @@ import {
 	IconButton,
 	FormHelperText,
 	Button,
+	CircularProgress,
 } from "@mui/material";
 import React from "react";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ import { ApiResponse, Employee } from "@/types/types";
 export default function ChangePasswordPage() {
 	const [employee, setEmployee] = React.useState<Employee>();
 	const [showPassword, setShowPassword] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
 	const { data: session } = useSession();
 	const schema = z
 		.object({
@@ -206,7 +208,8 @@ export default function ChangePasswordPage() {
 						variant="contained"
 						color="success"
 						type="submit"
-						className="w-full mr-2 mb-3">
+						className="w-full mr-2 mb-3"
+						startIcon={loading ? <CircularProgress size={24} /> : <Update />}>
 						Change
 					</Button>
 					<Button

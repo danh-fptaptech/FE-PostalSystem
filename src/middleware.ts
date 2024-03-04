@@ -51,7 +51,7 @@ export default withAuth(
 				req.nextUrl.pathname.startsWith("/app/employee") ||
 				req.nextUrl.pathname.startsWith("/app/admin/employees")
 			) {
-				return NextResponse.redirect(new URL("/?login=false", req.url));
+				return NextResponse.redirect(new URL("/", req.url));
 			}
 		}
 	},
@@ -79,13 +79,13 @@ export const config = {
 };
 
 const paths = [
-	// {
-	// 	path: "/app/admin",
-	// 	permission: ["Admin"],
-	// },
+	{
+		path: "/register",
+		permission: ["user.access", "user.all", "home.access"],
+	},
 	{
 		path: "/app/admin/employees",
-		permission: ["Admin", "Branch Manager"],
+		permission: ["Admin"],
 	},
 	{
 		path: "/app/admin/roles",
@@ -104,6 +104,10 @@ const paths = [
 	{
 		path: "/app/employee",
 		permission: ["user.access", "Employee", "Branch Manager"],
+	},
+	{
+		path: "/app/user",
+		permission: ["user.access", "User"],
 	},
 
 	{

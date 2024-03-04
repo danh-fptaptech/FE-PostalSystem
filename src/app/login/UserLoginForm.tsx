@@ -76,7 +76,7 @@ const UserLoginForm = () => {
 
 			if (!res?.error) {
 				//router.push(callbackUrl);
-				router.push("/app/dashboard");
+				router.push("/app/user");
 			} else {
 				setError("Invalid email or password");
 			}
@@ -161,14 +161,16 @@ const UserLoginForm = () => {
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2">
+					variant="body2"
+					className="text-decoration-none">
 					Forgot Password?
 				</Link>
 				<Box mt={1}>
 					<Link
 						component={LinkBehaviour}
 						href="/register"
-						variant="body2">
+						variant="body2"
+						className="text-decoration-none hover:font-semibold">
 						Don&apos;t have an account? Sign Up
 					</Link>
 				</Box>

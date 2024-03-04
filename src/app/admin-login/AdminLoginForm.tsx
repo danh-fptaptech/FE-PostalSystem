@@ -71,7 +71,6 @@ const AdminLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				//router.push(callbackUrl);
 				router.push("/app/admin/employees");
 			} else {
 				setError("Invalid email or password");
@@ -157,17 +156,10 @@ const AdminLoginForm = () => {
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2">
+					variant="body2"
+					className="text-decoration-none hover:font-semibold">
 					Forgot Password?
 				</Link>
-				<Box mt={1}>
-					<Link
-						component={LinkBehaviour}
-						href="/register"
-						variant="body2">
-						Don&apos;t have an account? Sign Up
-					</Link>
-				</Box>
 			</Box>
 		</Box>
 	);

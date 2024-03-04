@@ -136,29 +136,34 @@ export default function HistoryLogsPage() {
 										</TableCell>
 									</TableRow>
 								) : (
-									employee?.historyLogs?.map(h => (
-										<TableRow
-											key={h.id}
-											sx={{
-												"&:last-child td, &:last-child th": { border: 0 },
-											}}>
-											<TableCell align="center">{h.packageId}</TableCell>
-											<TableCell align="center">{h.photos}</TableCell>
-											<TableCell align="center">{h.historyNote}</TableCell>
-											<TableCell align="center">
-												{processStepLabels[h.processStep]}
-											</TableCell>
-											<TableCell align="center">
-												{h.step === 0
-													? "Processing"
-													: h.step === 1
-													? "Done"
-													: "Hold"}
-											</TableCell>
-											<TableCell align="center">
-												{h.updatedAt.split("T")[0]}
-											</TableCell>
-											{/* <TableCell align="center">
+									employee?.historyLogs
+										?.slice(
+											page * rowsPerPage,
+											page * rowsPerPage + rowsPerPage
+										)
+										.map(h => (
+											<TableRow
+												key={h.id}
+												sx={{
+													"&:last-child td, &:last-child th": { border: 0 },
+												}}>
+												<TableCell align="center">{h.packageId}</TableCell>
+												<TableCell align="center">{h.photos}</TableCell>
+												<TableCell align="center">{h.historyNote}</TableCell>
+												<TableCell align="center">
+													{processStepLabels[h.processStep]}
+												</TableCell>
+												<TableCell align="center">
+													{h.step === 0
+														? "Processing"
+														: h.step === 1
+														? "Done"
+														: "Hold"}
+												</TableCell>
+												<TableCell align="center">
+													{h.updatedAt.split("T")[0]}
+												</TableCell>
+												{/* <TableCell align="center">
 												<Tooltip title="Change Step">
 													<Button
 														type="button"
@@ -172,8 +177,8 @@ export default function HistoryLogsPage() {
 														}}></Button>
 												</Tooltip>
 											</TableCell> */}
-										</TableRow>
-									))
+											</TableRow>
+										))
 								)}
 							</TableBody>
 						</Table>

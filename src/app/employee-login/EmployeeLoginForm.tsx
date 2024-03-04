@@ -22,6 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { useSession } from "next-auth/react";
 
 const schema = z.object({
 	userId: z.string({
@@ -38,6 +39,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 const EmployeeLoginForm = () => {
+	const { data: session } = useSession();
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [error, setError] = React.useState("");
 	const router = useRouter();
@@ -71,7 +73,6 @@ const EmployeeLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				//router.push(callbackUrl);
 				router.push("/app/employee");
 			} else {
 				setError("Invalid email or password");
@@ -80,6 +81,17 @@ const EmployeeLoginForm = () => {
 			setError("An unexpected error happened");
 		}
 	};
+
+	// React.useEffect(() => {
+	// 	if (session?.user) {
+	// 		if (session.user.role.name === "Branch Manager") {
+	// 			router.push("/app/branch-manager");
+	// 		}
+	// 		if (session.user.role.name === "Employee") {
+	// 			router.push("/app/employee");
+	// 		}
+	// 	}
+	// }, [session, router]);
 
 	return (
 		<Box
@@ -157,17 +169,10 @@ const EmployeeLoginForm = () => {
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2">
+					variant="body2"
+					className="text-decoration-none hover:font-semibold">
 					Forgot Password?
 				</Link>
-				<Box mt={1}>
-					<Link
-						component={LinkBehaviour}
-						href="/register"
-						variant="body2">
-						Don&apos;t have an account? Sign Up
-					</Link>
-				</Box>
 			</Box>
 		</Box>
 	);

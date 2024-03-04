@@ -16,57 +16,35 @@ export default function AvatarMenu() {
 		setAnchorEl(null);
 	};
 
-	// if (status === "authenticated") {
-	// 	return (
-	// 		<div>
-	// 			<div className="flex">
-	// 				<Button
-	// 					id="basic-button"
-	// 					aria-controls={open ? "basic-menu" : undefined}
-	// 					aria-haspopup="true"
-	// 					aria-expanded={open ? "true" : undefined}
-	// 					onClick={handleClick}>
-	// 					<Avatar>a</Avatar>
-	// 				</Button>
-	// 				<p>Welcome {session.user.fullname}</p>
-	// 			</div>
-	// 			<Menu
-	// 				id="basic-menu"
-	// 				anchorEl={anchorEl}
-	// 				open={open}
-	// 				onClose={handleClose}
-	// 				MenuListProps={{
-	// 					"aria-labelledby": "basic-button",
-	// 				}}>
-	// 				<MenuItem onClick={handleClose}>Profile</MenuItem>
-	// 				<MenuItem onClick={signOut}>Logout</MenuItem>
-	// 			</Menu>
-	// 		</div>
-	// 	);
-	// }
-
-	return (
-		<div>
-			<Button
-				id="basic-button"
-				aria-controls={open ? "basic-menu" : undefined}
-				aria-haspopup="true"
-				aria-expanded={open ? "true" : undefined}
-				onClick={handleClick}>
-				<Avatar>a</Avatar>
-			</Button>
-
-			<Menu
-				id="basic-menu"
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					"aria-labelledby": "basic-button",
-				}}>
-				<MenuItem onClick={handleClose}>Profile</MenuItem>
-				<MenuItem onClick={handleClose}>Logout</MenuItem>
-			</Menu>
-		</div>
-	);
+	if (status === "authenticated") {
+		return (
+			<div>
+				<div className="flex">
+					<Button
+						id="basic-button"
+						aria-controls={open ? "basic-menu" : undefined}
+						aria-haspopup="true"
+						aria-expanded={open ? "true" : undefined}
+						onClick={handleClick}>
+						<Avatar src="">a</Avatar>
+					</Button>
+					<div className="flex">
+						<p>Welcome</p>
+						<p className="uppercase px-2">{session.user.fullname}</p>
+					</div>
+				</div>
+				<Menu
+					id="basic-menu"
+					anchorEl={anchorEl}
+					open={open}
+					onClose={handleClose}
+					MenuListProps={{
+						"aria-labelledby": "basic-button",
+					}}>
+					<MenuItem onClick={handleClose}>Profile</MenuItem>
+					<MenuItem onClick={() => signOut()}>Logout</MenuItem>
+				</Menu>
+			</div>
+		);
+	}
 }

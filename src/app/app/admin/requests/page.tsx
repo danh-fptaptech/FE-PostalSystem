@@ -187,41 +187,47 @@ export default function UpdatedRequestManagement() {
 										</TableCell>
 									</TableRow>
 								)}
-								{employees.map(employee => {
-									return (
-										<TableRow
-											key={employee.id}
-											sx={{
-												"&:last-child td, &:last-child th": { border: 0 },
-											}}>
-											<TableCell align="center">
-												{employee.employeeCode}
-											</TableCell>
-											<TableCell align="center">{employee.fullname}</TableCell>
-											<TableCell align="center">{employee.email}</TableCell>
-											<TableCell align="center">
-												{employee.phoneNumber}
-											</TableCell>
-											<TableCell align="center">
-												{employee.branchName}
-											</TableCell>
-											<TableCell align="center">{employee.roleName}</TableCell>
-											<TableCell align="center">
-												<Tooltip title="Accept">
-													<Button
-														variant="text"
-														color="success"
-														type="button"
-														onClick={() => {
-															setSelectedEmployee(employee);
-														}}>
-														<DoneOutline className="text-green-700 text-[20px] mr-2" />
-													</Button>
-												</Tooltip>
-											</TableCell>
-										</TableRow>
-									);
-								})}
+								{employees
+									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+									.map(employee => {
+										return (
+											<TableRow
+												key={employee.id}
+												sx={{
+													"&:last-child td, &:last-child th": { border: 0 },
+												}}>
+												<TableCell align="center">
+													{employee.employeeCode}
+												</TableCell>
+												<TableCell align="center">
+													{employee.fullname}
+												</TableCell>
+												<TableCell align="center">{employee.email}</TableCell>
+												<TableCell align="center">
+													{employee.phoneNumber}
+												</TableCell>
+												<TableCell align="center">
+													{employee.branchName}
+												</TableCell>
+												<TableCell align="center">
+													{employee.roleName}
+												</TableCell>
+												<TableCell align="center">
+													<Tooltip title="Accept">
+														<Button
+															variant="text"
+															color="success"
+															type="button"
+															onClick={() => {
+																setSelectedEmployee(employee);
+															}}>
+															<DoneOutline className="text-green-700 text-[20px] mr-2" />
+														</Button>
+													</Tooltip>
+												</TableCell>
+											</TableRow>
+										);
+									})}
 							</TableBody>
 						</Table>
 						<TablePagination

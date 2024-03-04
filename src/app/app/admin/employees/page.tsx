@@ -21,7 +21,11 @@ import {
 	TableRow,
 	Tooltip,
 } from "@mui/material";
-import { CloseOutlined, DriveFileRenameOutline } from "@mui/icons-material";
+import {
+	CloseOutlined,
+	DriveFileRenameOutline,
+	Update,
+} from "@mui/icons-material";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import {
@@ -701,7 +705,6 @@ export default function EmployeeManagement() {
 										/>
 									</div>
 
-									{/* Select branch, role */}
 									<div className="my-3 flex">
 										<div className="mr-2">
 											<label className="font-semibold">Branch:</label>
@@ -745,8 +748,11 @@ export default function EmployeeManagement() {
 											variant="contained"
 											size="medium"
 											className="w-full"
-											disabled={loading}>
-											{loading ? "Loading..." : "Update"}
+											disabled={loading}
+											startIcon={
+												loading ? <CircularProgress size={24} /> : <Update />
+											}>
+											Update
 										</Button>
 									</div>
 								</form>
