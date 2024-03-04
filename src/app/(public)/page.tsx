@@ -11,6 +11,7 @@ import box from '../../../public/ic-box.png'
 import { Grid } from '@mui/material'
 import Image from 'next/image'
 import CountUp from 'react-countup'
+import NewsHomepage from '@/components/NewsHomepage'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -54,6 +55,7 @@ export default function Home() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <NewsHomepage />
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
           <Tab sx={{ fontWeight:'550', fontSize:'20px' }} label="TRA CỨU ĐƠN HÀNG" {...a11yProps(0)} />
