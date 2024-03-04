@@ -49,7 +49,7 @@ function NewsHomepage() {
       .then(response => response.json())
       .then((data: BlogItem[]) => {
         data.sort((a: BlogItem, b: BlogItem) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // sort by date
-        setBlogs(data.slice(0, 4)) // get the first 4 items
+        setBlogs(data.slice(0, 8)) // get the first 4 items
       })
   }, [])
 
