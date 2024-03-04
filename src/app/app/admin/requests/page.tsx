@@ -1,11 +1,8 @@
 "use client";
 
+import { fetchUpdatedRequests } from "@/app/_data/index";
 import {
-	AcceptEmployeeRequest,
-	fetchUpdatedRequests,
-	Employee,
-} from "@/libs/data";
-import {
+	Box,
 	Button,
 	Dialog,
 	DialogContent,
@@ -15,6 +12,7 @@ import {
 	TableCell,
 	TableContainer,
 	TableHead,
+	TablePagination,
 	TableRow,
 	Tooltip,
 } from "@mui/material";
@@ -25,18 +23,32 @@ import {
 	SkipPrevious,
 } from "@mui/icons-material";
 import Loading from "@/app/components/Loading";
-import { ApiResponse } from "@/types/types";
+import { ApiResponse, AcceptEmployeeRequest, Employee } from "@/types/types";
 import { toast } from "sonner";
 import React from "react";
+import page from "../employees/page";
 
 export default function UpdatedRequestManagement() {
 	const [employees, setEmployees] = React.useState<AcceptEmployeeRequest[]>([]);
-	const [currentPage, setCurrentPage] = React.useState(1);
-	const [isLoading, setIsLoading] = React.useState(true);
-	const [selectAllChecked, setSelectAllChecked] = React.useState(false);
+	const [loading, seLoading] = React.useState(true);
 	const [selectedEmployee, setSelectedEmployee] =
 		React.useState<AcceptEmployeeRequest | null>(null);
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+	const handleChangePage = (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number
+	) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
 	// fetch data
 	React.useEffect(() => {
 		Promise.all([fetchUpdatedRequests()]).then(data => {
@@ -62,19 +74,9 @@ export default function UpdatedRequestManagement() {
 				});
 				setEmployees(newEmployees);
 			}
-			setIsLoading(false);
+			seLoading(false);
 		});
 	}, []);
-
-	// Handle Pagination
-	const PAGE_SIZE = 10;
-	const totalPages = Math.ceil(employees.length / PAGE_SIZE);
-	const startIndex = (currentPage - 1) * PAGE_SIZE;
-	const endIndex = startIndex + PAGE_SIZE;
-	const currentEmployees = employees.slice(startIndex, endIndex);
-	function handlePageChange(selectedPage: number) {
-		setCurrentPage(selectedPage);
-	}
 
 	// Accept Updated Request
 	async function AcceptRequest(e: React.FormEvent<HTMLFormElement>) {
@@ -125,8 +127,8 @@ export default function UpdatedRequestManagement() {
 	}
 
 	return (
-		<div className="w-full">
-			{isLoading ? (
+		<>
+			{loading ? (
 				<Loading />
 			) : (
 				<div className="mt-4">
@@ -175,63 +177,62 @@ export default function UpdatedRequestManagement() {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{employees.map(employee => (
-									<TableRow
-										key={employee.id}
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-										<TableCell align="center">
-											{employee.employeeCode}
-										</TableCell>
-										<TableCell align="center">{employee.fullname}</TableCell>
-										<TableCell align="center">{employee.email}</TableCell>
-										<TableCell align="center">{employee.phoneNumber}</TableCell>
-										<TableCell align="center">{employee.branchName}</TableCell>
-										<TableCell align="center">{employee.roleName}</TableCell>
-										<TableCell align="center">
-											<Tooltip title="Accept">
-												<Button
-													variant="text"
-													color="success"
-													type="button"
-													onClick={() => {
-														setSelectedEmployee(employee);
-													}}>
-													<DoneOutline className="text-green-700 text-[20px] mr-2" />
-												</Button>
-											</Tooltip>
+								{employees.length === 0 && (
+									<TableRow>
+										<TableCell
+											colSpan={7}
+											align="center"
+											className="text-sm">
+											No Request
 										</TableCell>
 									</TableRow>
-								))}
+								)}
+								{employees.map(employee => {
+									return (
+										<TableRow
+											key={employee.id}
+											sx={{
+												"&:last-child td, &:last-child th": { border: 0 },
+											}}>
+											<TableCell align="center">
+												{employee.employeeCode}
+											</TableCell>
+											<TableCell align="center">{employee.fullname}</TableCell>
+											<TableCell align="center">{employee.email}</TableCell>
+											<TableCell align="center">
+												{employee.phoneNumber}
+											</TableCell>
+											<TableCell align="center">
+												{employee.branchName}
+											</TableCell>
+											<TableCell align="center">{employee.roleName}</TableCell>
+											<TableCell align="center">
+												<Tooltip title="Accept">
+													<Button
+														variant="text"
+														color="success"
+														type="button"
+														onClick={() => {
+															setSelectedEmployee(employee);
+														}}>
+														<DoneOutline className="text-green-700 text-[20px] mr-2" />
+													</Button>
+												</Tooltip>
+											</TableCell>
+										</TableRow>
+									);
+								})}
 							</TableBody>
 						</Table>
+						<TablePagination
+							component="div"
+							count={employees.length || 0}
+							page={page}
+							onPageChange={handleChangePage}
+							rowsPerPage={rowsPerPage}
+							onRowsPerPageChange={handleChangeRowsPerPage}
+						/>
 					</TableContainer>
-
-					{/* Pagination */}
-					<div className="flex justify-center items-center mt-4">
-						<button
-							disabled={currentPage === 1}
-							onClick={() => handlePageChange(currentPage - 1)}
-							className={`${
-								currentPage === 1
-									? "cursor-not-allowed btn-previous"
-									: "btn-previous cursor-pointer hover:opacity-80"
-							}`}>
-							<SkipPrevious fontSize="small" />
-						</button>
-						<span className="text-sm mx-2">
-							Page {currentPage} of {totalPages}
-						</span>
-						<button
-							disabled={currentPage === totalPages}
-							onClick={() => handlePageChange(currentPage + 1)}
-							className={`${
-								currentPage === totalPages
-									? "cursor-not-allowed btn-next"
-									: "btn-next cursor-pointer hover:opacity-80"
-							}`}>
-							<SkipNext fontSize="small" />
-						</button>
-					</div>
 
 					{selectedEmployee && (
 						<Dialog
@@ -289,7 +290,7 @@ export default function UpdatedRequestManagement() {
 											value={selectedEmployee?.submitedInfo.address}
 											readOnly></textarea>
 									</div>
-									{/* Select: district, province */}
+
 									<div className="my-3 flex">
 										<div className="mr-2">
 											<label className="font-semibold">Province:</label>
@@ -347,6 +348,6 @@ export default function UpdatedRequestManagement() {
 					)}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }

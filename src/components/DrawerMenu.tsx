@@ -9,6 +9,11 @@ import {
 	HomeWorkOutlined,
 	Inventory2Outlined,
 	NoteAddOutlined,
+	BadgeOutlined,
+	ManageAccountsOutlined,
+	DriveFileRenameOutlineOutlined,
+	GroupOutlined,
+	Badge,
 } from "@mui/icons-material";
 import * as React from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -56,10 +61,35 @@ export default function DrawerMenu() {
 		createMenu("Packages", Inventory2Outlined, "/app/packages", [
 			"package.view",
 		]),
+		createMenu("User Management", GroupOutlined, "/app/admin/users", ["user"]),
+
+		createMenu(
+			"Employee Management",
+			BadgeOutlined,
+			"/app/admin",
+			["admin"],
+			[
+				createMenu("List Employees", GroupOutlined, "/app/admin/employees", [
+					"admin.employee",
+				]),
+				createMenu(
+					"Updated Requests",
+					DriveFileRenameOutlineOutlined,
+					"/app/admin/requests",
+					["admin.request"]
+				),
+				createMenu(
+					"Role Management",
+					ManageAccountsOutlined,
+					"/app/admin/roles",
+					["admin.role"]
+				),
+			]
+		),
 	];
 
 	return (
-		<div>
+		<>
 			<Toolbar></Toolbar>
 			<Divider />
 			<List>
@@ -69,6 +99,6 @@ export default function DrawerMenu() {
 						key={index}></MenuGroup>
 				))}
 			</List>
-		</div>
+		</>
 	);
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import { Box, Tab, Tabs } from "@mui/material";
+import { Tabs, Tab, Box } from "@mui/material";
 import { useSession } from "next-auth/react";
 import React from "react";
-import EmployeeInfoPage from "./[employeeCode]/EmployeeInfo";
-import ChangePasswordPage from "./[employeeCode]/ChangePassword";
-import HistoryLogsPage from "./[employeeCode]/HistoryLogs";
+import EmployeeManagement from "./employees/page";
+import UpdatedRequestManagement from "./requests/page";
+import RoleManagement from "./roles/page";
 
-export default function EmployeeInfo() {
+export default function Page() {
 	const [value, setValue] = React.useState(0);
 	const { data: session } = useSession();
 
@@ -30,20 +30,20 @@ export default function EmployeeInfo() {
 					scrollButtons="auto">
 					<Tab
 						value={0}
-						label="Informations"
+						label="Employee Management"
 					/>
 					<Tab
 						value={1}
-						label="Change Password"
+						label="Updated Requests"
 					/>
 					<Tab
 						value={2}
-						label="History Logs"
+						label="Role Management"
 					/>
 				</Tabs>
-				{value === 0 && <EmployeeInfoPage />}
-				{value === 1 && <ChangePasswordPage />}
-				{value === 2 && <HistoryLogsPage />}
+				{/* {value === 0 && <EmployeeManagement />}
+				{value === 1 && <UpdatedRequestManagement />}
+				{value === 2 && <RoleManagement />} */}
 			</Box>
 		</>
 	);

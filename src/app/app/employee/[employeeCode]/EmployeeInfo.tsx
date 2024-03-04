@@ -2,14 +2,14 @@
 
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
+import { fetchLocations } from "@/app/_data/index";
+import React from "react";
 import {
+	ApiResponse,
 	Employee,
 	Location,
 	UpdateInfoRequest,
-	fetchLocations,
-} from "@/libs/data";
-import React from "react";
-import { ApiResponse } from "@/types/types";
+} from "@/types/types";
 import { toast } from "sonner";
 import { CloseOutlined, Send } from "@mui/icons-material";
 import {
@@ -19,13 +19,17 @@ import {
 	DialogContent,
 	Button,
 	TextField,
+	Avatar,
+	InputLabel,
+	Typography,
+	Box,
 } from "@mui/material";
 import Loading from "@/components/Loading";
 
 export default function EmployeeInfoPage() {
 	const [employee, setEmployee] = React.useState<Employee>();
 	const [locations, setLocations] = React.useState<Location[]>([]);
-	const [isLoading, setIsLoading] = React.useState(true);
+	const [loading, setLoading] = React.useState(true);
 	const [openDialogUpdatedResquest, setOpenDialogUpdatedResquest] =
 		React.useState(false);
 
@@ -70,8 +74,6 @@ export default function EmployeeInfoPage() {
 				empRes.json().then(payload => {
 					if (payload.ok) {
 						setEmployee(payload.data);
-					} else {
-						console.error("Failed to get employee !");
 					}
 				});
 
@@ -79,7 +81,7 @@ export default function EmployeeInfoPage() {
 					setLocations(locRes.data);
 				}
 
-				setIsLoading(false);
+				setLoading(false);
 			});
 		};
 
@@ -87,149 +89,76 @@ export default function EmployeeInfoPage() {
 	}, [session?.user.employeeCode]);
 	return (
 		<>
-			{isLoading ? (
+			{loading ? (
 				<Loading />
 			) : (
-				<div className="mt-4">
-					<TextField
-						variant="outlined"
-						focused
-						fullWidth
-						color="success"
-						className="my-3"
-						label="Employee Code"
-						defaultValue={employee?.employeeCode}
-						size="small"
-						InputProps={{
-							readOnly: true,
-							disabled: true,
-						}}
-					/>
-					<TextField
-						variant="outlined"
-						focused
-						fullWidth
-						color="success"
-						className="my-3"
-						label="Fullname"
-						defaultValue={employee?.fullname}
-						size="small"
-						InputProps={{
-							readOnly: true,
-							disabled: true,
-						}}
-					/>
-					<TextField
-						variant="outlined"
-						focused
-						fullWidth
-						color="success"
-						className="my-3"
-						label="Email"
-						defaultValue={employee?.email}
-						size="small"
-						InputProps={{
-							readOnly: true,
-							disabled: true,
-						}}
-					/>
-					<TextField
-						variant="outlined"
-						focused
-						fullWidth
-						color="success"
-						className="my-3"
-						label="Phone Number"
-						defaultValue={employee?.phoneNumber}
-						size="small"
-						InputProps={{
-							readOnly: true,
-							disabled: true,
-						}}
-					/>
-					<TextField
-						variant="outlined"
-						focused
-						fullWidth
-						color="success"
-						className="my-3"
-						label="Address"
-						defaultValue={employee?.address}
-						size="small"
-						InputProps={{
-							readOnly: true,
-							disabled: true,
-						}}
-					/>
-					<div className="flex">
-						<TextField
-							variant="outlined"
-							focused
-							fullWidth
-							color="success"
-							className="my-3 mr-2"
-							label="Province"
-							defaultValue={employee?.province}
-							size="small"
-							InputProps={{
-								readOnly: true,
-								disabled: true,
-							}}
-						/>
-						<TextField
-							variant="outlined"
-							focused
-							fullWidth
-							color="success"
-							className="my-3"
-							label="District"
-							defaultValue={employee?.district}
-							size="small"
-							InputProps={{
-								readOnly: true,
-								disabled: true,
-							}}
-						/>
-					</div>
+				<Box className="my-4">
+					<Box className="mx-3">
+						<Box className="flex items-center my-3">
+							<Avatar
+								variant="rounded"
+								src={employee?.avatar}
+								alt={employee?.fullname}
+								className="mr-2"
+							/>
+							<Typography className="font-semibold">
+								{employee?.employeeCode}
+							</Typography>
+						</Box>
 
-					<div className="flex">
-						<TextField
-							variant="outlined"
-							focused
-							fullWidth
-							color="success"
-							className="my-3 mr-2"
-							label="Branch"
-							defaultValue={employee?.branchName}
-							size="small"
-							InputProps={{
-								readOnly: true,
-								disabled: true,
-							}}
-						/>
-						<TextField
-							variant="outlined"
-							focused
-							fullWidth
-							color="success"
-							className="my-3"
-							label="Role"
-							defaultValue={employee?.roleName}
-							size="small"
-							InputProps={{
-								readOnly: true,
-								disabled: true,
-							}}
-						/>
-					</div>
+						<Box className="flex items-center justify-between my-3">
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Full name:</InputLabel>
+								<Typography className="text-sm uppercase">
+									{employee?.fullname}
+								</Typography>
+							</Box>
 
-					<Button
-						className="my-3"
-						variant="contained"
-						color="secondary"
-						onClick={() => setOpenDialogUpdatedResquest(true)}>
-						Update Information
-					</Button>
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Email:</InputLabel>
+								<Typography className="text-sm">{employee?.email}</Typography>
+							</Box>
+
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Phone number:</InputLabel>
+								<Typography className="text-sm">
+									{employee?.phoneNumber}
+								</Typography>
+							</Box>
+						</Box>
+
+						<Box className="flex justify-between items-center my-3">
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Branch:</InputLabel>
+								<Typography className="text-sm">
+									{employee?.branchName}
+								</Typography>
+							</Box>
+
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Address:</InputLabel>
+								<Typography className="text-sm">
+									{employee?.address}, {employee?.district},{" "}
+									{employee?.province}.
+								</Typography>
+							</Box>
+
+							<Box className="flex items-center">
+								<InputLabel className="mr-2">Postal Code:</InputLabel>
+								<Typography className="text-sm">
+									{employee?.postalCode ? employee?.postalCode : "... updating"}
+								</Typography>
+							</Box>
+						</Box>
+
+						<Button
+							className="my-3"
+							variant="contained"
+							color="secondary"
+							onClick={() => setOpenDialogUpdatedResquest(true)}>
+							Update Information
+						</Button>
+					</Box>
 
 					{/* Dialog send updated info */}
 					<Dialog
@@ -392,12 +321,12 @@ export default function EmployeeInfoPage() {
 									color="success"
 									variant="contained"
 									className="w-full mr-2">
-									Send
+									{!loading ? "Send" : <Loading />}
 								</Button>
 							</form>
 						</DialogContent>
 					</Dialog>
-				</div>
+				</Box>
 			)}
 		</>
 	);

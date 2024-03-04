@@ -1,6 +1,6 @@
 "use client";
 
-import { Employee } from "@/libs/data";
+import { Employee } from "@/types/types";
 import { CloseOutlined, DriveFileRenameOutline } from "@mui/icons-material";
 import {
 	TableContainer,
@@ -78,12 +78,14 @@ export default function HistoryLogsPage() {
 	}, [session?.user.employeeCode]);
 
 	return (
-		<div>
+		<>
 			{loading ? (
 				<Loading />
 			) : (
-				<div className="mt-4">
-					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
+				<>
+					<TableContainer
+						className="mt-4"
+						sx={{ width: "100%", overflow: "hidden" }}>
 						<Table
 							sx={{ minWidth: 650 }}
 							size="small"
@@ -184,8 +186,8 @@ export default function HistoryLogsPage() {
 							onRowsPerPageChange={handleChangeRowsPerPage}
 						/>
 					</TableContainer>
-				</div>
+				</>
 			)}
-		</div>
+		</>
 	);
 }

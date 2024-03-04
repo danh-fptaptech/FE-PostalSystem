@@ -5,24 +5,12 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Loading from "@/app/components/Loading";
 import {
-	Employee,
-	Branch,
-	Role,
-	Location,
-	CreateEmployeeRequest,
-	fetchEmployees,
-	fetchBranches,
-	fetchRolesWithPermission,
-	fetchLocations,
-	fetchChangeStatus,
-	UpdateEmployeeRequest,
-} from "@/libs/data";
-import {
+	Box,
 	Button,
+	CircularProgress,
 	Dialog,
 	DialogContent,
 	DialogTitle,
-	Paper,
 	Switch,
 	Table,
 	TableBody,
@@ -33,38 +21,36 @@ import {
 	TableRow,
 	Tooltip,
 } from "@mui/material";
-import {
-	CloseOutlined,
-	DriveFileRenameOutline,
-	SkipNext,
-	SkipPrevious,
-} from "@mui/icons-material";
+import { CloseOutlined, DriveFileRenameOutline } from "@mui/icons-material";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { ApiResponse } from "@/types/types";
+import {
+	ApiResponse,
+	Employee,
+	Branch,
+	Role,
+	Province,
+	CreateEmployeeRequest,
+	UpdateEmployeeRequest,
+} from "@/types/types";
 import { toast } from "sonner";
-
-const SCHEME = z.object({
-	employeeCode: z.string(),
-	fullname: z.string(),
-	avatar: z.string(),
-	email: z.string().email(),
-	password: z.string(),
-	phoneNumber: z.string(),
-	address: z.string(),
-	province: z.string(),
-	district: z.string(),
-	branchId: z.number(),
-	roleId: z.number(),
-});
+import {
+	getProvinces,
+	getChildrenLocationsByParentId,
+	fetchEmployees,
+	fetchBranches,
+	fetchRolesWithPermission,
+	fetchChangeStatus,
+} from "@/app/_data/index";
 
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);
 	const [employee, setEmployee] = React.useState<Employee>();
 	const [branches, setBranches] = React.useState<Branch[]>([]);
 	const [roles, setRoles] = React.useState<Role[]>([]);
-	const [locations, setLocations] = React.useState<Location[]>([]);
-	const [isLoading, setIsLoading] = React.useState(true);
+	const [provinces, setProvinces] = React.useState<Province[]>([]);
+	const [districts, setDistricts] = React.useState<Province[]>([]);
+	const [loading, setLoading] = React.useState(true);
 	const [openAddForm, setOpenAddForm] = React.useState(false);
 	const [openUpdateForm, setOpenUpdateForm] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
@@ -75,7 +61,10 @@ export default function EmployeeManagement() {
 		handleSubmit,
 		formState: { errors },
 		setValue,
+		watch,
 	} = useForm<CreateEmployeeRequest>();
+
+	const province = watch("province");
 
 	const {
 		register: updatedRegister,
@@ -102,6 +91,56 @@ export default function EmployeeManagement() {
 		const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
 		setValue("employeeCode", `EMP-${randomCode}`);
 	}
+	// fetch data
+	React.useEffect(() => {
+		console.log("asb");
+		Promise.all([
+			fetchEmployees(),
+			fetchBranches(),
+			fetchRolesWithPermission(),
+			getProvinces(),
+		]).then(data => {
+			const [employeeRes, branchRes, roleRes, provinceRes] = data;
+
+			if (employeeRes.ok) {
+				setEmployees(employeeRes.data.reverse());
+			}
+
+			if (branchRes.ok) {
+				setBranches(branchRes.data);
+			}
+
+			if (roleRes.ok) {
+				setRoles(roleRes.data);
+			}
+
+			if (provinceRes.ok) {
+				setProvinces(provinceRes.data);
+			}
+
+			setLoading(false);
+		});
+	}, []);
+
+	React.useEffect(() => {
+		const provinceId = provinces.find(p => p.locationName === province)?.id;
+
+		if (!provinceId) {
+			setDistricts([]);
+		} else {
+			getChildrenLocationsByParentId(provinceId).then(res => {
+				if (res.ok) {
+					if (res.data.districs) {
+						setDistricts(res.data.districs);
+					} else {
+						setDistricts([]);
+					}
+				} else {
+					setDistricts([]);
+				}
+			});
+		}
+	}, [province, provinces]);
 
 	// Handle Search
 	function handleSearch(event: React.FormEvent<HTMLFormElement>) {
@@ -185,11 +224,10 @@ export default function EmployeeManagement() {
 			});
 
 			const payload = (await res.json()) as ApiResponse;
-			console.log(payload);
 
 			if (payload.ok) {
 				const response = await fetchEmployees();
-				setEmployees(await response.data.reverse());
+				setEmployees(await response.data);
 				setOpenUpdateForm(false);
 				toast.success(payload.message);
 			} else {
@@ -200,42 +238,13 @@ export default function EmployeeManagement() {
 		}
 	}
 
-	React.useEffect(() => {
-		Promise.all([
-			fetchEmployees(),
-			fetchBranches(),
-			fetchRolesWithPermission(),
-			fetchLocations(),
-		]).then(async data => {
-			const [employeeRes, branchRes, roleRes, locationRes] = data;
-
-			if (employeeRes.ok) {
-				setEmployees(employeeRes.data.reverse());
-			}
-
-			if (branchRes.ok) {
-				setBranches(branchRes.data);
-			}
-
-			if (roleRes.ok) {
-				setRoles(roleRes.data);
-			}
-
-			if (locationRes.ok) {
-				setLocations(locationRes.data);
-			}
-
-			setIsLoading(false);
-		});
-	}, []);
-
 	return (
-		<div className="w-full">
-			{isLoading ? (
+		<>
+			{loading ? (
 				<Loading />
 			) : (
-				<div>
-					<div className="mb-3 mt-4 flex justify-between items-center">
+				<>
+					<Box className="mb-3 flex justify-between items-center">
 						<Button
 							color="secondary"
 							variant="contained"
@@ -264,7 +273,7 @@ export default function EmployeeManagement() {
 								Search
 							</Button>
 						</form>
-					</div>
+					</Box>
 					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
 						<Table
 							sx={{ minWidth: 650 }}
@@ -316,54 +325,76 @@ export default function EmployeeManagement() {
 							</TableHead>
 
 							<TableBody>
-								{employees.map(employee => (
-									<TableRow
-										key={employee.id}
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-										<TableCell align="center">
-											{employee.employeeCode}
-										</TableCell>
-										<TableCell align="center">{employee.fullname}</TableCell>
-										<TableCell align="center">{employee.email}</TableCell>
-										<TableCell align="center">{employee.phoneNumber}</TableCell>
-										<TableCell align="center">{employee.branchName}</TableCell>
-										<TableCell align="center">{employee.roleName}</TableCell>
-										<TableCell align="center">
-											<Switch
-												size="small"
-												color="success"
-												className="cursor-pointer"
-												checked={employee.status == 1 ? true : false}
-												onChange={() => handleChangeStatus(employee.id)}
-											/>
-										</TableCell>
-										<TableCell align="center">
-											<Tooltip title="Edit">
-												<Button
-													type="button"
-													endIcon={<DriveFileRenameOutline fontSize="medium" />}
-													variant="text"
-													color="success"
-													onClick={() => {
-														setEmployee(employee);
-														setOpenUpdateForm(true);
-													}}></Button>
-											</Tooltip>
+								{employees.length === 0 && (
+									<TableRow>
+										<TableCell
+											colSpan={7}
+											align="center"
+											className="text-sm">
+											No Data
 										</TableCell>
 									</TableRow>
-								))}
+								)}
+								{employees
+									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+									.map(employee => (
+										<TableRow
+											key={employee.id}
+											sx={{
+												"&:last-child td, &:last-child th": { border: 0 },
+											}}>
+											<TableCell align="center">
+												{employee.employeeCode}
+											</TableCell>
+											<TableCell align="center">{employee.fullname}</TableCell>
+											<TableCell align="center">{employee.email}</TableCell>
+											<TableCell align="center">
+												{employee.phoneNumber}
+											</TableCell>
+											<TableCell align="center">
+												{employee.branchName}
+											</TableCell>
+											<TableCell align="center">{employee.roleName}</TableCell>
+											<TableCell align="center">
+												<Switch
+													size="small"
+													color="success"
+													className="cursor-pointer"
+													checked={employee.status == 1 ? true : false}
+													disabled={
+														employee.roleName === "Admin" ? true : false
+													}
+													onChange={() => handleChangeStatus(employee.id)}
+												/>
+											</TableCell>
+											<TableCell align="center">
+												<Tooltip title="Edit">
+													<Button
+														type="button"
+														endIcon={
+															<DriveFileRenameOutline fontSize="medium" />
+														}
+														variant="text"
+														color="success"
+														onClick={() => {
+															setEmployee(employee);
+															setOpenUpdateForm(true);
+														}}></Button>
+												</Tooltip>
+											</TableCell>
+										</TableRow>
+									))}
 							</TableBody>
 						</Table>
-
-						<TablePagination
-							component="div"
-							count={employees.length || 0}
-							page={page}
-							onPageChange={handleChangePage}
-							rowsPerPage={rowsPerPage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
 					</TableContainer>
+					<TablePagination
+						component="div"
+						count={employees.length || 0}
+						page={page}
+						onPageChange={handleChangePage}
+						rowsPerPage={rowsPerPage}
+						onRowsPerPageChange={handleChangeRowsPerPage}
+					/>
 
 					{/* Add New Employee */}
 					<Dialog
@@ -532,16 +563,14 @@ export default function EmployeeManagement() {
 											{...register("province")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											id="province">
-											<option>Select province</option>
-											{locations
-												.filter(location => location.locationLevel === 0)
-												.map(province => (
-													<option
-														key={province.id}
-														value={province.locationName}>
-														{province.locationName}
-													</option>
-												))}
+											<option value="">Select province</option>
+											{provinces.map(province => (
+												<option
+													key={province.id}
+													value={province.locationName}>
+													{province.locationName}
+												</option>
+											))}
 										</select>
 									</div>
 
@@ -550,17 +579,16 @@ export default function EmployeeManagement() {
 										<select
 											{...register("district")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											id="district">
-											<option>Select district</option>
-											{locations
-												.filter(location => location.locationLevel === 1)
-												.map(district => (
-													<option
-														key={district.id}
-														value={district.locationName}>
-														{district.locationName}
-													</option>
-												))}
+											id="district"
+											disabled={districts.length === 0}>
+											<option value="">Select district</option>
+											{districts.map(district => (
+												<option
+													key={district.id}
+													value={district.locationName}>
+													{district.locationName}
+												</option>
+											))}
 										</select>
 									</div>
 								</div>
@@ -617,7 +645,14 @@ export default function EmployeeManagement() {
 										variant="contained"
 										size="medium"
 										className="w-full">
-										+ Add New
+										{!loading ? (
+											"+ Add"
+										) : (
+											<CircularProgress
+												size={10}
+												color="inherit"
+											/>
+										)}
 									</Button>
 								</div>
 							</form>
@@ -709,16 +744,17 @@ export default function EmployeeManagement() {
 											color="success"
 											variant="contained"
 											size="medium"
-											className="w-full">
-											Update
+											className="w-full"
+											disabled={loading}>
+											{loading ? "Loading..." : "Update"}
 										</Button>
 									</div>
 								</form>
 							</DialogContent>
 						</Dialog>
 					)}
-				</div>
+				</>
 			)}
-		</div>
+		</>
 	);
 }

@@ -1,9 +1,9 @@
 "use client";
 import Tabs from "@mui/material/Tabs";
-import UserLoginForm from "./UserLoginForm";
 import Tab from "@mui/material/Tab";
 import React from "react";
 import { useSession } from "next-auth/react";
+import AdminLoginForm from "./AdminLoginForm";
 
 export default function LoginPage() {
 	const [value, setValue] = React.useState(0);
@@ -19,10 +19,10 @@ export default function LoginPage() {
 				value={value}
 				onChange={handleChange}
 				centered>
-				<Tab label="User" />
+				<Tab label="Admin" />
 			</Tabs>
 
-			{value === 0 && <UserLoginForm />}
+			{value === 0 && <AdminLoginForm />}
 		</>
 	);
 }

@@ -5,20 +5,24 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
-import { Menu } from "@mui/icons-material";
-import { Container } from "@mui/material";
+import { DeleteOutline, Menu } from "@mui/icons-material";
+import {
+	Card,
+	Container,
+	Divider,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+} from "@mui/material";
 import AvatarMenu from "@/components/AvatarMenu";
 import DrawerMenu from "@/components/DrawerMenu";
 import MenuContext from "@/context/MenuContext";
 
 import { useSession } from "next-auth/react";
 
-const AppLayout = (props: {
-	window?: Window;
-	user: React.ReactNode;
-	employees: React.ReactNode;
-	admin: React.ReactNode;
-}) => {
+const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
 	const drawerWidth = 300;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 	const [isClosing, setIsClosing] = React.useState(false);
@@ -26,17 +30,17 @@ const AppLayout = (props: {
 	const { data: session, status } = useSession();
 	const [role, setRole] = React.useState<React.ReactNode | null>(null);
 
-	React.useEffect(() => {
-		if (status === "authenticated") {
-			if (session?.user?.role?.name === "User") {
-				setRole(props.user);
-			} else if (session?.user?.role?.name !== "Admin") {
-				setRole(props.employees);
-			} else if (session?.user?.role?.name === "Admin") {
-				setRole(props.admin);
-			}
-		}
-	}, [status, session?.user?.role?.name, props]);
+	// React.useEffect(() => {
+	// 	if (status === "authenticated") {
+	// 		if (session?.user?.role?.name === "User") {
+	// 			setRole(props.user);
+	// 		} else if (session?.user?.role?.name !== "Admin") {
+	// 			setRole(props.employees);
+	// 		} else if (session?.user?.role?.name === "Admin") {
+	// 			setRole(props.admin);
+	// 		}
+	// 	}
+	// }, [status, session?.user?.role?.name, props]);
 
 	const handleDrawerClose = () => {
 		setIsClosing(true);
@@ -54,7 +58,7 @@ const AppLayout = (props: {
 	};
 
 	const drawer = (
-		<div>
+		<>
 			<Toolbar></Toolbar>
 			<Divider />
 			<List>
@@ -71,7 +75,7 @@ const AppLayout = (props: {
 					</ListItem>
 				))}
 			</List>
-		</div>
+		</>
 	);
 	return (
 		<Box sx={{ display: "flex" }}>
@@ -96,7 +100,7 @@ const AppLayout = (props: {
 							sx={{ mr: 2, display: { md: "none" } }}>
 							<Menu />
 						</IconButton>
-						<div></div>
+						<></>
 						<AvatarMenu />
 					</Container>
 				</Toolbar>
@@ -105,38 +109,41 @@ const AppLayout = (props: {
 				component="nav"
 				sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
 				aria-label="mailbox folders">
-				<Drawer
-					container={
-						props.window !== undefined ? () => window.document.body : undefined
-					}
-					variant="temporary"
-					open={mobileOpen}
-					onTransitionEnd={handleDrawerTransitionEnd}
-					onClose={handleDrawerClose}
-					ModalProps={{
-						keepMounted: true,
-					}}
-					sx={{
-						display: { xs: "block", md: "none" },
-						"& .MuiDrawer-paper": {
-							boxSizing: "border-box",
-							width: drawerWidth,
-						},
-					}}>
-					{drawer}
-				</Drawer>
-				<Drawer
-					variant="permanent"
-					sx={{
-						display: { xs: "none", md: "block" },
-						"& .MuiDrawer-paper": {
-							boxSizing: "border-box",
-							width: drawerWidth,
-						},
-					}}
-					open>
-					{drawer}
-				</Drawer>
+				<MenuContext.Provider value={{ handleDrawerClose }}>
+					<Drawer
+						container={
+							props.window !== undefined
+								? () => window.document.body
+								: undefined
+						}
+						variant="temporary"
+						open={mobileOpen}
+						onClose={handleDrawerClose}
+						ModalProps={{
+							keepMounted: true,
+						}}
+						sx={{
+							display: { xs: "block", md: "none" },
+							"& .MuiDrawer-paper": {
+								boxSizing: "border-box",
+								width: drawerWidth,
+							},
+						}}>
+						<DrawerMenu />
+					</Drawer>
+					<Drawer
+						variant="permanent"
+						sx={{
+							display: { xs: "none", md: "block" },
+							"& .MuiDrawer-paper": {
+								boxSizing: "border-box",
+								width: drawerWidth,
+							},
+						}}
+						open>
+						<DrawerMenu />
+					</Drawer>
+				</MenuContext.Provider>
 			</Box>
 			<Box
 				component="main"
@@ -144,11 +151,11 @@ const AppLayout = (props: {
 					flexGrow: 1,
 					p: 3,
 					width: { md: `calc(100% - ${drawerWidth}px)` },
+					backgroundColor: "#f1f1f1",
+					minHeight: "100vh",
 				}}>
 				<Toolbar />
-				<Container>
-					<Card sx={{ padding: 2 }}>{role}</Card>
-				</Container>
+				<Container>{props.children}</Container>
 			</Box>
 		</Box>
 	);

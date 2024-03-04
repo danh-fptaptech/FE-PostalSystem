@@ -17,14 +17,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
-import { CircularProgress } from "@mui/material";
-import Loading from "@/components/Loading";
 
 const schema = z.object({
 	userId: z.string({
@@ -40,7 +37,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-const EmployeeLoginForm = () => {
+const AdminLoginForm = () => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [error, setError] = React.useState("");
 	const router = useRouter();
@@ -65,7 +62,7 @@ const EmployeeLoginForm = () => {
 
 	const onSubmit = async (data: Schema) => {
 		try {
-			const res = await signIn("credentials", {
+			const employeeRes = await signIn("credentials", {
 				redirect: false,
 				username: data.userId,
 				password: data.password,
@@ -73,9 +70,9 @@ const EmployeeLoginForm = () => {
 				// callbackUrl,
 			});
 
-			if (!res?.error) {
+			if (!employeeRes?.error) {
 				//router.push(callbackUrl);
-				router.push("/app");
+				router.push("/app/admin/employees");
 			} else {
 				setError("Invalid email or password");
 			}
@@ -176,4 +173,4 @@ const EmployeeLoginForm = () => {
 	);
 };
 
-export default EmployeeLoginForm;
+export default AdminLoginForm;
