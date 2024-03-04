@@ -9,6 +9,8 @@ import {
 	HomeWorkOutlined,
 	Inventory2Outlined,
 	NoteAddOutlined,
+	AccountBoxOutlined,
+	PasswordOutlined,
 	BadgeOutlined,
 	ManageAccountsOutlined,
 	DriveFileRenameOutlineOutlined,
@@ -19,6 +21,7 @@ import * as React from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { usePathname } from "next/navigation";
 import MenuGroup from "@/components/MenuGroup";
+import { useSession } from "next-auth/react";
 
 export default function DrawerMenu() {
 	const path = usePathname();
@@ -41,11 +44,9 @@ export default function DrawerMenu() {
 
 	const menu = [
 		createMenu("Dashboard", AppsOutlined, "/app", ["app.view"]),
-
 		createMenu("Create Package", NoteAddOutlined, "/app/create-package", [
 			"package.create",
 		]),
-
 		createMenu(
 			"Branches",
 			HomeWorkOutlined,
@@ -64,48 +65,39 @@ export default function DrawerMenu() {
 			"package.view",
 		]),
 
-		createMenu("User Management", GroupOutlined, "/app/admin/users", ["user"]),
-
+		createMenu("Profile", AccountBoxOutlined, "/app/user", ["user.view"]),
 		createMenu(
-			"Employee Management",
-			BadgeOutlined,
-			"/app/admin",
-			["admin"],
-			[
-				createMenu("List Employees", GroupOutlined, "/app/admin/employees", [
-					"admin.employee",
-				]),
-				createMenu(
-					"Updated Requests",
-					DriveFileRenameOutlineOutlined,
-					"/app/admin/requests",
-					["admin.request"]
-				),
-				createMenu(
-					"Role Management",
-					ManageAccountsOutlined,
-					"/app/admin/roles",
-					["admin.role"]
-				),
-			]
+			"Change Password",
+			PasswordOutlined,
+			"/app/user/change-password",
+			["password.change"]
 		),
-
-		createMenu("HistoryLogs", ViewListOutlined, "/app/historylogs", [
-			"historylogs.view",
+		createMenu("Packages", Inventory2Outlined, "/app/user/packages", [
+			"packages.view",
+		]),
+		createMenu("Create Package", NoteAddOutlined, "/app/user/create-package", [
+			"package.create",
+		]),
+		createMenu("Add Address", NoteAddOutlined, "/app/user/add-address", [
+			"address.create",
+		]),
+		createMenu("Addresses", NoteAddOutlined, "/app/user/addresses", [
+			"addresses.view",
 		]),
 	];
 
 	return (
-		<>
+		<div>
 			<Toolbar></Toolbar>
 			<Divider />
 			<List>
 				{menu.map((item, index) => (
 					<MenuGroup
 						item={item}
-						key={index}></MenuGroup>
+						key={index}
+					></MenuGroup>
 				))}
 			</List>
-		</>
+		</div>
 	);
 }

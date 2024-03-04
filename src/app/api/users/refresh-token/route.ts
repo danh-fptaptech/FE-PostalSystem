@@ -10,9 +10,7 @@ export async function POST(req: NextRequest) {
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/Refresh-token`,
 			{
 				// header must have access token
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 			}
 		);

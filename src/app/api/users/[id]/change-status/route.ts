@@ -11,9 +11,7 @@ export async function PUT(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Change-status`,
 			{
 				// header must have access token
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 				body: JSON.stringify(formData),
 			}

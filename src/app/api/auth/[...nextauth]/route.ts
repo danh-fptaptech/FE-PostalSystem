@@ -77,11 +77,25 @@ export const authOptions = {
 					if (!data.role) {
 						session.user.role = {
 							name: "User",
-							permissions: ["User"],
+							permissions: [
+								"user.view",
+								"password.change",
+								"packages.view",
+								"package.create",
+								"address.create",
+								"addresses.view",
+							],
 						};
 						session.token.role = {
 							name: "User",
-							permissions: ["User"],
+							permissions: [
+								"user.view",
+								"password.change",
+								"packages.view",
+								"package.create",
+								"address.create",
+								"addresses.view",
+							],
 						};
 					} else {
 						session.token.role = data.role;

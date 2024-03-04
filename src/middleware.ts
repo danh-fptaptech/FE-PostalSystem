@@ -79,10 +79,37 @@ export const config = {
 
 const paths = [
 	{
+		path: "/app",
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/user",
+		permission: ["user.view"],
+	},
+	{
+		path: "/app/user/change-password",
+		permission: ["password.change"],
+	},
+	{
+		path: "/app/user/packages",
+		permission: ["packages.view"],
+	},
+	{
+		path: "/app/user/create-package",
+		permission: ["package.create"],
+	},
+	{
+		path: "/app/user/add-address",
+		permission: ["address.create"],
+	},
+	{
+		path: "/app/user/addresses",
+		permission: ["addresses.view"],
+	},
+	{
 		path: "/register",
 		permission: ["user.access", "user.all", "home.access"],
 	},
-
 	{
 		path: "/app/admin/users",
 		permission: ["Admin"],

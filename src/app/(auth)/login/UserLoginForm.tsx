@@ -22,6 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { toast } from "sonner";
 
 const schema = z.object({
 	userId: z
@@ -66,22 +67,24 @@ const UserLoginForm = () => {
 
 	const onSubmit = async (data: Schema) => {
 		try {
-			const res = await signIn("credentials", {
-				redirect: false,
-				username: data.userId,
-				password: data.password,
-				role: "User",
-				//			callbackUrl,
-			});
-
-			if (!res?.error) {
-				//router.push(callbackUrl);
-				router.push("/app/user");
-			} else {
-				setError("Invalid email or password");
-			}
+			toast.promise(
+				signIn("credentials", {
+					redirect: false,
+					username: data.userId,
+					password: data.password,
+					role: "User",
+				}),
+				{
+					success(data) {
+						router.push("/app/user");
+						return "Logged in successfully";
+					},
+					loading: "Logging in...",
+					error: "Invalid email or password",
+				}
+			);
 		} catch (error) {
-			setError("An unexpected error happened");
+			console.log("An unexpected error happened");
 		}
 	};
 
@@ -98,6 +101,8 @@ const UserLoginForm = () => {
 				backgroundColor: "white",
 			}}
 		>
+			}}
+		>
 			{error && (
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -107,6 +112,8 @@ const UserLoginForm = () => {
 			<Typography
 				variant="h5"
 				component="div"
+				sx={{ mb: 2 }}
+			>
 				sx={{ mb: 2 }}
 			>
 				Login Your Account
@@ -127,6 +134,8 @@ const UserLoginForm = () => {
 				margin="normal"
 				error={!!errors.password}
 			>
+				error={!!errors.password}
+			>
 				<InputLabel htmlFor="password">Password</InputLabel>
 				<OutlinedInput
 					label="Password"
@@ -145,6 +154,8 @@ const UserLoginForm = () => {
 								onMouseUp={handleMouseEvents}
 								edge="end"
 							>
+								edge="end"
+							>
 								{showPassword ? <VisibilityOff /> : <Visibility />}
 							</IconButton>
 						</InputAdornment>
@@ -160,6 +171,8 @@ const UserLoginForm = () => {
 				fullWidth
 				sx={{ mt: 2 }}
 			>
+				sx={{ mt: 2 }}
+			>
 				Login
 			</Button>
 			<Box sx={{ mt: 2, textAlign: "center" }}>
@@ -167,7 +180,6 @@ const UserLoginForm = () => {
 					component={LinkBehaviour}
 					href="/forgot-password"
 					variant="body2"
-					className="text-decoration-none"
 				>
 					Forgot Password?
 				</Link>
@@ -176,7 +188,6 @@ const UserLoginForm = () => {
 						component={LinkBehaviour}
 						href="/register"
 						variant="body2"
-						className="text-decoration-none hover:font-semibold"
 					>
 						Don&apos;t have an account? Sign Up
 					</Link>

@@ -9,9 +9,8 @@ export async function GET(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Addresses`,
 			{
 				// header must have access token
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
+
 				method: req.method,
 			}
 		);
@@ -69,14 +68,15 @@ export async function POST(
 	{ params }: { params: { id: number } }
 ) {
 	try {
+		const payload = await req.json();
+
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Addresses`,
 			{
 				// header must have access token
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
+				body: JSON.stringify(payload),
 			}
 		);
 
@@ -87,7 +87,7 @@ export async function POST(
 				message: "Success to post user address",
 			});
 		}
-
+		console.log(res);
 		const data = await res.json();
 
 		if (res.status === 400) {

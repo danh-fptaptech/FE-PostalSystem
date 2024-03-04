@@ -7,9 +7,7 @@ export async function POST(req: NextRequest) {
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/Register`,
 			{
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 				body: JSON.stringify(formData),
 			}
