@@ -8,6 +8,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Employee } from '@/components/interfaces'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 function Page() {
   const [age, setAge] = React.useState('')
   const [title, setTitle] = useState('')
@@ -66,6 +67,9 @@ function Page() {
       <Box>
         <Paper elevation={1} sx={{ my: 3, p:1, borderRadius: '6px', boxSizing: 'border-box' }}>
           <h2>Create News</h2>
+          <Link href="/app/news-management">
+            <Button variant="contained">Back</Button>
+          </Link>
           <Box sx={{ m:2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

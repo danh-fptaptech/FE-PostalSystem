@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, Chip, Link, Paper } from '@mui/material'
+import { Box, Button, Chip, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import Table from '@mui/material/Table'
@@ -17,6 +17,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import LastPageIcon from '@mui/icons-material/LastPage'
 import { BlogItem } from '@/components/interfaces'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface TablePaginationActionsProps {
   count: number
@@ -156,7 +157,7 @@ export default function Page() {
         <Box>
           <Box sx={{ p: 3, display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
             <h2>News Management</h2>
-            <Link href="/app/news-management/create" underline="none">
+            <Link href="/app/news-management/create">
               <Button sx={{ p:0, fontWeight:'550', fontSize:'16px' }}>Create News</Button>
             </Link>
           </Box>
