@@ -14,9 +14,9 @@ import CountUp from 'react-countup'
 import NewsHomepage from '@/components/NewsHomepage'
 
 interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
+    children?: React.ReactNode
+    index: number
+    value: number
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -58,8 +58,8 @@ export default function Home() {
       <NewsHomepage />
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
-          <Tab sx={{ fontWeight:'550', fontSize:'20px' }} label="TRA CỨU ĐƠN HÀNG" {...a11yProps(0)} />
-          <Tab sx={{ fontWeight:'550', fontSize:'20px' }} label="ƯỚC TÍNH CƯỚC PHÍ" {...a11yProps(1)} />
+          <Tab sx={{ fontWeight:'550', fontSize:'20px' }} label="TRACKING ORDER" {...a11yProps(0)} />
+          <Tab sx={{ fontWeight:'550', fontSize:'20px' }} label="ESTIMATE COST" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

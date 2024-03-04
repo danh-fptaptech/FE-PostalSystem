@@ -16,18 +16,14 @@ import { Card, Container } from '@mui/material'
 import AvatarMenu from '@/components/AvatarMenu'
 
 const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
-  const drawerWidth = 300
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [isClosing, setIsClosing] = React.useState(false)
+    const drawerWidth = 300;
+    const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleDrawerClose = () => {
-    setIsClosing(true)
-    setMobileOpen(false)
-  }
 
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false)
-  }
+    const handleDrawerClose = () => {
+        setMobileOpen(false);
+    };
+
 
   const handleDrawerToggle = () => {
     if (!isClosing) {

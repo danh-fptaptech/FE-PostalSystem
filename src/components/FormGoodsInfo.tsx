@@ -366,7 +366,7 @@ function FormGoodsInfo() {
                                             fontSize: '16px'
                                         }}
                             >
-                                Total Weight:
+                                Calculate Weight:
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -386,7 +386,7 @@ function FormGoodsInfo() {
                                         fontSize: '16px'
                                     }}
                         >
-                            Total value:
+                            Calculate value:
                         </Typography>
                     </Grid>
                         <Grid item xs={6}>

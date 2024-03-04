@@ -1,8 +1,11 @@
-import { Box, Tab, Tabs, Typography } from '@mui/material'
-import React from 'react'
-
-
-  interface TabPanelProps {
+import { Box, Grid, Paper, Tab, Tabs, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import NewspaperIcon from '@mui/icons-material/Newspaper'
+import HomeIcon from '@mui/icons-material/Home'
+import WatchLaterIcon from '@mui/icons-material/WatchLater'
+import { BlogItem } from './interfaces'
+import { format } from 'date-fns'
+interface TabPanelProps {
     children?: React.ReactNode
     index: number
     value: number
@@ -36,25 +39,106 @@ function a11yProps(index: number) {
 }
 function NewsHomepage() {
   const [value, setValue] = React.useState(0)
+  const [blogs, setBlogs] = useState<BlogItem[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:5255/api/Blog/all')
+      .then(response => response.json())
+      .then((data: BlogItem[]) => {
+        data.sort((a: BlogItem, b: BlogItem) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // sort by date
+        setBlogs(data.slice(0, 4)) // get the first 4 items
+      })
+  }, [])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
+
   return (
     <Box sx={{ my:4 }}>
-      <Box>
+      <Box sx={{ my: 3 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display:'flex', flexDirection:'row' }}>
-          <Typography sx={{ fontWeight: '550', fontSize: '25px', flexGrow: 0.9 }}>TARS News</Typography>
+          <Typography sx={{ fontWeight: '550', fontSize:{ xs:'20px', md:'25px' }, flexGrow: 0.9 }}>TARS News</Typography>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
             <Tab sx={{ fontWeight: '550', fontSize: '20px' }} label="Promotion" {...a11yProps(0)} />
             <Tab sx={{ fontWeight: '550', fontSize: '20px' }} label="Guide" {...a11yProps(1)} />
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Box></Box>
+          {blogs.filter(blog => blog.category === 0).map((blog) => (
+            <Box sx={{ my:1 }} key={blog.id}>
+              <Paper elevation={1}>
+                <Box sx={{ mt:2 }}>
+                  <Grid container>
+                    <Grid item xs={1}>
+                      <NewspaperIcon sx={{ fontSize:{ xs:'30px', md:'45px' }, display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'auto', marginBottom:'auto' }}/>
+                    </Grid>
+                    <Grid item xs={11} sx={{ borderLeft:1, borderColor:'#eeeeee' }}>
+                      <Box sx={{ mx: 2, my: 1 }}>
+                        <Box sx={{ display:'flex', flexDirection:'row' }}>
+                          <Box>
+                            <HomeIcon sx={{ display:'flex', marginRight:1, marginTop:0.5, color:'#ec1e32' }}/>
+                          </Box>
+                          <Box>
+                            <Typography sx={{ fontWeight:'550', fontSize:'20px' }}>{blog.title}</Typography>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <Box sx={{ display:'flex', flexDirection:'row', ml:4 }}>
+                            <WatchLaterIcon sx={{ fontSize:'18px', color:'#aeaeae', mt:0.4 }}/>
+                            <Typography>{format(new Date(blog.createdAt), 'dd/MM/yyyy')}</Typography>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <Typography sx={{ fontSize:'16px', ml:4 }}>
+                            {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Paper>
+            </Box>
+          ))}
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-            hello
+          {blogs.filter(blog => blog.category === 1).map((blog) => (
+            <Box sx={{ my:1 }} key={blog.id}>
+              <Paper elevation={1}>
+                <Box sx={{ mt:2 }}>
+                  <Grid container>
+                    <Grid item xs={1}>
+                      <NewspaperIcon sx={{ fontSize:{ xs:'30px', md:'45px' }, display:'flex', marginLeft:'auto', marginRight:'auto', marginTop:'auto', marginBottom:'auto' }}/>
+                    </Grid>
+                    <Grid item xs={11} sx={{ borderLeft:1, borderColor:'#eeeeee' }}>
+                      <Box sx={{ mx: 2, my: 1 }}>
+                        <Box sx={{ display:'flex', flexDirection:'row' }}>
+                          <Box>
+                            <HomeIcon sx={{ display:'flex', marginRight:1, marginTop:0.5, color:'#ec1e32' }}/>
+                          </Box>
+                          <Box>
+                            <Typography sx={{ fontWeight:'550', fontSize:'20px' }}>{blog.title}</Typography>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <Box sx={{ display:'flex', flexDirection:'row', ml:4 }}>
+                            <WatchLaterIcon sx={{ fontSize:'18px', color:'#aeaeae', mt:0.4 }}/>
+                            <Typography>{format(new Date(blog.createdAt), 'dd/MM/yyyy')}</Typography>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <Typography sx={{ fontSize:'16px', ml:4 }}>
+                            {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Paper>
+            </Box>
+          ))}
         </CustomTabPanel>
       </Box>
       <Box></Box>

@@ -53,22 +53,22 @@ export default function TrackingShipment() {
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography sx={{ fontWeight:550, py:1 }}>
-                Mã phiếu gửi
+                Tracking Code
               </Typography>
               {/* <Typography sx={{ fontWeight:550, fontSize:'16px', py:1 }}>
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
               <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }}
                 type="text"
-                placeholder='VD: 123456, 24563'
+                placeholder='Example: 123456, 24563'
                 value={trackingCode}
                 onChange={handleInputChange}
               />
-              <TextField
+              {/* <TextField
                 sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }}
                 type="text"
                 placeholder='Nhập số điện thoại'
-              />
+              /> */}
               <Button sx={{
                 my:2,
                 color:'white',
@@ -81,7 +81,7 @@ export default function TrackingShipment() {
               }}
               onClick={handleTraCuuButton}
               >
-                TRA CỨU
+                Search
               </Button>
             </Box>
           </Grid>

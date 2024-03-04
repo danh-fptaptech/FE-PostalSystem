@@ -115,7 +115,7 @@ export default function UocTinhCuocPhi() {
           localStorage.setItem('dataEstimate', JSON.stringify(dataToStore))
           console.log('Data fetched successfully:', data)
           // Redirect to the page.tsx
-          router.push('/estimate-cost-by-postalCode-weight')
+          router.push('/estimate-cost')
         } else {
           toast.error('No data found')
         }
@@ -151,9 +151,9 @@ export default function UocTinhCuocPhi() {
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography sx={{ fontWeight:550 }} variant="h5" component="h5">
-                Ước tính cước phí
+                Estimate cost
               </Typography>
-              <Typography sx={{ my:2, fontWeight:'550' }}>Gửi từ *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>Send from *</Typography>
               <Autocomplete
                 id="city-select-demo"
                 options={locations}
@@ -171,7 +171,7 @@ export default function UocTinhCuocPhi() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn tỉnh/thành phố"
+                    label="Choose a city"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -179,7 +179,7 @@ export default function UocTinhCuocPhi() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Quận/huyện *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-select-demo"
@@ -196,7 +196,7 @@ export default function UocTinhCuocPhi() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn quận/huyện"
+                    label="Choose a district"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -204,7 +204,7 @@ export default function UocTinhCuocPhi() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Gửi đến *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>Send to *</Typography>
               <Autocomplete
                 id="city-to-select-demo"
                 options={locations}
@@ -222,7 +222,7 @@ export default function UocTinhCuocPhi() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn tỉnh/thành phố"
+                    label="Choose a city"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -230,7 +230,7 @@ export default function UocTinhCuocPhi() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Quận/huyện *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-to-select-demo"
@@ -247,7 +247,7 @@ export default function UocTinhCuocPhi() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn quận/huyện"
+                    label="Choose a district"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -255,8 +255,8 @@ export default function UocTinhCuocPhi() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Nhập khối lượng *</Typography>
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="number" placeholder='Nhập trọng lượng'/>
+              <Typography sx={{ my:2, fontWeight:'550' }}>Total weight *</Typography>
+              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="number" placeholder='Enter weight in grams'/>
 
               <Typography sx={{ fontWeight:550 }}>
                 <Button sx={{
@@ -270,7 +270,7 @@ export default function UocTinhCuocPhi() {
                   }
                 }}
                 onClick={handleTraCuuEstimateCost}
-                >TRA CỨU</Button>
+                >Search</Button>
               </Typography>
             </Box>
           </Grid>
