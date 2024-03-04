@@ -5,6 +5,9 @@ import HomeIcon from '@mui/icons-material/Home'
 import WatchLaterIcon from '@mui/icons-material/WatchLater'
 import { BlogItem } from './interfaces'
 import { format } from 'date-fns'
+import Link from 'next/link'
+
+
 interface TabPanelProps {
     children?: React.ReactNode
     index: number
@@ -80,7 +83,9 @@ function NewsHomepage() {
                             <HomeIcon sx={{ display:'flex', marginRight:1, marginTop:0.5, color:'#ec1e32' }}/>
                           </Box>
                           <Box>
-                            <Typography sx={{ fontWeight:'550', fontSize:'20px' }}>{blog.title}</Typography>
+                            <Link href={`/news/${blog.id}`}>
+                              <Typography sx={{ textDecoration:'none', fontWeight:'550', fontSize:'20px', '&:hover': { color: 'red' } }}>{blog.title}</Typography>
+                            </Link>
                           </Box>
                         </Box>
                         <Box>
@@ -90,9 +95,11 @@ function NewsHomepage() {
                           </Box>
                         </Box>
                         <Box>
-                          <Typography sx={{ fontSize:'16px', ml:4 }}>
-                            {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
-                          </Typography>
+                          <Link href={`/news/${blog.id}`}>
+                            <Typography sx={{ fontSize:'16px', ml:4 }}>
+                              {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
+                            </Typography>
+                          </Link>
                         </Box>
                       </Box>
                     </Grid>
@@ -118,7 +125,9 @@ function NewsHomepage() {
                             <HomeIcon sx={{ display:'flex', marginRight:1, marginTop:0.5, color:'#ec1e32' }}/>
                           </Box>
                           <Box>
-                            <Typography sx={{ fontWeight:'550', fontSize:'20px' }}>{blog.title}</Typography>
+                            <Link href={`/news/${blog.id}`}>
+                              <Typography sx={{ textDecoration:'none', fontWeight:'550', fontSize:'20px', '&:hover': { color: 'red' } }}>{blog.title}</Typography>
+                            </Link>
                           </Box>
                         </Box>
                         <Box>
@@ -128,9 +137,11 @@ function NewsHomepage() {
                           </Box>
                         </Box>
                         <Box>
-                          <Typography sx={{ fontSize:'16px', ml:4 }}>
-                            {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
-                          </Typography>
+                          <Link href={`/news/${blog.id}`}>
+                            <Typography sx={{ fontSize:'16px', ml:4 }}>
+                              {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
+                            </Typography>
+                          </Link>
                         </Box>
                       </Box>
                     </Grid>

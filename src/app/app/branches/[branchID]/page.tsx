@@ -62,6 +62,6 @@ const BranchDetails = ({ params }: { params: { branchID: string } }) => {
         <Chip label="Active" color="success" />
       </Card>
     </>
-  );
-};
+  )
+}
 export default BranchDetails;

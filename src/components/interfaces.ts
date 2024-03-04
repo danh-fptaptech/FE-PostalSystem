@@ -162,9 +162,11 @@ export interface BlogItem {
   slug: string;
   content: string;
   author: string;
-  employeeId: number;
   category: number;
+  employeeId: number;
   createdAt: string;
   updatedAt: string;
   status: number;
+  employee: Employee;
 }
+
