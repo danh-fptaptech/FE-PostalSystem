@@ -1,4 +1,3 @@
-/*
 import * as React from 'react';
 import {styled} from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -16,9 +15,8 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-// @ts-ignore
-export default function InputFileUpload({preview, setPreview, uploadFile, setUploadFile, setImage}) {
-
+const useS3 = () => {
+    const [preview, setPreview] = React.useState(null);
     const handleFileUpload = async () => {
         if (preview) {
             // @ts-ignore
@@ -32,29 +30,25 @@ export default function InputFileUpload({preview, setPreview, uploadFile, setUpl
             return data.fileLink;
         }
     };
-    React.useEffect(() => {
-        if (uploadFile === true) {
-            handleFileUpload().then((res) => {
-                setImage(res.fileLink)
-            });
-            setUploadFile(false);
-        }
-    }, [uploadFile]);
 
-    return (
-        <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon/>}
-        >
-            Upload file
-            <VisuallyHiddenInput type="file" onChange={(e) => {
-                // @ts-ignore
-                setPreview(e.target.files[0] || null);
-            }}/>
+    const ButtonUpload = () => {
+        return (
+            <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon/>}
+            >
+                Upload file
+                <VisuallyHiddenInput type="file" onChange={(e) => {
+                    // @ts-ignore
+                    setPreview(e.target.files[0] || null);
+                }}/>
 
-        </Button>
-    );
-}*/
+            </Button>
+        );
+    };
+    return { handleFileUpload, ButtonUpload, preview };
+};
+export default useS3;

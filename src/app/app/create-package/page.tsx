@@ -12,8 +12,8 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import {toast} from "sonner";
 import {useSiteSetting} from "@/contexts/SiteContext";
 import {useSession} from "next-auth/react";
-import InputFileUpload from "@/components/UploadImage";
 import Image from "next/image";
+import useS3 from "@/hooks/useS3";
 
 // @ts-ignore
 const CreatePackage = () => {
@@ -30,7 +30,7 @@ const CreatePackage = () => {
     // Context
     // @ts-ignore
     const {siteSetting} = useSiteSetting();
-
+    const { handleFileUpload, ButtonUpload, preview} = useS3();
     const {data: session} = useSession();
 
 
@@ -79,10 +79,7 @@ const CreatePackage = () => {
     const [fee, setFee] = useState(0);
     const [packageNote, setPackageNote] = useState("");
     const [timeProcess, setTimeProcess] = useState(0);
-    const [empProcess, setEmpProcess] = useState('');
-    const [image, setImage] = useState('');
-    const [preview, setPreview] = useState(null);
-    const [uploadFile, setUploadFile] = useState(false);
+    const [empProcess, setEmpProcess] = useState(true);
 
     const previewUrl = useMemo(() => {
         if (preview) {
@@ -213,6 +210,7 @@ const CreatePackage = () => {
                 service: selectedService,
                 packageNote: packageNote,
                 packageSize: formData.package_size,
+                image: await handleFileUpload(),
                 submitBy: session?.user||{
                     id: 1,
                     fullName: 'Admin',
@@ -291,9 +289,9 @@ const CreatePackage = () => {
 
     useEffect(() => {
         if (session?.user?.employeeCode) {
-            setEmpProcess(session?.user?.employeeCode);
+            setEmpProcess(!!(session?.user?.employeeCode));
         } else {
-            setEmpProcess('');
+            setEmpProcess(true);
         }
     }, [session]);
 
@@ -461,7 +459,7 @@ const CreatePackage = () => {
             </Grid>
 
             {/*Employee Process */}
-            {session?.user?.employeeCode ? (<Grid container spacing={3} columns={12}>
+            {empProcess ? (<Grid container spacing={3} columns={12}>
                 <Grid item xs={12}>
                     <Card sx={{
                         my: 3,
@@ -492,9 +490,7 @@ const CreatePackage = () => {
                                         alignItems: 'center',
                                         my: 2,
                                     }}>
-                                        <InputFileUpload setPreview={setPreview} preview={preview}
-                                                         uploadFile={uploadFile} setUploadFile={setUploadFile}
-                                                         setImage={setImage}/>
+                                        <ButtonUpload/>
                                         {preview ?
                                             <Image src={`${previewUrl}`}
                                                    width={0}
@@ -504,12 +500,14 @@ const CreatePackage = () => {
                                                    title={"preview"}
                                                    style={{
                                                        width: 'clamp(100px, 100%, 200px)',
-                                                       height: 'auto'
+                                                       height: 'auto',
+                                                       margin: '20px'
                                                    }}
                                             /> :
                                             <img src={'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Upload Image'}
                                                  alt={"preview"} title={"preview"} width={200} height={200}
-                                                 style={{margin: '20px'}}/>
+                                                 style={{margin: '20px'}}
+                                            />
                                         }
                                     </Box>
                                 </Grid>
