@@ -192,7 +192,7 @@ export default function Page() {
                         }
                       </TableCell>
                       <TableCell align="center" style={{ fontSize: '16px' }}>
-                        <Button size="small" variant="contained" color="info"
+                        <Button sx={{ mr: 0.5 }} size="small" variant="contained" color="info"
                           onClick={() => handleItemClick(item.id)}
                         >Edit</Button>
                         <Button size="small" variant="contained" color="error"

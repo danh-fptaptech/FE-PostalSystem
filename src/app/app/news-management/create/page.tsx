@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, Grid, Paper, TextField } from '@mui/material'
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,8 +9,10 @@ import { Employee } from '@/components/interfaces'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
 function Page() {
-  const [age, setAge] = React.useState('')
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [employeeId, setEmployeeId] = useState('')
@@ -37,6 +39,11 @@ function Page() {
 
   //submit form
   const handleSubmit = async () => {
+    if (!title || !slug || !content || !author || !employeeId) {
+      toast.error('Please fill all the fields')
+      return
+    }
+
     const news = {
       title,
       slug,
@@ -66,10 +73,12 @@ function Page() {
     <>
       <Box>
         <Paper elevation={1} sx={{ my: 3, p:1, borderRadius: '6px', boxSizing: 'border-box' }}>
-          <h2>Create News</h2>
-          <Link href="/app/news-management">
-            <Button variant="contained">Back</Button>
-          </Link>
+          <Box sx={{ m:2, display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
+            <Typography sx={{ fontSize:'24px', fontWeight:550 }}>Create News</Typography>
+            <Link href="/app/news-management">
+              <Button variant="contained">Back</Button>
+            </Link>
+          </Box>
           <Box sx={{ m:2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -83,16 +92,11 @@ function Page() {
                   placeholder='Enter title'
                   onChange={(e) => setTitle(e.target.value)}
                 />
-                <TextField
-                  sx={{ my:1 }}
-                  required
-                  id='content'
-                  name='content'
-                  label='content'
-                  fullWidth
-                  placeholder='Enter content'
-                  onChange={(e) => setContent(e.target.value)}
-                />
+                
+
+
+
+
                 <FormControl fullWidth sx={{ my:1 }}>
                   <InputLabel id="demo-simple-select-label">Employee</InputLabel>
                   <Select
@@ -166,6 +170,36 @@ function Page() {
                     ))}
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <CKEditor
+                  editor={ ClassicEditor }
+                  onReady={ editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log( 'Editor is ready to use!', editor );
+                  } }
+                  onChange={ ( event, editor ) => {
+                    const data = editor.getData()
+                    console.log( 'Data:', data )
+                    setContent(data) // set the content state with the current data from the editor
+                  } }
+                  onBlur={ ( event, editor ) => {
+                    console.log( 'Blur.', editor )
+                  } }
+                  onFocus={ ( event, editor ) => {
+                    console.log( 'Focus.', editor )
+                  } }
+                >
+                </CKEditor>
+                {/* <TextField
+                  required
+                  id='content'
+                  name='content'
+                  label='content'
+                  fullWidth
+                  placeholder='Enter content'
+                  onChange={(e) => setContent(e.target.value)}
+                /> */}
               </Grid>
             </Grid>
             <Button onClick={handleSubmit}>Submit</Button>

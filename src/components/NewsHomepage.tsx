@@ -6,7 +6,7 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater'
 import { BlogItem } from './interfaces'
 import { format } from 'date-fns'
 import Link from 'next/link'
-
+import './NewsHomepage.css'
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -94,11 +94,9 @@ function NewsHomepage() {
                             <Typography>{format(new Date(blog.createdAt), 'dd/MM/yyyy')}</Typography>
                           </Box>
                         </Box>
-                        <Box>
-                          <Link href={`/news/${blog.id}`}>
-                            <Typography sx={{ fontSize:'16px', ml:4 }}>
-                              {blog.content.length > 100 ? blog.content.substring(0, 100) + '...' : blog.content}
-                            </Typography>
+                        <Box sx={{ ml:4 }}>
+                          <Link href={`/news/${blog.id}`} >
+                            <div className="ckeditor" dangerouslySetInnerHTML={{ __html: blog.content.length> 50 ? blog.content.substring(0, 50) +' ...' : blog.content }} />
                           </Link>
                         </Box>
                       </Box>

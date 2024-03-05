@@ -53,9 +53,7 @@ function Page({ params }: { params: { blogId: string } }) {
               </Typography>
             </Box>
             <Box sx={{ ml:2, my:2 }}>
-              <Typography sx={{ fontSize:'18px' }}>
-                {blog? blog.content:'Loading ...'}
-              </Typography>
+              <div dangerouslySetInnerHTML={{ __html: blog ? blog.content : 'Loading ...' }} />
             </Box>
           </Box>
         </Grid>
