@@ -40,9 +40,18 @@ export default withAuth(
 
 			return NextResponse.next();
 		} else {
-			if (req.nextUrl.pathname === "/login") return NextResponse.next();
-			else if (req.nextUrl.pathname.startsWith("/app/dashboard")) {
-				return NextResponse.redirect(new URL("/login", req.url));
+			if (
+				req.nextUrl.pathname === "/login" ||
+				req.nextUrl.pathname === "/employee-login" ||
+				req.nextUrl.pathname === "/admin-login"
+			)
+				return NextResponse.next();
+			else if (
+				req.nextUrl.pathname.startsWith("/app") ||
+				req.nextUrl.pathname.startsWith("/app/employee") ||
+				req.nextUrl.pathname.startsWith("/app/admin/employees")
+			) {
+				return NextResponse.redirect(new URL("/", req.url));
 			}
 		}
 	},
@@ -71,19 +80,43 @@ export const config = {
 
 const paths = [
 	{
-		path: "/app",
-		permission: ["home.access"],
+		path: "/register",
+		permission: ["user.access", "user.all", "home.access"],
 	},
+	{
+		path: "/app/admin/employees",
+		permission: ["Admin"],
+	},
+	{
+		path: "/app/admin/roles",
+		permission: ["Admin"],
+	},
+	{
+		path: "/app/admin/requests",
+		permission: ["Admin"],
+	},
+
+	{
+		path: "/app/admin/users",
+		permission: ["Admin"],
+	},
+
+	{
+		path: "/app/employee",
+		permission: ["user.access", "Employee", "Branch Manager"],
+	},
+	{
+		path: "/app/user",
+		permission: ["user.access", "User"],
+	},
+
 	{
 		path: "/app/users",
 		permission: ["user.access", "user.all", "home.access"],
 	},
+
 	{
-		path: "/app/dashboard",
-		permission: ["user.access", "Admin"],
-	},
-	{
-		path: "/app/branchs",
+		path: "/app/branches",
 		permission: ["user.access", "Admin"],
 	},
 ];

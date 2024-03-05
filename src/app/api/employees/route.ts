@@ -8,7 +8,11 @@ export async function GET() {
 			cache: "no-cache",
 		});
 
-		const data = await res.json();
+		let data = null;
+		if (res.ok) {
+			data = await res.json();
+			//console.log(data);
+		}
 
 		if (res.ok) {
 			return NextResponse.json({
@@ -46,6 +50,8 @@ export async function POST(req: Request) {
 			},
 			body: JSON.stringify(employee),
 		});
+
+		console.log(employee);
 
 		if (res.ok) {
 			return NextResponse.json({
