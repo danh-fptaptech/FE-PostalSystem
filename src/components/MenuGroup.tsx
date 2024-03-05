@@ -8,7 +8,7 @@ import {Collapse} from "@mui/material";
 import List from "@mui/material/List";
 import {usePathname, useRouter} from "next/navigation";
 import {useContext, useEffect} from "react";
-import MenuContext from "@/context/MenuContext";
+import MenuContext from "@/contexts/MenuContext";
 
 
 export default function MenuGroup(props: { item: any }) {

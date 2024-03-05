@@ -3,7 +3,8 @@ import {Item} from "@/models/Item";
 export interface DataCreatePackage {
 
     type_sender: string;
-    select_sender: {};
+    select_sender: {
+    };
     phoneNumber_sender: string;
     fullName_sender: string;
     address_sender: string;

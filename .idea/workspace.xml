@@ -5,20 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/aws-s3/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/UploadImage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/VolumetricWeightContent.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/contexts/PackageCreateContext.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/contexts/SiteContext.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hooks/useS3.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(auth)/reset-password/[token]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/reset-password/[token]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/Feecustom/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/Feecustom/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/UserPackages.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/UserPackages.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/@user/@content/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppAppBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppAppBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/libs/data.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/libs/data.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(public)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(public)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/fee-service/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/fee-service/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/general-setting/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/general-setting/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/users/packages/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/users/packages/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/dashboard/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/BoxInputInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/BoxInputInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FormGoodsInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FormGoodsInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FormReciever.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MenuGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MenuGroup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/MenuContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/MenuContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/PostalCodeContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helper/aws-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper/aws-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helper/deleteFileS3.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper/deleteFileS3.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helper/uploadFileS3.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper/uploadFileS3.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helper/useDebounce.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useDebounce.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/DataCreatePackage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/DataCreatePackage.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,23 +78,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merge-3.3",
-    "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/api/locations/getlocationsbyid",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ImportCost",
-    "ts.external.directory.path": "G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merge-3.3&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/eProject/tars-delivery-fe/src/app/api/packages/create&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ImportCost&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactBuddySettings">
     <option name="extensionsIgnore" value="true" />
   </component>
@@ -93,17 +109,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\eProject\tars-delivery-fe\src\app\api\packages\create" />
+      <recent name="G:\eProject\tars-delivery-fe\src\app\api\aws-s3" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlocationsbyid" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlistprovince" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\user\address\getlistsender" />
-      <recent name="G:\eProject\tars-delivery-fe\src\app\api\user\address\getlistreceiver" />
-      <recent name="G:\eProject\tars-delivery-fe\src\app\api\user" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\eProject\tars-delivery-fe\src\hooks" />
+      <recent name="G:\eProject\tars-delivery-fe\src\contexts" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlocationsbyid\[id]" />
       <recent name="G:\eProject\tars-delivery-fe\src\models\Enum" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\app\branches" />
-      <recent name="G:\eProject\tars-delivery-fe\src\app\api\branchs\getbyid" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -133,6 +150,8 @@
       <workItem from="1709397609629" duration="242000" />
       <workItem from="1709397862118" duration="6376000" />
       <workItem from="1709405829203" duration="1042000" />
+      <workItem from="1709610727147" duration="8546000" />
+      <workItem from="1709626287567" duration="4285000" />
     </task>
     <servers />
   </component>

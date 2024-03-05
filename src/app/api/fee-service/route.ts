@@ -39,7 +39,7 @@ export async function POST(req: Request) {
             },
         ]
         const dataEmpty: never[] = [];
-        return NextResponse.json({ data : data });
+        return NextResponse.json({ data : data.filter(f=>f.status===1) });
     } catch (error) {
         return NextResponse.json({ error: "api backend error" });
     }

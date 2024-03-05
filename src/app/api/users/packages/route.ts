@@ -5,7 +5,6 @@ export async function GET(req: NextRequest) {
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/Packages`,
 			{
-				// header must have access token
 				headers: {
 					...req.headers,
 				},

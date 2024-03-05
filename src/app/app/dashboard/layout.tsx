@@ -15,6 +15,7 @@ export default function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	const { data: session, status } = useSession();
+
 	if (status === "authenticated") {
 		if (session?.user.role.name === "User") {
 			return <div>{user}</div>;

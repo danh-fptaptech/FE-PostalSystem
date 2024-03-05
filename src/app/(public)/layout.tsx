@@ -14,24 +14,6 @@ const Layout = ({ children }: any) => {
         <AppAppBar mode={'dark'} toggleColorMode={function (): void {
           throw new Error('Function not implemented.')
         } } />
-        {/* <AppBar position='fixed'>
-          <Toolbar>
-            <Container
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <Link href='/' style={{ textDecoration:'none' }}>
-                <Typography sx={{ fontWeight:550, fontSize:30, color:'white' }}>Tars Postal</Typography>
-              </Link>
-              <Button variant='contained' href='/app' color='secondary'>
-                To App
-              </Button>
-            </Container>
-          </Toolbar>
-        </AppBar> */}
       </header>
       <Box sx={{ mt:{ xs:'56px', md:0 } }}>
         <Image src={banner} alt='Hong Kong Skyline' layout='responsive'/>
