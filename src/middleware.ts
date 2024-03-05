@@ -74,6 +74,7 @@ export const config = {
 		 * - favicon.ico (favicon file)
 		 */
 		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
+		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
 	],
 };
 
@@ -84,7 +85,7 @@ const paths = [
 	},
 	{
 		path: "/app/user",
-		permission: ["user.view"],
+		permission: ["user.view", "User"],
 	},
 	{
 		path: "/app/user/change-password",
