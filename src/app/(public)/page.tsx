@@ -12,6 +12,7 @@ import { Grid } from '@mui/material'
 import Image from 'next/image'
 import CountUp from 'react-countup'
 import NewsHomepage from '@/components/NewsHomepage'
+import Link from 'next/link'
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -32,7 +33,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <>{children}</>
         </Box>
       )}
     </div>
@@ -75,12 +76,12 @@ export default function Home() {
               Post office network in 63 provinces
             </Typography>
             <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-evenly' }}>
-              <a href="https://apps.apple.com/us/app/viettelpost-chuy%E1%BB%83n-ph%C3%A1t-nhanh/id1398283517">
+              <Link href="https://apps.apple.com/us/app/viettelpost-chuy%E1%BB%83n-ph%C3%A1t-nhanh/id1398283517">
                 <img style={{ paddingTop:'10px' }} src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/app.png" alt=""/>
-              </a>
-              <a href="https://play.google.com/store/apps/details?id=com.viettel.ViettelPost">
+              </Link>
+              <Link href="https://play.google.com/store/apps/details?id=com.viettel.ViettelPost">
                 <img src="https://en.viettelpost.com.vn/wp-content/themes/viettel/assets/images/gg.png" alt=""/>
-              </a>
+              </Link>
             </Box>
           </Grid>
           <Grid item xs={12} md={4} sx={{ backgroundColor:'#ee0033', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center' }}>

@@ -159,7 +159,7 @@ function Page() {
           localStorage.setItem('dataEstimate', JSON.stringify(dataToStore))
           setTrackingData(data)
           // Redirect to the page.tsx
-          router.push('/estimate-cost-by-postalCode-weight')
+          router.push('/estimate-cost')
         } else {
           toast.error('No data found')
         }
@@ -206,18 +206,18 @@ function Page() {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 380 }} aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell>Tên dịch vụ</TableCell>
-                <TableCell align="left">Giá cước</TableCell>
-                <TableCell align="left">Thời gian</TableCell>
+              <TableRow sx={{ backgroundColor:'#f0f0f0' }}>
+                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Service Name</TableCell>
+                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Cost</TableCell>
+                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Estimate Time</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {trackingData ? trackingData.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.service.serviceName}</TableCell>
-                  <TableCell>{row.feeCharge} đ</TableCell>
-                  <TableCell>{row.timeProcess} ngày</TableCell>
+                  <TableCell style={{ fontSize: '16px' }}>{row.service.serviceName}</TableCell>
+                  <TableCell style={{ fontSize: '16px' }}>{row.feeCharge.toLocaleString()} VND</TableCell>
+                  <TableCell style={{ fontSize: '16px' }}>{row.timeProcess} day(s)</TableCell>
                 </TableRow>
               )) : <TableRow><TableCell colSpan={3}>No data</TableCell></TableRow>}
             </TableBody>
@@ -231,7 +231,7 @@ function Page() {
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography sx={{ fontWeight:550 }} variant="h5" component="h5">
-                Ước tính cước phí
+                Estimate Cost
               </Typography>
               <Typography sx={{ my:2, fontWeight:'550' }}>Gửi từ *</Typography>
               <Autocomplete
@@ -251,7 +251,7 @@ function Page() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn tỉnh/thành phố"
+                    label="Choose a city"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -259,7 +259,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Quận/huyện *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-select-demo"
@@ -276,7 +276,7 @@ function Page() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn quận/huyện"
+                    label="Choose a district"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -284,7 +284,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Gửi đến *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>To *</Typography>
               <Autocomplete
                 id="city-to-select-demo"
                 options={locations}
@@ -302,7 +302,7 @@ function Page() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn tỉnh/thành phố"
+                    label="Choose a city"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -310,7 +310,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Quận/huyện *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-to-select-demo"
@@ -327,7 +327,7 @@ function Page() {
                   <TextField
                     sx={{ flexGrow: 1 }}
                     {...params}
-                    label="Chọn quận/huyện"
+                    label="Choose a district"
                     inputProps={{
                       ...params.inputProps,
                       autoComplete: 'new-password' // disable autocomplete and autofill
@@ -335,8 +335,8 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Nhập khối lượng *</Typography>
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="number" placeholder='Nhập trọng lượng'/>
+              <Typography sx={{ my:2, fontWeight:'550' }}>Enter total weight *</Typography>
+              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="number" placeholder='Enter weight in grams'/>
 
               <Typography sx={{ fontWeight:550 }}>
                 <Button sx={{
@@ -350,7 +350,7 @@ function Page() {
                   }
                 }}
                 onClick={handleTraCuuEstimateCost}
-                >TRA CỨU</Button>
+                >SEARCH</Button>
               </Typography>
             </Box>
           </Grid>

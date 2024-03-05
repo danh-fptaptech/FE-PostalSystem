@@ -176,11 +176,11 @@ export default function Page() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((item, index) => (
+                  {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
                     <TableRow key={index}>
                       <TableCell align="center" style={{ fontSize: '16px' }}>{item?.title.length > 30 ? item?.title.substring(0, 30) + ' ...' : item?.title}</TableCell>
                       <TableCell align="center" style={{ fontSize: '16px' }}>{item?.slug}</TableCell>
-                      <TableCell align="center" style={{ fontSize: '16px' }}>{item?.content.length > 50 ? item?.content.substring(0, 50) + ' ...' : item?.content}</TableCell>
+                      <TableCell align="center" style={{ fontSize: '16px' }}>{item?.content.length > 30 ? item?.content.substring(0, 30) + ' ...': item?.content}</TableCell>
                       <TableCell align="center" style={{ fontSize: '16px' }}>{item?.author}</TableCell>
                       <TableCell align="center" style={{ fontSize: '16px' }}>
                         {item?.category ? 'Guide': 'Promotion'}
@@ -199,7 +199,6 @@ export default function Page() {
                           onClick={() => handleDelete(item.id)}
                         >Delete</Button>
                       </TableCell>
-
                     </TableRow>
                   ))}
                 </TableBody>

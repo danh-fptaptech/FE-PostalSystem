@@ -45,7 +45,7 @@ const Layout = ({ children }: any) => {
       {/* <Toolbar /> */}
       {/* banner */}
       <main>
-        <Container>
+        <Container maxWidth='xl'>
           {children}
         </Container>
       </main>

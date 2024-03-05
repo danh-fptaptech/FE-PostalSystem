@@ -51,7 +51,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
           mt: 2
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Toolbar
             variant="regular"
             sx={(theme) => ({
@@ -140,7 +140,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 color="primary"
                 variant="contained"
                 size="small"
-                component="a"
+                 
               >
                 <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
               </Button>
@@ -192,7 +192,6 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     <Button
                       color="primary"
                       variant="contained"
-                      component="a"
                       sx={{ width: '100%' }}
                     >
                       <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>

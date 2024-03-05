@@ -27,7 +27,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <>{children}</>
         </Box>
       )}
     </div>
@@ -49,7 +49,7 @@ function NewsHomepage() {
       .then(response => response.json())
       .then((data: BlogItem[]) => {
         data.sort((a: BlogItem, b: BlogItem) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // sort by date
-        setBlogs(data.slice(0, 8)) // get the first 4 items
+        setBlogs(data.slice(0, 10)) // get the first 4 items
       })
   }, [])
 
@@ -68,7 +68,7 @@ function NewsHomepage() {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          {blogs.filter(blog => blog.category === 0).map((blog) => (
+          {blogs.filter(blog => blog.category === 0 && blog.status !== 0 ).map((blog) => (
             <Box sx={{ my:1 }} key={blog.id}>
               <Paper elevation={1}>
                 <Box sx={{ mt:2 }}>

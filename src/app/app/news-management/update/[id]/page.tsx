@@ -43,12 +43,8 @@ function Page({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(!id)
 
   useEffect(() => {
-    // console.log('params.id:', id)
+    console.log('status', status)
     const fetchData = async () => {
-      if (!title || !slug || !content || !author || !employeeId) {
-        toast.error('Please fill all the fields')
-        return
-      }
 
       try {
         const response = await fetch(`/api/news/${id}`)
@@ -96,8 +92,12 @@ function Page({ params }: { params: { id: string } }) {
       content,
       author,
       employeeId,
-      category: 0,
-      status: 0
+      category,
+      status
+    }
+    if (!title || !slug || !content || !author || !employeeId) {
+      toast.error('Please fill all the fields')
+      return
     }
 
     const res = await fetch(`/api/news-management/create-update/${newsId}`, {
@@ -127,7 +127,7 @@ function Page({ params }: { params: { id: string } }) {
             </Link>
           </Box>
           <Box sx={{ m:2 }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ mb:2 }}>
               <Grid item xs={12} sm={6}>
                 <Box>
                   <Typography sx={{ color:'red' }}>Title *</Typography>
@@ -178,7 +178,6 @@ function Page({ params }: { params: { id: string } }) {
                     </Select>
                   </FormControl>
                 </Box>
-                
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Box>
@@ -215,7 +214,8 @@ function Page({ params }: { params: { id: string } }) {
                       labelId="demo-simple-select-label"
                       value={status}
                       id="demo-simple-select"
-                      onChange={(e) => setStatus(e.target.value as number)}
+                      onChange={(e) => {setStatus(parseInt(e.target.value as string))
+                      }}
                     >
                       {[0, 1].map((value) => (
                         <MenuItem key={value} value={value}>
@@ -249,7 +249,7 @@ function Page({ params }: { params: { id: string } }) {
                 </CKEditor>
               </Grid>
             </Grid>
-            <Button sx={{ fontWeight:550, my:1 }} onClick={handleSubmit}>Update</Button>
+            <Button variant="contained" onClick={handleSubmit}>Update</Button>
 
           </Box>
         </Paper>

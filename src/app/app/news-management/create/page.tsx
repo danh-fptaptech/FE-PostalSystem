@@ -92,10 +92,6 @@ function Page() {
                   placeholder='Enter title'
                   onChange={(e) => setTitle(e.target.value)}
                 />
-                
-
-
-
 
                 <FormControl fullWidth sx={{ my:1 }}>
                   <InputLabel id="demo-simple-select-label">Employee</InputLabel>
@@ -202,8 +198,7 @@ function Page() {
                 /> */}
               </Grid>
             </Grid>
-            <Button onClick={handleSubmit}>Submit</Button>
-
+            <Button sx={{ my:1 }} variant="contained" onClick={handleSubmit}>Back</Button>
           </Box>
         </Paper>
       </Box>

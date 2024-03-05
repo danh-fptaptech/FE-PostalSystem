@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 
 const schema = z.object({
 	otp: z
@@ -104,14 +105,14 @@ export default function VerifyEmailPage() {
 
 													<div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
 														<p>Didn&apos;t recieve code?</p>{" "}
-														<a
+														<Link
 															className="flex flex-row items-center text-blue-600"
 															href="http://"
 															target="_blank"
 															rel="noopener noreferrer"
 														>
 															Resend
-														</a>
+														</Link>
 													</div>
 												</div>
 											</div>
