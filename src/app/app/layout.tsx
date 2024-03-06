@@ -9,7 +9,7 @@ import { Menu } from '@mui/icons-material'
 import { Container } from '@mui/material'
 import AvatarMenu from '@/components/AvatarMenu'
 import DrawerMenu from '@/components/DrawerMenu'
-import MenuContext from '@/context/MenuContext'
+import MenuContext from '@/contexts/MenuContext'
 
 
 const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {

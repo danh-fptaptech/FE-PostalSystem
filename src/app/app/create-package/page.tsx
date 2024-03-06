@@ -1,6 +1,6 @@
 'use client'
 import {Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import BoxInputInfo from "@/components/BoxInputInfo";
 import {useForm} from "react-hook-form";
 import {PackageCreateContext} from "@/context/PackageCreateContext";
@@ -10,6 +10,10 @@ import {Item} from "@/models/Item";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import {toast} from "sonner";
+import {useSiteSetting} from "@/contexts/SiteContext";
+import {useSession} from "next-auth/react";
+import Image from "next/image";
+import useS3 from "@/hooks/useS3";
 
 // @ts-ignore
 const CreatePackage = () => {
@@ -23,6 +27,13 @@ const CreatePackage = () => {
         trigger,
         reset
     } = useForm({mode: "onBlur",});
+    // Context
+    // @ts-ignore
+    const {siteSetting} = useSiteSetting();
+    const { handleFileUpload, ButtonUpload, preview} = useS3();
+    const {data: session} = useSession();
+
+
     // State
     const [formData, setFormData] = useState<DataCreatePackage>({
         address_receiver: "",
@@ -61,9 +72,6 @@ const CreatePackage = () => {
         size_convert: "",
         package_note: ""
     });
-    const [rateConvert, setRateConvert] = useState(5);
-    const [limitSize, setLimitSize] = useState(50);
-    const [limitWeight, setLimitWeight] = useState(6);
     const [listService, setListService] = useState([]);
     const [selectedService, setSelectedService] = useState({});
     const [finalWeight, setFinalWeight] = useState(0);
@@ -71,6 +79,13 @@ const CreatePackage = () => {
     const [fee, setFee] = useState(0);
     const [packageNote, setPackageNote] = useState("");
     const [timeProcess, setTimeProcess] = useState(0);
+    const [empProcess, setEmpProcess] = useState(true);
+
+    const previewUrl = useMemo(() => {
+        if (preview) {
+            return URL.createObjectURL(preview);
+        }
+    }, [preview]);
 
     // Function
     const createItem = () => {
@@ -134,7 +149,7 @@ const CreatePackage = () => {
         // @ts-ignore
         let postalCodeReceiver = formData?.type_receiver === "new" ? (formData?.postalCode_receiver || "") : (formData?.select_receiver?.postalCode || "");
         // @ts-ignore
-        let checkSize = Object.values(formData.package_size).some(value => parseFloat(value) > limitSize) || formData.size_convert / 1000 > limitWeight;
+        let checkSize = Object.values(formData.package_size).some(value => parseFloat(value) > siteSetting.limitSize) || formData.size_convert / 1000 > siteSetting.limitWeight;
         // @ts-ignore
         let totalWeight = !checkSize ? formData.total_weight : (formData.size_convert > formData.total_weight ? formData.size_convert : formData.total_weight);
         // @ts-ignore
@@ -159,15 +174,76 @@ const CreatePackage = () => {
         window.location.reload(); // This will reload the page
     }
 
+    const SubmitPackage = async () => {
+        const InfoSender = formData.type_sender === "new" ? {
+            address: formData.address_sender,
+            district: formData.district_sender,
+            fullName: formData.fullName_sender,
+            phoneNumber: formData.phoneNumber_sender,
+            postalCode: formData.postalCode_sender,
+            province: formData.province_sender,
+            ward: formData.ward_sender,
+        } : formData.select_sender;
+        const InfoReceiver = formData.type_receiver === "new" ? {
+            address: formData.address_receiver,
+            district: formData.district_receiver,
+            fullName: formData.fullName_receiver,
+            phoneNumber: formData.phoneNumber_receiver,
+            postalCode: formData.postalCode_receiver,
+            province: formData.province_receiver,
+            ward: formData.ward_receiver,
+        } : formData.select_receiver;
+
+
+        const response = await fetch("/api/packages/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                sender: InfoSender,
+                receiver: InfoReceiver,
+                items: formData.list_items,
+                type: formData.type_package,
+                fee: fee,
+                cod: cod,
+                service: selectedService,
+                packageNote: packageNote,
+                packageSize: formData.package_size,
+                image: await handleFileUpload(),
+                submitBy: session?.user||{
+                    id: 1,
+                    fullName: 'Admin',
+                    employeeCode: 'EMP001',
+                    email: 'admin@localhost',
+                    phoneNumber: '0123456789',
+                    avatar: 'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Admin',
+                    role: {
+                        name: 'Admin',
+                        permissions: ['admin']
+                    }
+                },
+            })
+        });
+        const data = await response.json();
+        console.log("Data service:", data.data);
+        return data.data;
+    }
+
 
     // useEffect
+    useEffect(() => {
+        setListService([]);
+        setSelectedService({});
+    }, [formData?.type_sender, formData?.type_receiver, formData?.postalCode_sender, formData?.postalCode_receiver, formData?.total_weight, formData?.select_sender, formData?.select_receiver, JSON.stringify(formData?.package_size)]);
+
     useEffect(() => {
         console.log("Run effect calculate total weight and value")
         let totalWeight = 0;
         let totalValue = 0;
         // @ts-ignore
         formData.list_items.forEach((item: Item) => {
-            totalWeight += Number(item.itemWeight);
+            totalWeight += Number(item.itemWeight) * Number(item.itemQuantity);
             totalValue += Number(item.itemValue);
         });
         // @ts-ignore
@@ -180,8 +256,7 @@ const CreatePackage = () => {
         const size = formData?.package_size;
         // @ts-ignore
         const totalSize = size?.width * size?.height * size?.length;
-        // @ts-ignore
-        const sizeConvert = totalSize / rateConvert;
+        const sizeConvert = totalSize / siteSetting.rateConvert;
         // @ts-ignore
         setFormData({...formData, size_convert: sizeConvert});
     }, [JSON.stringify(formData?.package_size)]);
@@ -211,6 +286,14 @@ const CreatePackage = () => {
         // @ts-ignore
         setFee(selectedService?.feeCharge);
     }, [selectedService])
+
+    useEffect(() => {
+        if (session?.user?.employeeCode) {
+            setEmpProcess(!!(session?.user?.employeeCode));
+        } else {
+            setEmpProcess(true);
+        }
+    }, [session]);
 
 
     return (
@@ -375,6 +458,134 @@ const CreatePackage = () => {
                 </Grid>
             </Grid>
 
+            {/*Employee Process */}
+            {empProcess ? (<Grid container spacing={3} columns={12}>
+                <Grid item xs={12}>
+                    <Card sx={{
+                        my: 3,
+                        borderRadius: "10px",
+                        boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
+                    }}>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderBottom: 1,
+                            backgroundColor: "primary.light",
+                            borderColor: '#C7C8CC',
+                            borderTopLeftRadius: 2,
+                            borderTopRightRadius: 2
+                        }}
+                        >
+                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                                Employee Process
+                            </Typography>
+                        </Box>
+                        <CardContent>
+                            <Grid container spacing={2} columns={12}>
+                                <Grid item xs={12} lg={4}>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        my: 2,
+                                    }}>
+                                        <ButtonUpload/>
+                                        {preview ?
+                                            <Image src={`${previewUrl}`}
+                                                   width={0}
+                                                   height={0}
+                                                   objectFit='contain'
+                                                   alt={"preview"}
+                                                   title={"preview"}
+                                                   style={{
+                                                       width: 'clamp(100px, 100%, 200px)',
+                                                       height: 'auto',
+                                                       margin: '20px'
+                                                   }}
+                                            /> :
+                                            <img src={'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Upload Image'}
+                                                 alt={"preview"} title={"preview"} width={200} height={200}
+                                                 style={{margin: '20px'}}
+                                            />
+                                        }
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} lg={8}
+                                >
+                                    <Grid container spacing={1} columns={12}>
+
+                                        <Grid item xs={12} lg={6}>
+                                            <TextField
+                                                margin="dense"
+                                                label="Employee Name"
+                                                type="text"
+                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                disabled
+                                                size={"small"}
+                                                autoComplete={"off"}
+                                                sx={{my: 2}}
+                                                fullWidth={true}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} lg={6}>
+                                            <TextField
+                                                margin="dense"
+                                                label="Employee Name"
+                                                type="text"
+                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                disabled
+                                                size={"small"}
+                                                autoComplete={"off"}
+                                                fullWidth={true}
+                                                sx={{my: 2}}
+                                            /></Grid>
+                                        <Grid item xs={12} lg={6}>
+                                            <TextField
+                                                margin="dense"
+                                                label="Employee Name"
+                                                type="text"
+                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                disabled
+                                                size={"small"}
+                                                autoComplete={"off"}
+                                                fullWidth={true}
+                                                sx={{my: 2}}
+                                            /></Grid><Grid item xs={12} lg={6}>
+                                        <TextField
+                                            margin="dense"
+                                            label="Employee Name"
+                                            type="text"
+                                            value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                            disabled
+                                            size={"small"}
+                                            autoComplete={"off"}
+                                            fullWidth={true}
+                                            sx={{my: 2}}
+                                        /></Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Package Note"
+                                                multiline
+                                                rows={4}
+                                                onChange={(e) => {
+                                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//,+-]/g, '');
+                                                    // @ts-ignore
+                                                    setPackageNote(e.target.value);
+                                                }}
+                                                fullWidth={true}
+                                                autoComplete={"off"}
+                                                sx={{my: 2}}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>) : null}
+
             {/*Action Confirm*/}
             <Grid container columns={12} spacing={2}
                   sx={{position: 'sticky', bottom: 10, zIndex: 100, backgroundColor: {xs: '#fff', lg: 'transparent'},}}>
@@ -482,13 +693,26 @@ const CreatePackage = () => {
                         boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
                         p: 1,
                     }}>
-                        <Button
-                            startIcon={<TextSnippetIcon/>}
-                            variant="outlined"
-                            onClick={handleSubmit(onSubmit)}
-                        >
-                            Get Service
-                        </Button>
+                        {   // @ts-ignore
+                            selectedService.serviceId ?
+                                <Button
+                                    startIcon={<TextSnippetIcon/>}
+                                    variant="contained"
+                                    color={"success"}
+                                    onClick={SubmitPackage}
+                                >
+                                    Submit Package
+                                </Button>
+                                :
+                                <Button
+                                    startIcon={<TextSnippetIcon/>}
+                                    variant="outlined"
+                                    onClick={handleSubmit(onSubmit)}
+                                >
+                                    Get Service
+                                </Button>
+                        }
+
                         <Button
                             variant="outlined"
                             onClick={handleReload}

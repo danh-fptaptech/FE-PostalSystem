@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 
-export async function POST() {
+export async function GET(req: Request) {
     try {
         const data = {
             site_name: "Nextjs",
@@ -14,9 +14,11 @@ export async function POST() {
             site_logo: "Nextjs",
             site_favicon: "Nextjs",
             site_logo_bg: "Nextjs",
+            site_language: "vi",
             site_favicon_bg: "Nextjs",
-            location_version: "Nextjs",
-            fee_version: "Nextjs",
+            rateConvert:5,
+            limitSize: 50,
+            limitWeight: 6,
         }
         return NextResponse.json({data: data});
     } catch (error) {
