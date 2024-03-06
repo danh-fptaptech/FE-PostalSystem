@@ -109,7 +109,7 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
                 }}
             >
                 <Toolbar/>
-                <Container>
+                <Container maxWidth={"xl"}>
                     {props.children}
                 </Container>
             </Box>
