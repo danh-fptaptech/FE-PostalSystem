@@ -57,6 +57,10 @@ const LocationsPage = () => {
         fetchProvince();
     }, []);
 
+    useEffect(() => {
+        fetchProvince();
+    }, [openModalNew]);
+
     const handleEdit = (item: DataLocationType) => {
         setOpenModalNew(true);
         setIsEditing(true);
@@ -285,10 +289,11 @@ const LocationsPage = () => {
 
     return (
         <div>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px" }}>
             <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5">Locations Management</h1>
             <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} isEditing={isEditing} setIsEditing={setIsEditing} editItem={editItem} setEditItem={setEditItem} />
             <ChangeStatus />
-            <TableContainer component={Paper} sx={{ marginTop: '10px' }}>
+            <TableContainer sx={{ marginTop: '10px' }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow sx={{ bgcolor: 'primary.main' }}>
@@ -304,12 +309,13 @@ const LocationsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {listProvince.map((row) => (
+                        {listProvince && listProvince.map((row) => (
                             <Row key={row.id} row={row} />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            </Paper>
         </div>
     );
 }

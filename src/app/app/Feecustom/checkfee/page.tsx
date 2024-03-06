@@ -1,6 +1,5 @@
 'use client'
 import React, { FormEventHandler, useEffect, useState } from 'react';
-// import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -11,10 +10,10 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import { DataFeeCustomType, DataLocationType } from '@/helper/interface';
+import Paper from '@mui/material/Paper';
 
 
-
-const EstimatePage: React.FC = () => {
+const CheckFee: React.FC = () => {
     const [listProvinces, setListProvinces] = useState<DataLocationType[]>([]);
     const [listDistricts, setListDistricts] = useState<DataLocationType[]>([]);
 
@@ -148,6 +147,7 @@ const EstimatePage: React.FC = () => {
             setData({ ...data, postalCodeTo: value.postalCode });
         }
     }
+
     const renderListFee = (data: any) => {
         return (
             <Table>
@@ -160,7 +160,7 @@ const EstimatePage: React.FC = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row:any, index:number) => {
+                    {data.map((row: any, index: number) => {
                         return (
                             <TableRow key={index}>
                                 <TableCell>{row.serviceName}</TableCell>
@@ -176,7 +176,11 @@ const EstimatePage: React.FC = () => {
     }
     return (
         <div style={{ marginLeft: '50px', marginRight: '50px' }}>
-            <Typography className="mt-5 mb-5" variant="h4">Ước tính cước phí</Typography>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px" }}>
+            <Typography className="mt-5 mb-5" variant="h4">Fare Estimate</Typography>
+            <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
+                <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}></Divider>
+            </Grid>
             <div className="border-2 border-slate-200 rounded-lg">
                 <form className=" p-5 pr-0" onSubmit={handleSubmit}>
                     <Grid item container rowSpacing={2} columnSpacing={{ xs: 1, sm: 20, md: 3 }}>
@@ -215,7 +219,7 @@ const EstimatePage: React.FC = () => {
                                 fullWidth
                             >
                                 <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
                                     )
@@ -234,7 +238,7 @@ const EstimatePage: React.FC = () => {
                                 fullWidth
                             >
                                 <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
                                     )
@@ -249,7 +253,7 @@ const EstimatePage: React.FC = () => {
                                 style={{ width: '100%', marginTop: '10px' }}
                                 disablePortal
                                 id="listDistrictsSender"
-                                options={listDistrictsSender}
+                                options={listDistrictsSender || []}
                                 getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
                                 getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
                                 sx={{ width: 300 }}
@@ -269,7 +273,7 @@ const EstimatePage: React.FC = () => {
                                 style={{ width: '100%', marginTop: '10px' }}
                                 disablePortal
                                 id="listDistrictsReceiver"
-                                options={listDistrictsReceiver}
+                                options={listDistrictsReceiver || []}
                                 getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
                                 getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
                                 sx={{ width: 300 }}
@@ -288,12 +292,14 @@ const EstimatePage: React.FC = () => {
                     </Grid>
                 </form>
             </div>
+            </Paper>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px", marginTop: '15px'}}>
             <div className="m-5 border-2 rounded-lg">
                 <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
-                    <Divider sx={{ marginBottom:'15px', marginTop:'15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
+                    <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
                 </Grid>
                 <Grid className="mt-5 mb-5 p-5">
-                    {listFee.length === 0 && (
+                    {listFee && listFee.length === 0 && (
                         <Alert variant="outlined" severity="warning" sx={{ display: 'flex', justifyContent: 'center' }}>
                             Not Found!!!
                         </Alert>
@@ -301,8 +307,9 @@ const EstimatePage: React.FC = () => {
                     {listFee && listFee.length > 0 && renderListFee(listFee)}
                 </Grid>
             </div>
+            </Paper>
         </div>
     );
 };
 
-export default EstimatePage;
+export default CheckFee;

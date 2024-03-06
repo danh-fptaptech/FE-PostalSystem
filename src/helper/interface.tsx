@@ -9,15 +9,23 @@ export enum Status {
     Inactive = 0,
 }
 
-export interface DataServiceType {
+export interface DataTypeService {
     id: number;
     serviceName: string;
     serviceDescription: string;
+    createdAt: string;
+    updatedAt: string;
+    status: number;
+}
+export interface DataServiceType {
+    id: number;
+    serviceTypeId: number;
     weighFrom: number;
     weighTo: number;
     createdAt: string;
     updatedAt: string;
     status: number;
+    serviceType: DataTypeService;
 }
 
 export interface DataLocationType {
@@ -45,4 +53,5 @@ export interface DataFeeCustomType {
     service: DataServiceType;
     locationFrom: DataLocationType;
     locationTo: DataLocationType;
+    overWeightCharge: number;
 }

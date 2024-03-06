@@ -123,6 +123,9 @@ export default function ModalAddNew({
                 });
                 if (response.ok) {
                     setOpen(false);
+                    setIsEditing(false);
+                    setEditItem({});
+                    setErrors([]);
                     console.log('Update Location successfully!');
                 } else {
                     if (response.status === 400) {

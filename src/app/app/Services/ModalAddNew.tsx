@@ -6,9 +6,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { FormControlLabel, InputLabel, MenuItem, FormControl, FormGroup, Switch, Grid, Alert } from '@mui/material';
+import { FormControlLabel, InputLabel, MenuItem, FormControl, FormGroup, Switch, Grid, Alert, Tooltip, IconButton } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { DataServiceType } from '@/helper/interface';
+import { DataServiceType, DataTypeService } from '@/helper/interface';
+import { useEffect } from 'react';
+import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,22 +36,31 @@ export default function ModalAddNew({
 }) {
     const handleOpen = () => {
         setOpen(true)
-        setEditItemId(null); 
+        setEditItemId(null);
     };
     const handleClose = () => setOpen(false);
 
     const [editService, SetEditService] = React.useState<DataServiceType | null>(null);
 
-    const [serviceName, setServiceName] = React.useState('');
-    const [serviceDescription, setServiceDescription] = React.useState('');
+    const [serviceTypeId, setServiceTypeId] = React.useState<number | null>(null);
     const [weighFrom, setWeighFrom] = React.useState(0);
     const [weighTo, setWeighTo] = React.useState(0);
     const [status, setStatus] = React.useState(1);
 
     const [errors, setErrors] = React.useState<string[]>([]);
+    const [serviceTypes, setServiceTypes] = React.useState([]);
+    const [serviceTypeSelect, SetServiceTypeSelect] = React.useState<number | null>(null);
+    const [weightAllowRange, setWeightAllowRange] = React.useState<any[]>([]);
 
     const handleSelectChange = (event: SelectChangeEvent) => {
         const { name, value } = event.target;
+        if (name == 'serviceType') {
+            SetServiceTypeSelect(+value);
+            if(value !=null){
+                setErrors([]);
+                setWeightAllowRange([]);
+            }
+        }
     };
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,38 +73,67 @@ export default function ModalAddNew({
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'serviceName') {
-            setServiceName(value);
-        }
-        if (name === 'serviceDescription') {
-            setServiceDescription(value);
-        }
         if (name === 'weighFrom') {
             setWeighFrom(Number(value));
         }
         if (name === 'weighTo') {
-            setWeighTo(Number(value));
+            if (+value > 0) {
+                setWeighTo(Number(value));
+            } else {
+                setWeighTo(999999999);
+            }
         }
+    }
+    const getAlowWeightRange = async (id: number) => {
+        const res = await fetch(`/api/services/AllowRange/${id}`);
+        const resJson = await res.json();
+        const data = resJson.data;
+        console.log(data);
+        setWeightAllowRange(data);
     }
 
     const handelSubmit = async () => {
-
         if (editItemId != null) {
-            console.log('id:', editItemId, 'serviceName:', serviceName, 'serviceDescription:', serviceDescription, 'weighFrom:', weighFrom, 'weighTo:', weighTo, 'status:', status);
             try {
                 const requestBody = {
                     id: editItemId,
-                    serviceName: serviceName,
-                    serviceDescription: serviceDescription,
+                    serviceTypeId: serviceTypeSelect,
                     weighFrom: weighFrom,
                     weighTo: weighTo,
                     status: status
                 };
-                let checkValidate = validateService(serviceName, serviceDescription, weighFrom, weighTo, status);
+
+                console.log("updateR: ", requestBody);
+
+                if (weighTo === 0) {
+                    requestBody.weighTo = 999999999;
+                }
+
+                let checkValidate = validateService(requestBody.serviceTypeId, weighFrom, requestBody.weighTo, status);
+
                 if (checkValidate.length > 0) {
                     setErrors(checkValidate);
                     return;
                 }
+
+                if (requestBody.serviceTypeId != null) {
+                    const res = await validateWeight(requestBody.serviceTypeId, requestBody.weighFrom, requestBody.weighTo, +editItemId);
+                    if (res.check == false) {
+                        if (res.check == false) {
+                            setErrors(['Weight range already exists']);
+                            console.log('ValidateWeight: ', res.data);
+                            console.log('lenght: ', res.data.length);
+                            let newErrors = [`Weight range already exists [${res.data[0].weighFrom} - ${res.data[0].weighTo}]`];
+                            if(res.data.length > 1){
+                                newErrors.push(`Weight range already exists [${res.data[1].weighFrom} - ${res.data[1].weighTo}]`);
+                            }
+                            setErrors(newErrors);
+                            return;
+                        }
+                    }
+                    setErrors([]);
+                }
+
                 const response = await fetch(`/api/services`, {
                     method: 'PUT',
                     headers: {
@@ -101,7 +141,9 @@ export default function ModalAddNew({
                     },
                     body: JSON.stringify(requestBody)
                 });
+
                 console.log('updated service:', response);
+
                 if (response.ok) {
                     setOpen(false);
                     SetEditService(null);
@@ -123,19 +165,42 @@ export default function ModalAddNew({
                 console.error('Error', error);
             }
         } else {
-            console.log('serviceName:', serviceName, 'serviceDescription:', serviceDescription, 'weighFrom:', weighFrom, 'weighTo:', weighTo, 'status:', status);
             try {
                 const requestBody = {
-                    serviceName: serviceName,
-                    serviceDescription: serviceDescription,
+                    serviceTypeId: serviceTypeSelect,
                     weighFrom: weighFrom,
                     weighTo: weighTo,
                     status: status
                 };
-                let checkValidate = validateService(serviceName, serviceDescription, weighFrom, weighTo, status);
+
+                console.log("CreateR: ", requestBody);
+
+                if (weighTo === 0) {
+                    requestBody.weighTo = 999999999;
+                }
+
+                let checkValidate = validateService(requestBody.serviceTypeId, weighFrom, requestBody.weighTo, status);
+
                 if (checkValidate.length > 0) {
                     setErrors(checkValidate);
                     return;
+                }
+
+                if (requestBody.serviceTypeId != null) {
+                    const res = await validateWeight(requestBody.serviceTypeId, requestBody.weighFrom, requestBody.weighTo, 0);
+                    console.log("CreateR: ", res);
+                    if (res.check == false) {
+                        setErrors(['Weight range already exists']);
+                        let newErrors = [`Weight range already exists [${res.data[0].weighFrom} - ${res.data[0].weighTo}]`];
+                        if(res.data.length > 1){
+                            newErrors.push(`Weight range already exists [${res.data[1].weighFrom} - ${res.data[1].weighTo}]`);
+                        }   
+                        await getAlowWeightRange(requestBody.serviceTypeId);
+
+                        setErrors(newErrors);
+                        return;
+                    }
+                    setErrors([]);
                 }
                 const response = await fetch(`/api/services`, {
                     method: 'POST',
@@ -167,41 +232,57 @@ export default function ModalAddNew({
             }
         }
     }
+    const validateWeight = async (serviceTypeId: number, weightFrom: number, weightTo: number, serviceId: number) => {
+        const res = await fetch(`/api/services/ValidateServiceWeight/${serviceTypeId}/${weightFrom}/${weightTo}/${serviceId}`);
+        const resJson = await res.json();
+        console.log(resJson);
+        return resJson;
+    }
 
     const getService = async () => {
         const res = await fetch(`/api/services/getService/${editItemId}`);
         const resJson = await res.json();
         const data = resJson.data;
-        SetEditService(data.data);
-        setServiceName(data.serviceName);
-        setServiceDescription(data.serviceDescription);
+        SetEditService(data);
+        setEditItemId(data.id);
         setWeighFrom(data.weighFrom);
         setWeighTo(data.weighTo);
         setStatus(data.status);
+        SetServiceTypeSelect(data.serviceTypeId);
     }
-    React.useEffect(() => {
+    useEffect(() => {
         if (editItemId !== null) {
             getService();
         } else {
-            setServiceName('');
-            setServiceDescription('');
+            setServiceTypeId(null);
             setWeighFrom(0);
             setWeighTo(0);
             setStatus(1);
+            SetServiceTypeSelect(null);
         }
     }, [editItemId])
-    React.useEffect(() => {
+
+    useEffect(() => {
         if (editItemId !== null) {
             getService();
         } else {
-            setServiceName('');
-            setServiceDescription('');
+            setServiceTypeId(null);
             setWeighFrom(0);
             setWeighTo(0);
             setStatus(1);
+            SetServiceTypeSelect(null);
         }
-    },[])
+        fetchServiceType();
+        console.log("listTYPe", serviceTypes);
+    }, [])
 
+    const fetchServiceType = async () => {
+        const res = await fetch(`/api/ServiceType`);
+        const resJson = await res.json();
+        const data = await resJson.data;
+        setServiceTypes(data);
+        console.log("resJson", data);
+    }
     return (
         <div>
             <Button
@@ -223,39 +304,51 @@ export default function ModalAddNew({
             >
                 <Fade in={open}>
                     <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h6" component="h2" style={{textAlign:'center'}}>
-                            Add Service
-                        </Typography>
-                        <hr style={{margin:'20px 50px'}} />
+                    <Typography id="transition-modal-title" variant="h6" component="h2" style={{ textAlign: 'center' }}>
+                    Add Service
+                    {weightAllowRange && weightAllowRange.length>0 && (
+                        <Tooltip title={
+                            <React.Fragment>
+                                Allow Range:
+                            {weightAllowRange && weightAllowRange.map((item, index) => (
+                                <div key={index}>{item.from} - {item.to}</div>
+                            ))}
+                            </React.Fragment>
+                        }>
+                            <TipsAndUpdatesOutlinedIcon style={{ marginLeft: 8, verticalAlign: 'middle' }} />
+                        </Tooltip>
+                    )}
+                    </Typography>
+                        <hr style={{ margin: '20px 50px' }} />
                         <Box>
                             {errors && errors.length > 0 && (
                                 <Grid item xs={12}>
-                                <div className="error-message">
-                                    {errors.map((msg, i) => (
-                                        <Alert severity="success" color="warning" key={i}>
-                                            {msg}
-                                        </Alert>
-                                    ))}
-                                </div>
-                            </Grid>
+                                    <div className="error-message">
+                                        {errors.map((msg, i) => (
+                                            <Alert severity="success" color="warning" key={i} sx={{marginBottom:'5px'}}>
+                                                {msg}
+                                            </Alert>
+                                        ))}
+                                    </div>
+                                </Grid>
                             )}
                         </Box>
-                        <TextField
-                            fullWidth
-                            label="serviceName"
-                            variant="standard"
-                            name='serviceName'
-                            value={serviceName.length > 0 ? serviceName : ''}
-                            onChange={handleChangeInput}
-                        />
-                        <TextField
-                            fullWidth
-                            label="serviceDescription"
-                            variant="standard"
-                            name='serviceDescription'
-                            value={serviceDescription ? serviceDescription : ''}
-                            onChange={handleChangeInput}
-                        />
+                        <Grid sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                            <Select
+                                value={serviceTypeSelect !== null ? serviceTypeSelect.toString() : ""}
+                                displayEmpty
+                                name="serviceType"
+                                onChange={handleSelectChange}
+                                fullWidth
+                            >
+                                <MenuItem value="" disabled>Choice Type Service</MenuItem>
+                                {serviceTypes && serviceTypes.length > 0 && serviceTypes.map((item: any, index: number) => {
+                                    return (
+                                        <MenuItem key={index} value={item.id}>{item.serviceName}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </Grid>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
@@ -263,7 +356,7 @@ export default function ModalAddNew({
                                     label="weighFrom"
                                     variant="standard"
                                     name='weighFrom'
-                                    value={weighFrom ? weighFrom : ''}
+                                    value={weighFrom ? weighFrom : 0}
                                     onChange={handleChangeInput}
                                 />
                             </Grid>
@@ -273,7 +366,7 @@ export default function ModalAddNew({
                                     label="weighTo"
                                     variant="standard"
                                     name='weighTo'
-                                    value={weighTo ? weighTo : ''}
+                                    value={weighTo ? weighTo : 0}
                                     onChange={handleChangeInput}
                                 />
                             </Grid>
@@ -292,7 +385,12 @@ export default function ModalAddNew({
                                 label={status === 1 ? 'Active' : 'Inactive'}
                             />
                         </FormGroup>
-                        <Button variant="contained" onClick={handelSubmit}>Submit</Button>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                            <Button variant="contained" onClick={handelSubmit}>Submit</Button>
+                            </Grid>
+                        </Grid>
+                        
                     </Box>
                 </Fade>
             </Modal>
@@ -300,19 +398,16 @@ export default function ModalAddNew({
     );
 }
 
-function validateService(serviceName: string, serviceDescription: string, weighFrom: number, weighTo: number, status: number) {
+function validateService(serviceTypeId: number | null, weighFrom: number, weighTo: number, status: number) {
     let errorList = [];
-    if (serviceName === "") {
-        errorList.push("Please enter Service Name");
+    if (serviceTypeId == null) {
+        errorList.push("Please choices Service Type");
     }
-    if (serviceDescription === "") {
-        errorList.push("Please enter Service Description");
-    }
-    if (weighFrom <= 0) {
+    if (weighFrom < 0) {
         errorList.push("Please Enter one weigh From");
     }
     if (weighTo <= weighFrom) {
         errorList.push("Weigh To must be greater than weigh From");
     }
-    return errorList;   
+    return errorList;
 }
