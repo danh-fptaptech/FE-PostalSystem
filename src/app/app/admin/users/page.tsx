@@ -54,29 +54,8 @@ export default function UserManagement() {
 	const [provinces, setProvinces] = React.useState<Province[]>([]);
 	const [districts, setDistricts] = React.useState<Province[]>([]);
 	const [loading, setLoading] = React.useState(true);
-	const [openAddForm, setOpenAddForm] = React.useState(false);
-	const [openUpdateForm, setOpenUpdateForm] = React.useState(false);
-	const [showPassword, setShowPassword] = React.useState(false);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-	const { data: session, status } = useSession();
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setValue,
-		watch,
-	} = useForm<CreateEmployeeRequest>();
-
-	const province = watch("province");
-
-	const {
-		register: updatedRegister,
-		handleSubmit: handleUpdatedSubmit,
-		formState: { errors: updatedErrors },
-	} = useForm<UpdateEmployeeRequest>();
 
 	const handleChangePage = (
 		event: React.MouseEvent<HTMLButtonElement> | null,
@@ -155,96 +134,41 @@ export default function UserManagement() {
 			const filterUsers = users.filter(
 				user =>
 					user.fullname.toLowerCase().includes(name.toLowerCase()) ||
-					user.email.toLowerCase().includes(name.toLowerCase()) ||
-					user.phoneNumber.includes(name)
+					user.email.toLowerCase().includes(name.toLowerCase())
 			);
 
 			setUsers(filterUsers);
 		}
 	}
-	// Handle Change Status
-	// function handleChangeStatus(id: number) {
-	// 	const loadingId = toast.loading("Loading...");
-	// 	fetchChangeStatus(id)
-	// 		.then(() => {
-	// 			const updatedEmployees = employees.map(employee => {
-	// 				if (employee.id === id && employee.status === 1) {
-	// 					return {
-	// 						...employee,
-	// 						status: 0,
-	// 					};
-	// 				} else if (employee.id === id && employee.status === 0) {
-	// 					return {
-	// 						...employee,
-	// 						status: 1,
-	// 					};
-	// 				}
-	// 				return employee;
-	// 			});
-	// 			setEmployees(updatedEmployees);
-	// 			toast.success("Change status successfully.");
-	// 		})
-	// 		.catch(error => {
-	// 			console.log(error);
-	// 			toast.error("Failed to change status !");
-	// 		});
-	// 	toast.dismiss(loadingId);
-	// }
 
-	// Add employee
-	// async function AddEmployee(employee: CreateEmployeeRequest) {
-	// 	const loadingId = toast.loading("Loading...");
-	// 	try {
-	// 		// const uploadFile = await uploadFileS3(file);
-	// 		// employee.avatar = uploadFile;
-	// 		const res = await fetch("/api/employees", {
-	// 			method: "POST",
-	// 			body: JSON.stringify(employee),
-	// 		});
-
-	// 		const payload = (await res.json()) as ApiResponse;
-
-	// 		if (payload.ok) {
-	// 			const response = await fetchEmployees();
-	// 			setEmployees(await response.data);
-	// 			setOpenAddForm(false);
-	// 			toast.success(payload.message);
-	// 		} else {
-	// 			toast.error(payload.message);
-	// 		}
-	// 	} catch (error) {
-	// 		console.log("Error upload file or add employee: ", error);
-	// 		toast.error("Oops! Error while trying to upload file or add employee.");
-	// 	}
-	// 	toast.dismiss(loadingId);
-	// }
-
-	// Update Employee
-	// async function UpdateEmployee(updatedEmployee: UpdateEmployeeRequest) {
-	// 	const loadingId = toast.loading("Loading...");
-	// 	const res = await fetch(`/api/employees/${employee?.employeeCode}`, {
-	// 		method: "PUT",
-	// 		body: JSON.stringify(updatedEmployee),
-	// 	});
-
-	// 	const payload = (await res.json()) as ApiResponse;
-
-	// 	if (payload.ok) {
-	// 		const response = await fetchEmployees();
-	// 		setEmployees(await response.data.reverse());
-	// 		setOpenUpdateForm(false);
-	// 		toast.success(payload.message);
-	// 	} else {
-	// 		toast.error(payload.message);
-	// 	}
-	// 	toast.dismiss(loadingId);
-	// }
 	return (
 		<>
 			{loading ? (
 				<Loading />
 			) : (
 				<div className="mt-4">
+					<Box className="mb-3">
+						<form
+							onSubmit={handleSearch}
+							method="post"
+							className="flex justify-end items-center py-4 ">
+							<input
+								type="text"
+								name="search"
+								id="searchInput"
+								className="mr-2 px-2 text-[14px] rounded-md max-w-[400px] h-[30px] cursor-pointer"
+								placeholder="Enter name to search"
+							/>
+							<Button
+								startIcon={<SearchOutlined />}
+								color="success"
+								variant="contained"
+								size="small"
+								className="rounded-md">
+								Search
+							</Button>
+						</form>
+					</Box>
 					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
 						<Table
 							sx={{ minWidth: 650 }}
@@ -280,12 +204,12 @@ export default function UserManagement() {
 									<TableCell
 										align="center"
 										className="text-white text-sm">
-										Role
+										Status
 									</TableCell>
 									<TableCell
 										align="center"
 										className="text-white text-sm">
-										Action
+										Create At
 									</TableCell>
 								</TableRow>
 							</TableHead>
@@ -319,9 +243,7 @@ export default function UserManagement() {
 														alt={user.fullname}
 													/>
 												</TableCell>
-												<TableCell align="center">
-													{user.createAt.split("T")[0]}
-												</TableCell>
+
 												<TableCell align="center">
 													<Switch
 														size="small"
@@ -330,6 +252,7 @@ export default function UserManagement() {
 														checked={user.status == 1 ? true : false}
 													/>
 												</TableCell>
+												<TableCell align="center">{user.createAt}</TableCell>
 											</TableRow>
 										);
 									})}
