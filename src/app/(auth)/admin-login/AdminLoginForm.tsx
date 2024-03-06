@@ -22,6 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { toast } from "sonner";
 
 const schema = z.object({
 	userId: z.string({
@@ -61,6 +62,7 @@ const AdminLoginForm = () => {
 	};
 
 	const onSubmit = async (data: Schema) => {
+		const loadingId = toast.loading("Loading ... ");
 		try {
 			const employeeRes = await signIn("credentials", {
 				redirect: false,
@@ -78,6 +80,7 @@ const AdminLoginForm = () => {
 		} catch (error) {
 			setError("An unexpected error happened");
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (

@@ -13,7 +13,7 @@ import {
 	ManageAccountsOutlined,
 	DriveFileRenameOutlineOutlined,
 	GroupOutlined,
-	Badge,
+	ViewListOutlined,
 } from "@mui/icons-material";
 import * as React from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -41,9 +41,11 @@ export default function DrawerMenu() {
 
 	const menu = [
 		createMenu("Dashboard", AppsOutlined, "/app", ["app.view"]),
+
 		createMenu("Create Package", NoteAddOutlined, "/app/create-package", [
 			"package.create",
 		]),
+
 		createMenu(
 			"Branches",
 			HomeWorkOutlined,
@@ -61,6 +63,7 @@ export default function DrawerMenu() {
 		createMenu("Packages", Inventory2Outlined, "/app/packages", [
 			"package.view",
 		]),
+
 		createMenu("User Management", GroupOutlined, "/app/admin/users", ["user"]),
 
 		createMenu(
@@ -86,6 +89,10 @@ export default function DrawerMenu() {
 				),
 			]
 		),
+
+		createMenu("HistoryLogs", ViewListOutlined, "/app/historylogs", [
+			"historylogs.view",
+		]),
 	];
 
 	return (

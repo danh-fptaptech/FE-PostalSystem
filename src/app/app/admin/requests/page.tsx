@@ -82,6 +82,7 @@ export default function UpdatedRequestManagement() {
 	async function AcceptRequest(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		if (selectedEmployee) {
+			const loadingId = toast.loading("Loading ... ");
 			try {
 				const response = await fetch(`/api/requests/${selectedEmployee.id}`, {
 					method: "PUT",
@@ -89,9 +90,8 @@ export default function UpdatedRequestManagement() {
 				});
 
 				const payload = (await response.json()) as ApiResponse;
-				console.log("payload:" + payload);
+
 				if (payload.ok) {
-					//const res = await fetchUpdatedRequests();
 					setEmployees(pre => pre.filter(emp => emp.id != selectedEmployee.id));
 					setSelectedEmployee(null);
 					toast.success(payload.message);
@@ -101,6 +101,7 @@ export default function UpdatedRequestManagement() {
 			} catch (error) {
 				console.log(error);
 			}
+			toast.dismiss(loadingId);
 		}
 	}
 	// Reject Updated Request

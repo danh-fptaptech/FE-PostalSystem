@@ -185,6 +185,9 @@
 .text-danger {
 	color: #cd3545;
 }
+.text-dark {
+	color: #333;
+}
 .text-success {
 	color: #05b17d;
 }

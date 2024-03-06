@@ -100,7 +100,7 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
 							sx={{ mr: 2, display: { md: "none" } }}>
 							<Menu />
 						</IconButton>
-						<></>
+						<div></div>
 						<AvatarMenu />
 					</Container>
 				</Toolbar>

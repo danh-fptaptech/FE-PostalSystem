@@ -16,7 +16,12 @@ export const getChildrenLocationsByParentId = async (id: number) => {
 	return res.json() as Promise<ApiResponse>;
 };
 
-// fetchData
+export const fetchUsers = async () => {
+	const res = await fetch("/api/user", {
+		method: "GET",
+	});
+	return res.json() as Promise<ApiResponse>;
+};
 
 export const fetchEmployees = async () => {
 	const res = await fetch("/api/employees", {
@@ -51,9 +56,7 @@ export const fetchAddPermission = async (
 			`/Role/${roleId}/Permission/${permissionId}`,
 		{
 			method: "POST",
-			next: {
-				revalidate: 1,
-			},
+			cache: "no-cache",
 		}
 	);
 };
@@ -85,12 +88,14 @@ export const fetchProvinces = async () => {
 	});
 	return res.json() as Promise<ApiResponse>;
 };
+
 export const fetchRoles = async () => {
 	const res = await fetch("/api/roles", {
 		method: "GET",
 	});
 	return res.json() as Promise<ApiResponse>;
 };
+
 export const fetchRolesWithPermission = async () => {
 	const res = await fetch("/api/roles/permissions", {
 		method: "GET",

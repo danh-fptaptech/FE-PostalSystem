@@ -11,9 +11,10 @@ declare module "next-auth" {
 			fullname: string;
 			employeeCode?: string;
 			email: string;
-			phone?: string;
-			phoneNumber?: string;
+			phoneNumber: string;
 			avatar: string;
+			branchId?: string;
+			branchName?: string;
 			role: {
 				name: string;
 				permissions: string[];
