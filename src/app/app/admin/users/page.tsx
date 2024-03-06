@@ -7,10 +7,6 @@ import {
 	Avatar,
 	Box,
 	Button,
-	CircularProgress,
-	Dialog,
-	DialogContent,
-	DialogTitle,
 	Switch,
 	Table,
 	TableBody,
@@ -19,7 +15,6 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
-	Tooltip,
 } from "@mui/material";
 import {
 	CloseOutlined,
@@ -27,25 +22,13 @@ import {
 	Update,
 	SearchOutlined,
 } from "@mui/icons-material";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import {
-	ApiResponse,
-	User,
-	Role,
-	Province,
-	CreateEmployeeRequest,
-	UpdateEmployeeRequest,
-} from "@/types/types";
-import { toast } from "sonner";
+import { ApiResponse, User, Role, Province } from "@/types/types";
 import {
 	getProvinces,
 	getChildrenLocationsByParentId,
 	fetchUsers,
 	fetchRolesWithPermission,
-	fetchChangeStatus,
-} from "@/app/_data/index";
-import { useSession } from "next-auth/react";
+} from "@/app/_data/data";
 
 export default function UserManagement() {
 	const [users, setUsers] = React.useState<User[]>([]);
@@ -56,7 +39,7 @@ export default function UserManagement() {
 	const [loading, setLoading] = React.useState(true);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+	// const province = watch("province");
 	const handleChangePage = (
 		event: React.MouseEvent<HTMLButtonElement> | null,
 		newPage: number
@@ -96,25 +79,25 @@ export default function UserManagement() {
 		});
 	}, []);
 
-	React.useEffect(() => {
-		const provinceId = provinces.find(p => p.locationName === province)?.id;
+	// React.useEffect(() => {
+	// 	const provinceId = provinces.find(p => p.locationName === province)?.id;
 
-		if (!provinceId) {
-			setDistricts([]);
-		} else {
-			getChildrenLocationsByParentId(provinceId).then(res => {
-				if (res.ok) {
-					if (res.data.districs) {
-						setDistricts(res.data.districs);
-					} else {
-						setDistricts([]);
-					}
-				} else {
-					setDistricts([]);
-				}
-			});
-		}
-	}, [province, provinces]);
+	// 	if (!provinceId) {
+	// 		setDistricts([]);
+	// 	} else {
+	// 		getChildrenLocationsByParentId(provinceId).then(res => {
+	// 			if (res.ok) {
+	// 				if (res.data.districs) {
+	// 					setDistricts(res.data.districs);
+	// 				} else {
+	// 					setDistricts([]);
+	// 				}
+	// 			} else {
+	// 				setDistricts([]);
+	// 			}
+	// 		});
+	// 	}
+	// }, [province, provinces]);
 
 	// Handle Search
 	function handleSearch(event: React.FormEvent<HTMLFormElement>) {

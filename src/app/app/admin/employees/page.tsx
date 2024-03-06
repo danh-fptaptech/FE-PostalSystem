@@ -32,6 +32,7 @@ import {
 	VisibilityOffOutlined,
 	VisibilityOutlined,
 } from "@mui/icons-material";
+
 import {
 	ApiResponse,
 	Employee,
@@ -41,6 +42,7 @@ import {
 	CreateEmployeeRequest,
 	UpdateEmployeeRequest,
 } from "@/types/types";
+
 import {
 	getProvinces,
 	getChildrenLocationsByParentId,
@@ -48,7 +50,7 @@ import {
 	fetchBranches,
 	fetchRolesWithPermission,
 	fetchChangeStatus,
-} from "@/app/_data/index";
+} from "@/app/_data/data";
 
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);
@@ -209,8 +211,6 @@ export default function EmployeeManagement() {
 	// Add employee
 	async function AddEmployee(employee: CreateEmployeeRequest) {
 		try {
-			// const uploadFile = await uploadFileS3(file);
-			// employee.avatar = uploadFile;
 			const loadingId = toast.loading("Loading ...");
 			const res = await fetch("/api/employees", {
 				method: "POST",
@@ -221,7 +221,7 @@ export default function EmployeeManagement() {
 
 			if (payload.ok) {
 				const response = await fetchEmployees();
-				setEmployees(await response.data);
+				setEmployees(await response.data.reverse());
 				setOpenAddForm(false);
 				toast.success(payload.message);
 			} else {
@@ -592,6 +592,8 @@ export default function EmployeeManagement() {
 													required: "EmployeeCode is required.",
 												})}
 												className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+												readOnly
+												disabled
 												placeholder="EMP-000001"
 											/>
 											<button
@@ -762,19 +764,6 @@ export default function EmployeeManagement() {
 										</div>
 									</div>
 
-									<div className="my-3">
-										<label className="font-semibold">Upload Avatar:</label>
-										<input
-											type="file"
-											{...register("avatar", { required: false })}
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											placeholder="Avatar"
-										/>
-										<span className="text-danger">
-											{errors.avatar?.message}
-										</span>
-									</div>
-									{/* Select branch, role */}
 									<div className="my-3 flex">
 										<div className="mr-2">
 											<label className="font-semibold">Branch:</label>

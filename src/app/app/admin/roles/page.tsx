@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { fetchPermissions, fetchRolesWithPermission } from "@/app/_data/index";
+import { fetchPermissions, fetchRolesWithPermission } from "@/app/_data/data";
 import {
 	Avatar,
 	Button,
@@ -256,11 +256,7 @@ export default function RoleManagement() {
 										</Box>
 									</Box>
 
-									<Box className="min-h-[200px]">
-										<Typography className="text-xs my-2">
-											{role.name} has {role.roleHasPermissions.length}{" "}
-											permission.
-										</Typography>
+									<Box className="min-h-[200px] my-2">
 										{role.roleHasPermissions.map(permission => (
 											<Chip
 												key={permission}

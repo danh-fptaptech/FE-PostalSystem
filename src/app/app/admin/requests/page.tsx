@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchUpdatedRequests } from "@/app/_data/index";
+import { fetchUpdatedRequests } from "@/app/_data/data";
 import {
 	Box,
 	Button,
@@ -107,6 +107,7 @@ export default function UpdatedRequestManagement() {
 	// Reject Updated Request
 	async function handleRejectRequest() {
 		if (selectedEmployee) {
+			const loadingId = toast.loading("Loading ... ");
 			try {
 				const res = await fetch(`/api/requests/${selectedEmployee.id}`, {
 					method: "DELETE",
@@ -124,6 +125,7 @@ export default function UpdatedRequestManagement() {
 			} catch (error) {
 				console.log(error);
 			}
+			toast.dismiss(loadingId);
 		}
 	}
 

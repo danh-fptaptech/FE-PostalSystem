@@ -2,11 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import {
-	fetchLocations,
-	getChildrenLocationsByParentId,
-	getProvinces,
-} from "@/app/_data/index";
+import { getChildrenLocationsByParentId, getProvinces } from "@/app/_data/data";
 import React from "react";
 import {
 	ApiResponse,
@@ -52,6 +48,7 @@ export default function EmployeeInfoPage() {
 
 	// handle send updated  request
 	async function SendUpdatedRequest(data: UpdateInfoRequest) {
+		const loadingId = toast.loading("Loading ...");
 		try {
 			const response = await fetch(
 				`/api/employees/${session?.user.employeeCode}/sendUpdatedRequest`,
@@ -72,6 +69,8 @@ export default function EmployeeInfoPage() {
 		} catch (error) {
 			console.log("error send updated requset: ", error);
 		}
+
+		toast.dismiss(loadingId);
 	}
 
 	React.useEffect(() => {
@@ -203,7 +202,7 @@ export default function EmployeeInfoPage() {
 							/>
 						</Tooltip>
 
-						<div className="my-3">
+						<div className="flex justify-center my-3">
 							<DialogTitle className="text-center">
 								Updated Employee Request
 							</DialogTitle>
@@ -328,10 +327,10 @@ export default function EmployeeInfoPage() {
 								</div>
 
 								<div className="my-3">
-									<label className="font-semibold">Upload Avatar:</label>
+									<label className="font-semibold">Upload New Avatar:</label>
 									<input
-										defaultValue={employee?.avatar}
 										{...updatedRegister("avatar")}
+										defaultValue={employee?.avatar}
 										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 									/>
 								</div>
@@ -342,7 +341,7 @@ export default function EmployeeInfoPage() {
 									color="success"
 									variant="contained"
 									className="w-full mr-2">
-									{!loading ? "Send" : <Loading />}
+									Send
 								</Button>
 							</form>
 						</DialogContent>
