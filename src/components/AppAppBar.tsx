@@ -51,7 +51,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
           mt: 2
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Toolbar
             variant="regular"
             sx={(theme) => ({
@@ -86,7 +86,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               <Link href='/' style={{ textDecoration:'none' }}>
                 <Typography sx={{ fontWeight:550, fontSize:24, px:2, color:'#ee0033' }}>Tars Postal</Typography>
               </Link>
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              {/* <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}
@@ -127,7 +127,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                     FAQ
                   </Typography>
                 </MenuItem>
-              </Box>
+              </Box> */}
             </Box>
             <Box
               sx={{
@@ -140,7 +140,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 color="primary"
                 variant="contained"
                 size="small"
-                component="a"
+                 
               >
                 <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
               </Button>
@@ -174,7 +174,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   >
                     <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
                   </Box>
-                  <MenuItem onClick={() => scrollToSection('features')}>
+                  {/* <MenuItem onClick={() => scrollToSection('features')}>
                     Features
                   </MenuItem>
                   <MenuItem onClick={() => scrollToSection('testimonials')}>
@@ -186,16 +186,15 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   <MenuItem onClick={() => scrollToSection('pricing')}>
                     Pricing
                   </MenuItem>
-                  <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
+                  <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem> */}
                   <Divider />
                   <MenuItem>
                     <Button
                       color="primary"
                       variant="contained"
-                      component="a"
                       sx={{ width: '100%' }}
                     >
-                      <Link href={"/app"} style={{ textDecoration:'none', color:'white' }}>To App</Link>
+                      <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
                     </Button>
                   </MenuItem>
                 </Box>

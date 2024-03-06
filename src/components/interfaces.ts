@@ -156,3 +156,17 @@ export interface Value {
   items: Item[];
   historyLogs: HistoryLog[];
 }
+export interface BlogItem {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  author: string;
+  category: number;
+  employeeId: number;
+  createdAt: string;
+  updatedAt: string;
+  status: number;
+  employee: Employee;
+}
+

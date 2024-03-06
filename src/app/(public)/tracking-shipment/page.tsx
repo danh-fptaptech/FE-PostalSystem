@@ -150,13 +150,13 @@ function Page() {
           <Grid item xs={12} sm={6}>
             <Box>
               <Typography sx={{ fontWeight:550, py:1 }}>
-                Mã phiếu gửi
+                Tracking code
               </Typography>
               {/* <Typography sx={{ fontWeight:550, fontSize:'16px', py:1 }}>
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }} type="text" placeholder='VD: 123456' value={trackingCode} onChange={handleTrackingCodeChange}/>
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Nhập số điện thoại'/>
+              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }} type="text" placeholder='Example: 123456' value={trackingCode} onChange={handleTrackingCodeChange}/>
+              {/* <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Enter phone number'/> */}
               <Button sx={{
                 my:2,
                 color:'white',
@@ -168,7 +168,7 @@ function Page() {
                 }
               }}
               onClick={handleButtonClick}>
-                TRA CỨU
+                SEARCH
               </Button>
             </Box>
           </Grid>
@@ -181,7 +181,7 @@ function Page() {
         <Box sx={{ backgroundColor:'#ced4da', borderRadius:1, mx:1 }}>
           <Box sx={{ py:2, px:3 }}>
             <Typography sx={{ fontWeight:550 }} variant="h5">
-              Thông tin vận đơn
+              Tracking Information
             </Typography>
           </Box>
           <Box sx={{ py:2, px:3 }}>
@@ -189,16 +189,16 @@ function Page() {
               <Grid item xs={12} sm={4} sx={{ display:'flex', flexDirection:'row', borderRight:{ xs:0, sm:1 } }}>
                 <Grid item xs={6}>
                   <Typography sx={{ py:2, textAlign:'left' }}>
-                    Mã vận đơn:
+                    Tracking code:
                   </Typography>
                   <Typography sx={{ py:2 }}>
-                    Chi tiết đơn hàng:
+                    Order Detail:
                   </Typography>
                   <Typography sx={{ py:2 }}>
-                    Người gửi:
+                    Sender name:
                   </Typography>
                   <Typography sx={{ py:2 }}>
-                    Người nhận:
+                    Reciever name:
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -206,7 +206,7 @@ function Page() {
                     {data?.trackingCode}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    Xem
+                    Xem them
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.nameFrom}
@@ -219,13 +219,13 @@ function Page() {
               <Grid item xs={12} sm={4} sx={{ display:'flex', flexDirection:'row', borderRight:{ xs:0, sm:1 } }}>
                 <Grid item xs={6}>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Khối lượng (gram):
+                    Weight (gram):
                   </Typography>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Dịch vụ:
+                    Service:
                   </Typography>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Trạng thái
+                    Status:
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -243,13 +243,13 @@ function Page() {
               <Grid item xs={12} sm={4} sx={{ display:'flex', flexDirection:'row' }}>
                 <Grid item xs={6}>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Ngày tạo:
+                    Created date:
                   </Typography>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Ngày nhận hàng:
+                    Recieve date:
                   </Typography>
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
-                    Ngày giao hàng dự kiến:
+                    Estimate deliver date:
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
