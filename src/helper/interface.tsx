@@ -53,4 +53,5 @@ export interface DataFeeCustomType {
     service: DataServiceType;
     locationFrom: DataLocationType;
     locationTo: DataLocationType;
+    overWeightCharge: number;
 }

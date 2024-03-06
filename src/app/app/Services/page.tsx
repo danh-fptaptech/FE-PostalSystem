@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { Grid, TablePagination, Chip, Alert, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Grid, TablePagination, Chip, Alert, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Paper } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -63,7 +63,7 @@ export default function Page({
         handleSearch(query);
     }, [query]);
 
-    const handleEdit = (rowData:any) => {
+    const handleEdit = (rowData: any) => {
         setEditItemId(rowData.id);
         setOpenModalNew(true);
     };
@@ -80,7 +80,7 @@ export default function Page({
     const handleSearch = (query: string) => {
         if (query.length > 0) {
             const dataFilter = data.filter(
-                (item:any) =>
+                (item: any) =>
                     item.serviceType.serviceName.toLowerCase().includes(query.toLowerCase()) ||
                     item.serviceType.serviceDescription.toLowerCase().includes(query.toLowerCase())
             );
@@ -182,57 +182,59 @@ export default function Page({
 
     return (
         <div className="App">
-            <ChangeStatus />
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding:"15px" }}>
+                <ChangeStatus />
 
-            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
-            <hr />
-            <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} data={data} setData={setData} />
+                <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
+                <hr />
+                <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} data={data} setData={setData} />
 
-            <Grid container spacing={1} sx={{ marginTop: '5px' }} >
-                {isError && (
-                    <Grid item xs={12} >
-                        <div className="error-message">
-                            {errorMessages.map((msg, i) => (
-                                <Alert severity="success" color="warning" key={i}>
-                                    {msg}
-                                </Alert>
-                            ))}
-                        </div>
+                <Grid container spacing={1} sx={{ marginTop: '5px' }} >
+                    {isError && (
+                        <Grid item xs={12} >
+                            <div className="error-message">
+                                {errorMessages.map((msg, i) => (
+                                    <Alert severity="success" color="warning" key={i}>
+                                        {msg}
+                                    </Alert>
+                                ))}
+                            </div>
+                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow sx={{ bgcolor: 'primary.main' }}>
+                                        <TableCell>ID</TableCell>
+                                        <TableCell>Service Name</TableCell>
+                                        <TableCell>Service Description</TableCell>
+                                        <TableCell>Type Service</TableCell>
+                                        <TableCell>CreatedAt</TableCell>
+                                        <TableCell>UpdatedAt</TableCell>
+                                        <TableCell>Status</TableCell>
+                                        <TableCell>Acction</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data
+                                        .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                                        .map((row: any) => renderRow(row) || null)}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={data.length}
+                            rowsPerPage={rowsPerPage}
+                            page={currentPage}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                     </Grid>
-                )}
-                <Grid item xs={12}>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow sx={{ bgcolor: 'primary.main' }}>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Service Name</TableCell>
-                                    <TableCell>Service Description</TableCell>
-                                    <TableCell>Type Service</TableCell>
-                                    <TableCell>CreatedAt</TableCell>
-                                    <TableCell>UpdatedAt</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Acction</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {data
-                                    .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
-                                    .map((row:any) => renderRow(row) || null)}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={data.length}
-                        rowsPerPage={rowsPerPage}
-                        page={currentPage}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 </Grid>
-            </Grid>
+            </Paper>
         </div>
     );
 }

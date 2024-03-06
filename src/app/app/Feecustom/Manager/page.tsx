@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/navigation'
+import Paper from '@mui/material/Paper';
 
 interface listServiceCustomType {
     id: number;
@@ -48,7 +49,6 @@ export default function ManagerFeeCustom() {
     const [listFee, setListFee] = useState<DataFeeCustomType[]>([]);
     const [listService, setListService] = useState<any>([]);
     const [listServiceCustom, setListServiceCustom] = useState<listServiceCustomType[]>([]);
-    // const [overWeightCharge, setOverWeightCharge] = useState<number>(0);
     const [selectedSenderDistrict, setSelectedSenderDistrict] = useState<DataLocationType | null>(null);
     const [selectedReceiverDistrict, setSelectedReceiverDistrict] = useState<DataLocationType | null>(null);
 
@@ -95,6 +95,7 @@ export default function ManagerFeeCustom() {
                 const res = await fetch('/api/Location/GetChildLocation/' + senderProvince.toString());
                 const resData = await res.json();
                 const data = resData.data;
+                console.log(resData.data);
                 setListDistrictsSender(data.districs);
             }
         }
@@ -127,13 +128,6 @@ export default function ManagerFeeCustom() {
         }
     }, [isLoadService])
 
-    const renderDistrictSenders = (rows: DataLocationType[]) => {
-        return (
-            rows.map((row: DataLocationType) => (
-                <MenuItem key={row.id} value={row.id}>{row.locationName}</MenuItem>
-            ))
-        );
-    }
     const handleAutocompleteOnchange = (e: any, value: DataLocationType | null, id: string) => {
         e.preventDefault();
         if (id === "listDistrictsSender" && value != null) {
@@ -163,12 +157,14 @@ export default function ManagerFeeCustom() {
                 createdAt: service.createdAt,
                 updatedAt: service.updatedAt,
                 status: service.status,
-                overWeightCharge: service.overWeightCharge,
+                overWeightCharge: getValueOverWeightCharge(service.id),
                 feeCharge: getValueFeeCharge(service.id),
                 timeProcess: getValueTimeProcess(service.id)
             });
         });
         setListServiceCustom(listServiceCustom);
+        console.log('listServiceCustom', listServiceCustom);
+        console.log('listService', listService);
     }
 
     const getValueTimeProcess = (serviceId: number) => {
@@ -188,6 +184,15 @@ export default function ManagerFeeCustom() {
             }
         });
         return feeCharge;
+    }
+    const getValueOverWeightCharge = (serviceId: number) => {
+        let overWeightCharge = 0;
+        listFee && listFee.length > 0 && listFee.map((fee, index) => {
+            if (fee.serviceId === serviceId) {
+                overWeightCharge = fee.overWeightCharge;
+            }
+        });
+        return overWeightCharge;
     }
     const handleSave = async (item: listServiceCustomType) => {
         const saveItem = {
@@ -250,6 +255,7 @@ export default function ManagerFeeCustom() {
 
     return (
         <div>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px"}}>
             <Typography className="mt-5 mb-5" variant="h4" sx={{ mb: 2 }}>FeeCustom Management</Typography>
             <div className="border-2 border-slate-200 rounded-lg">
                 <Grid item container rowSpacing={2} columnSpacing={{ xs: 1, sm: 20, md: 3 }}>
@@ -304,7 +310,7 @@ export default function ManagerFeeCustom() {
                             style={{ width: '100%', marginTop: '10px' }}
                             disablePortal
                             id="listDistrictsSender"
-                            options={listDistrictsSender}
+                            options={listDistrictsSender || []}
                             getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
                             getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
                             value={selectedSenderDistrict}
@@ -324,7 +330,7 @@ export default function ManagerFeeCustom() {
                             style={{ width: '100%', marginTop: '10px' }}
                             disablePortal
                             id="listDistrictsReceiver"
-                            options={listDistrictsReceiver}
+                            options={listDistrictsReceiver || []}
                             getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
                             getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
                             value={selectedReceiverDistrict}
@@ -361,6 +367,8 @@ export default function ManagerFeeCustom() {
                     </Grid>
                 </Grid>
             </div>
+            </Paper>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px", marginTop: '15px'}}>
             <div>
                 <Grid item >
                     <TableContainer>
@@ -377,6 +385,13 @@ export default function ManagerFeeCustom() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                {listServiceCustom.length === 0 && (
+                                    <TableRow>
+                                        <TableCell colSpan={7} style={{ textAlign: 'center' }}>
+                                            No Content
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                                 {listServiceCustom && listServiceCustom.length > 0 && listServiceCustom.map((item, index) => {
                                     return (
                                         <TableRow key={item.id} >
@@ -433,6 +448,7 @@ export default function ManagerFeeCustom() {
                     </TableContainer>
                 </Grid>
             </div>
+            </Paper>
         </div >
     );
 }

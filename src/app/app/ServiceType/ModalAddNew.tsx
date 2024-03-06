@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { FormControlLabel, FormGroup, Switch, Grid, Alert } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -30,6 +30,7 @@ export default function ModalAddNew({
     editItemId: Number | null,
     setEditItemId: any,
 }) {
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const handleOpen = () => {
         setOpen(true)
         setEditItemId(null);
@@ -42,7 +43,6 @@ export default function ModalAddNew({
     const [serviceDescription, setServiceDescription] = React.useState('');
     const [status, setStatus] = React.useState(1);
 
-    const [errors, setErrors] = React.useState<string[]>([]);
     const [serviceTypes, setServiceTypes] = React.useState([]);
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ export default function ModalAddNew({
         }
     }
 
-    const handelSubmit = async () => {
+    const onSubmit  = async () => {
         if (editItemId != null) {
             try {
                 const requestBody = {
@@ -74,13 +74,6 @@ export default function ModalAddNew({
                 };
 
                 console.log("updateR: ", requestBody);
-
-                let checkValidate = validateService(requestBody.serviceName, requestBody.serviceDescription);
-
-                if (checkValidate.length > 0) {
-                    setErrors(checkValidate);
-                    return;
-                }
 
                 const response = await fetch(`/api/ServiceType`, {
                     method: 'PUT',
@@ -96,7 +89,6 @@ export default function ModalAddNew({
                     setOpen(false);
                     setEditItemId(null);
                     SetEditItem(null);
-                    setErrors([]);
                     console.log('Update ServiceType successfully!');
                 } else {
                     console.error('Create ServiceType Error', response.status);
@@ -114,13 +106,6 @@ export default function ModalAddNew({
 
                 console.log("CreateR: ", requestBody);
 
-                let checkValidate = validateService(requestBody.serviceName, requestBody.serviceDescription);
-                
-                if (checkValidate.length > 0) {
-                    setErrors(checkValidate);
-                    return;
-                }
-
                 const response = await fetch(`/api/ServiceType`, {
                     method: 'POST',
                     headers: {
@@ -130,7 +115,6 @@ export default function ModalAddNew({
                 });
 
                 if (response.ok) {
-                    setErrors([]);
                     setEditItemId(null);
                     setOpen(false);
                     console.log('Create a new ServiceType successfully!');
@@ -201,39 +185,35 @@ export default function ModalAddNew({
                             Add Service Type
                         </Typography>
                         <hr style={{ margin: '20px 50px' }} />
-                        <Box>
-                            {errors && errors.length > 0 && (
+                    
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <div className="error-message">
-                                        {errors.map((msg, i) => (
-                                            <Alert severity="success" color="warning" key={i}>
-                                                {msg}
-                                            </Alert>
-                                        ))}
-                                    </div>
+                                    <TextField
+                                        fullWidth
+                                        label="Service Name"
+                                        variant="standard"
+                                        {...register('serviceName', { required: 'Service Name is required' })}
+                                        error={!!errors.serviceName}
+                                        helperText={errors.serviceName?.message as string}
+                                        onChange={handleChangeInput}
+                                        value={serviceName}
+                                    />
                                 </Grid>
-                            )}
-                        </Box>
-                        <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Service Name"
-                                    variant="standard"
-                                    name='serviceName'
-                                    value={serviceName ? serviceName : ''}
-                                    onChange={handleChangeInput}
-                                />
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Service Description"
+                                        variant="standard"
+                                        {...register('serviceDescription', { required: 'Service Description is required' })}
+                                        error={!!errors.serviceDescription}
+                                        helperText={errors.serviceDescription?.message as string}
+                                        onChange={handleChangeInput}
+                                        value={serviceDescription}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Service Description"
-                                    variant="standard"
-                                    name='serviceDescription'
-                                    value={serviceDescription ? serviceDescription : ''}
-                                    onChange={handleChangeInput}
-                                />
-                            </Grid>
+                        
                         <FormGroup style={{ marginTop: '20px' }}>
                             <FormControlLabel
                                 required
@@ -248,21 +228,12 @@ export default function ModalAddNew({
                                 label={status === 1 ? 'Active' : 'Inactive'}
                             />
                         </FormGroup>
-                        <Button variant="contained" onClick={handelSubmit}>Submit</Button>
+                        
+                        <Button variant="contained" type="submit">Submit</Button>
+                        </form>
                     </Box>
                 </Fade>
             </Modal>
         </div >
     );
-}
-
-function validateService(serviceName:string, serviceDescription:string) {
-    let errorList = [];
-    if (serviceName.length === 0) {
-        errorList.push("Please Enter Service Name");
-    }
-    if (serviceDescription.length === 0) {
-        errorList.push("Please Enter Service Description");
-    }
-    return errorList;
 }

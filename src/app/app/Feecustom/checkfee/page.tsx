@@ -10,7 +10,7 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import { DataFeeCustomType, DataLocationType } from '@/helper/interface';
-
+import Paper from '@mui/material/Paper';
 
 
 const CheckFee: React.FC = () => {
@@ -176,6 +176,7 @@ const CheckFee: React.FC = () => {
     }
     return (
         <div style={{ marginLeft: '50px', marginRight: '50px' }}>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px" }}>
             <Typography className="mt-5 mb-5" variant="h4">Fare Estimate</Typography>
             <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
                 <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}></Divider>
@@ -252,7 +253,7 @@ const CheckFee: React.FC = () => {
                                 style={{ width: '100%', marginTop: '10px' }}
                                 disablePortal
                                 id="listDistrictsSender"
-                                options={listDistrictsSender}
+                                options={listDistrictsSender || []}
                                 getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
                                 getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
                                 sx={{ width: 300 }}
@@ -272,7 +273,7 @@ const CheckFee: React.FC = () => {
                                 style={{ width: '100%', marginTop: '10px' }}
                                 disablePortal
                                 id="listDistrictsReceiver"
-                                options={listDistrictsReceiver}
+                                options={listDistrictsReceiver || []}
                                 getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
                                 getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
                                 sx={{ width: 300 }}
@@ -291,6 +292,8 @@ const CheckFee: React.FC = () => {
                     </Grid>
                 </form>
             </div>
+            </Paper>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px", marginTop: '15px'}}>
             <div className="m-5 border-2 rounded-lg">
                 <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
                     <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
@@ -304,6 +307,7 @@ const CheckFee: React.FC = () => {
                     {listFee && listFee.length > 0 && renderListFee(listFee)}
                 </Grid>
             </div>
+            </Paper>
         </div>
     );
 };

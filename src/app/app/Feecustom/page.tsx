@@ -1,11 +1,9 @@
 'use client'
-import { DataFeeCustomType } from "@/helper/interface";
 import { useEffect, useState } from "react"
 import * as React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Alert, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useRouter } from 'next/navigation'
-
+import Paper from '@mui/material/Paper';
 
 
 export default function FeeCustomPage({
@@ -142,6 +140,7 @@ export default function FeeCustomPage({
     }
     return (
         <div className="App">
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px"}}>
             <ChangeStatus />
 
             <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Service Types Managerment</h1>
@@ -166,7 +165,7 @@ export default function FeeCustomPage({
                     <TableContainer>
                         <Table>
                             <TableHead>
-                                <TableRow sx={{ bgcolor: 'primary.main' }}>
+                                <TableRow>
                                     <TableCell>ID</TableCell>
                                     <TableCell>Service</TableCell>
                                     <TableCell>From</TableCell>
@@ -196,6 +195,7 @@ export default function FeeCustomPage({
                     />
                 </Grid>
             </Grid>
+            </Paper>
         </div>
     );
 }

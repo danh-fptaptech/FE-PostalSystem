@@ -9,12 +9,13 @@ import {
     HomeWorkOutlined,
     Inventory2Outlined,
     NoteAddOutlined,
-    LocationOn,
-    Lan,
-    TypeSpecimen,
-    Paid,
-    LocalAtm,
-    FormatListBulleted
+    LocationOnOutlined,
+    LanOutlined,
+    TypeSpecimenOutlined,
+    PaidOutlined,
+    LocalAtmOutlined,
+    FormatListBulletedOutlined,
+    FactCheckOutlined
 } from "@mui/icons-material";
 import * as React from "react";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
@@ -43,13 +44,15 @@ export default function DrawerMenu() {
             createMenu("Create Branch", DomainAddOutlined, "/app/branches/create", ["branch.create"]),
         ]),
         createMenu("Packages", Inventory2Outlined, "/app/packages", ["package.view"]),
-        createMenu("Service Type", TypeSpecimen, "/app/ServiceType", ["servicetype.view"]),
-        createMenu("Services", Lan, "/app/Services", ["services.view"]),
-        createMenu("Locations", LocationOn, "/app/Locations", ["locations.view"]),
-        createMenu("Check Fee", Paid, "/app/Feecustom/checkfee", ["checkFee.view"]),
-        createMenu("Fee Custom", Paid, "/app/Feecustom", ["feecustom"], [
-            createMenu("List Branches", FormatListBulleted, "/app/Feecustom", ["feecustom.view"]),
-            createMenu("Create Branch", LocalAtm, "/app/Feecustom/Manager", ["feecustom.create"]),
+        createMenu("Service", FactCheckOutlined, "/app/Services", ["services"], [
+            createMenu("Service Type", TypeSpecimenOutlined, "/app/ServiceType", ["servicetype.view"]),
+            createMenu("Services Manager", LanOutlined, "/app/Services", ["services.view"]),
+        ]),
+        createMenu("Locations", LocationOnOutlined, "/app/Locations", ["locations.view"]),
+        createMenu("Check Fee", PaidOutlined, "/app/Feecustom/checkfee", ["checkFee.view"]),
+        createMenu("Fee Custom", PaidOutlined, "/app/Feecustom", ["feecustom"], [
+            createMenu("List Fee", FormatListBulletedOutlined, "/app/Feecustom", ["feecustom.view"]),
+            createMenu("Manager Fee", LocalAtmOutlined, "/app/Feecustom/Manager", ["feecustom.create"]),
         ]),
     ]
 
