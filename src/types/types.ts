@@ -1,9 +1,65 @@
 export interface ApiResponse {
-	json(): unknown;
 	ok: boolean;
 	status: string;
 	message: string;
 	data?: any;
+}
+
+export interface User {
+	id: number;
+	fullname: string;
+	email: string;
+	phone: string;
+	avatar?: string;
+	status: number;
+}
+
+export interface Package {
+	id: number;
+	trackingCode: string;
+	nameFrom: string;
+	addressFrom: string;
+	postalCodeFrom: string;
+	nameTo: string;
+	addressTo: string;
+	postalCodeTo: string;
+	packageSize: number;
+	packageNote: string;
+	totalFee: number;
+	serviceId: number;
+	step: number;
+	status: number;
+}
+
+export interface Address {
+	name: string;
+	phoneNumber: string;
+	address: string;
+	ward: string;
+	district: string;
+	city: string;
+	postalCode: string;
+	typeInfo: number;
+}
+
+export interface UserWithPackages extends User {
+	packages: Package[];
+}
+
+export interface UserWithAddresses extends User {
+	packages: Address[];
+}
+
+export interface UserWithAll extends User {
+	addresses: Address[];
+	packages: Package[];
+}
+
+export interface ImageType {
+	name: string;
+	width: number;
+	height: number;
+	alt?: string;
 }
 
 export interface EmployeeProps {

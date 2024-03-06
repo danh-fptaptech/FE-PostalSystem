@@ -7,9 +7,7 @@ export async function PUT(req: NextRequest) {
 		const res = await fetch(
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/Reset-password`,
 			{
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 				body: JSON.stringify(payload),
 			}

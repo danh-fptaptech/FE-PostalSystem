@@ -7,9 +7,7 @@ export async function DELETE(req: NextRequest) {
 			`${process.env.NEXT_PUBLIC_API_URL}/Users/Revoke-token`,
 			{
 				// header must have access token
-				headers: {
-					...req.headers,
-				},
+				headers: req.headers,
 				method: req.method,
 			}
 		);

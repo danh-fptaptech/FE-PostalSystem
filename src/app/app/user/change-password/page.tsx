@@ -50,7 +50,7 @@ const schema = z
 
 type Schema = z.infer<typeof schema>;
 
-export default function UserChangePasswordForm() {
+export default function UserChangePasswordPage() {
 	const { data: session } = useSession();
 	const [showOldPassword, setShowOldPassword] = React.useState(false);
 	const [showNewPassword, setShowNewPassword] = React.useState(false);
@@ -59,16 +59,19 @@ export default function UserChangePasswordForm() {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<Schema>({
 		resolver: zodResolver(schema),
 	});
 
 	const onSubmit = async (formData: Schema) => {
+		const loadingId = toast.loading("Changing password...");
+
 		const res = await fetch(`/api/users/${session?.user.id}/change-password`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${session?.token.accessToken}`,
+				Authorization: `Bearer ${session?.user.token}`,
 			},
 			body: JSON.stringify({
 				oldPassword: formData.oldPassword,
@@ -78,11 +81,15 @@ export default function UserChangePasswordForm() {
 
 		const data = (await res.json()) as ApiResponse;
 
+		toast.dismiss(loadingId);
+
 		if (data.ok) {
 			toast.success(data.message);
 		} else {
 			toast.error(data.message);
 		}
+
+		reset();
 	};
 
 	const handleClickShowPassword = (
@@ -100,7 +107,7 @@ export default function UserChangePasswordForm() {
 			component="form"
 			onSubmit={handleSubmit(onSubmit)}
 			sx={{
-				maxWidth: "500px",
+				width: "100%",
 				margin: "auto",
 				padding: "20px",
 				borderRadius: "8px",
@@ -222,7 +229,7 @@ export default function UserChangePasswordForm() {
 				fullWidth
 				sx={{ mt: 2 }}
 			>
-				Login
+				Change
 			</Button>
 		</Box>
 	);

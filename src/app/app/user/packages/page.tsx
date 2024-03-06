@@ -1,4 +1,5 @@
-/*
+"use client";
+
 import React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
@@ -40,11 +41,6 @@ const columns: GridColDef[] = [
 	{
 		field: "packageNote",
 		headerName: "PackageNote",
-		width: 90,
-	},
-	{
-		field: "totalFee",
-		headerName: "TotalFee",
 		width: 90,
 	},
 	{
@@ -100,7 +96,7 @@ interface UserWithPackages {
 	packages: Package[];
 }
 
-export default function UserPackages() {
+export default function UserPackagesPage() {
 	const [user, setUser] = React.useState<UserWithPackages | null>(null);
 	const { data: session } = useSession();
 
@@ -109,13 +105,13 @@ export default function UserPackages() {
 			fetch(`/api/users/${session.user.id}/packages`, {
 				method: "GET",
 				headers: {
-					Authorization: `Bearer ${session.token.accessToken}`,
+					Authorization: `Bearer ${session.user.token}`,
 				},
 			})
 				.then(response => response.json())
 				.then(data => setUser(data.data));
 		}
-	}, [session?.user.id, session?.token.accessToken]);
+	}, [session?.user.id, session?.user.token]);
 
 	return (
 		<div style={{ height: 400, width: "100%" }}>
@@ -132,4 +128,3 @@ export default function UserPackages() {
 		</div>
 	);
 }
-*/

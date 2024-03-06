@@ -6,11 +6,10 @@ export async function GET(
 ) {
 	try {
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Addresses`,
+			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/all`,
 			{
 				// header must have access token
 				headers: req.headers,
-
 				method: req.method,
 			}
 		);
@@ -21,7 +20,7 @@ export async function GET(
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Success to get user with addresses",
+				message: "Success to get user with all",
 				data,
 			});
 		}
@@ -42,23 +41,20 @@ export async function GET(
 			});
 		}
 
-		console.log("Unhandled server-side error in get user with addresses");
+		console.log("Unhandled server-side error in get user with all");
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to get user with addresses",
+			message: "Error to get user with all",
 		});
 	} catch (error: any) {
-		console.log(
-			"Unhandled client-side error in get user with addresses",
-			error
-		);
+		console.log("Unhandled client-side error in get user with all", error);
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to get user with addresses",
+			message: "Error to get user with all",
 		});
 	}
 }
@@ -71,7 +67,7 @@ export async function POST(
 		const payload = await req.json();
 
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Addresses`,
+			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/all`,
 			{
 				// header must have access token
 				headers: req.headers,
@@ -84,7 +80,7 @@ export async function POST(
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Success to post user address",
+				message: "Success to get user all",
 			});
 		}
 		console.log(res);
@@ -114,20 +110,20 @@ export async function POST(
 			});
 		}
 
-		console.log("Unhandled server-side error in post user address");
+		console.log("Unhandled server-side error in get user all");
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to post user address",
+			message: "Error to get user all",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in post user address", error);
+		console.log("Unhandled client-side error in get user all", error);
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to post user address",
+			message: "Error to get user all",
 		});
 	}
 }

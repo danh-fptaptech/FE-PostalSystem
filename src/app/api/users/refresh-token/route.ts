@@ -1,3 +1,5 @@
+import { parse } from "cookie";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 //import { getServerSession } from "next-auth/next";
 //import { authOptions } from "../../auth/[...nextauth]/route";
@@ -5,17 +7,31 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
 	//const session = (await getServerSession(authOptions)) as Session | null;
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_API_URL}/Users/Refresh-token`,
+		{
+			// header must have access token
+			headers: req.headers,
+			method: req.method,
+		}
+	);
 	try {
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/Users/Refresh-token`,
-			{
-				// header must have access token
-				headers: {
-					...req.headers,
-				},
-				method: req.method,
-			}
-		);
+		const apiCookies = res.headers.getSetCookie();
+
+		if (apiCookies && apiCookies.length > 0) {
+			apiCookies.forEach(cookie => {
+				const parsedCookie = parse(cookie);
+				const [cookieName, cookieValue] = Object.entries(parsedCookie)[0];
+				const httpOnly = cookie.includes("httponly");
+
+				cookies().set({
+					name: cookieName,
+					value: cookieValue,
+					httpOnly: httpOnly,
+					expires: new Date(parsedCookie.expires),
+				});
+			});
+		}
 
 		const data = await res.json();
 
@@ -53,7 +69,7 @@ export async function POST(req: NextRequest) {
 			message: "Error to refresh token",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in refresh token", error);
+		console.log("Unhandled client-side error in refresh token");
 
 		return NextResponse.json({
 			ok: false,
