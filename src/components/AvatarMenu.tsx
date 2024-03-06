@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -17,6 +19,15 @@ export default function AvatarMenu() {
 		setAnchorEl(null);
 	};
 
+	const handleSignOut = () => {
+		fetch("/api/Users/revoke-token", {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${session?.user.token}`,
+			},
+		}).then(() => {});
+	};
+
 	if (status === "authenticated") {
 		return (
 			<div>
@@ -26,7 +37,8 @@ export default function AvatarMenu() {
 						aria-controls={open ? "basic-menu" : undefined}
 						aria-haspopup="true"
 						aria-expanded={open ? "true" : undefined}
-						onClick={handleClick}>
+						onClick={handleClick}
+					>
 						<Avatar src="">a</Avatar>
 					</Button>
 					<div className="flex"></div>
@@ -38,16 +50,19 @@ export default function AvatarMenu() {
 					onClose={handleClose}
 					MenuListProps={{
 						"aria-labelledby": "basic-button",
-					}}>
+					}}
+				>
 					<MenuItem>
 						<p className="uppercase">{session.user.fullname}</p>
 					</MenuItem>
 					<MenuItem
 						color="black"
-						onClick={handleClose}>
+						onClick={handleClose}
+					>
 						<Link
 							href="/app/employee"
-							className="text-decoration-none py-1 text-dark">
+							className="text-decoration-none py-1 text-dark"
+						>
 							Profiles
 						</Link>
 					</MenuItem>

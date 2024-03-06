@@ -10,7 +10,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import MenuContext from "@/contexts/MenuContex";
 import { Simulate } from "react-dom/test-utils";
-import select = Simulate.select;
 
 export default function MenuGroup(props: { item: any }) {
 	const { handleDrawerClose } = useContext(MenuContext);
@@ -36,7 +35,8 @@ export default function MenuGroup(props: { item: any }) {
 			onClick={() => {
 				router.push(item.path);
 				handleDrawerClose();
-			}}>
+			}}
+		>
 			<ListItemIcon>
 				<item.icon />
 			</ListItemIcon>
@@ -54,16 +54,19 @@ export default function MenuGroup(props: { item: any }) {
 			<Collapse
 				in={open}
 				timeout="auto"
-				unmountOnExit>
+				unmountOnExit
+			>
 				<List
 					component="div"
 					sx={{
 						paddingLeft: 4,
-					}}>
+					}}
+				>
 					{item.children.map((child: any, index: number) => (
 						<MenuGroup
 							item={child}
-							key={index}></MenuGroup>
+							key={index}
+						></MenuGroup>
 					))}
 				</List>
 			</Collapse>

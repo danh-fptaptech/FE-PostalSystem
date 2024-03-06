@@ -137,42 +137,50 @@ export default function UpdatedRequestManagement() {
 						<Table
 							sx={{ minWidth: 650 }}
 							size="small"
-							aria-label="a dense table">
+							aria-label="a dense table"
+						>
 							<TableHead>
 								<TableRow>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Employee Code
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Fullname
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Email
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Phone Number
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Branch
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Role
 									</TableCell>
 									<TableCell
 										align="center"
-										className="text-white text-sm">
+										className="text-white text-sm"
+									>
 										Action
 									</TableCell>
 								</TableRow>
@@ -183,7 +191,8 @@ export default function UpdatedRequestManagement() {
 										<TableCell
 											colSpan={7}
 											align="center"
-											className="text-sm">
+											className="text-sm"
+										>
 											No Request
 										</TableCell>
 									</TableRow>
@@ -196,7 +205,8 @@ export default function UpdatedRequestManagement() {
 												key={employee.id}
 												sx={{
 													"&:last-child td, &:last-child th": { border: 0 },
-												}}>
+												}}
+											>
 												<TableCell align="center">
 													{employee.employeeCode}
 												</TableCell>
@@ -221,7 +231,8 @@ export default function UpdatedRequestManagement() {
 															type="button"
 															onClick={() => {
 																setSelectedEmployee(employee);
-															}}>
+															}}
+														>
 															<DoneOutline className="text-green-700 text-[20px] mr-2" />
 														</Button>
 													</Tooltip>
@@ -244,7 +255,8 @@ export default function UpdatedRequestManagement() {
 					{selectedEmployee && (
 						<Dialog
 							open
-							className="max-w-[500px] mx-auto">
+							className="max-w-[500px] mx-auto"
+						>
 							<Tooltip title="Close">
 								<CloseOutlined
 									onClick={() => setSelectedEmployee(null)}
@@ -262,7 +274,8 @@ export default function UpdatedRequestManagement() {
 							<DialogContent>
 								<form
 									onSubmit={e => AcceptRequest(e)}
-									className="text-xs">
+									className="text-xs"
+								>
 									<div className="my-3">
 										<label className="font-semibold">Email:</label>
 										<input
@@ -295,7 +308,8 @@ export default function UpdatedRequestManagement() {
 										<textarea
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={selectedEmployee?.submitedInfo.address}
-											readOnly></textarea>
+											readOnly
+										></textarea>
 									</div>
 
 									<div className="my-3 flex">
@@ -337,7 +351,8 @@ export default function UpdatedRequestManagement() {
 											color="success"
 											variant="contained"
 											size="small"
-											className="w-full mr-2">
+											className="w-full mr-2"
+										>
 											Accept
 										</Button>
 										<Button
@@ -345,7 +360,8 @@ export default function UpdatedRequestManagement() {
 											variant="contained"
 											size="small"
 											onClick={() => handleRejectRequest()}
-											className="w-full">
+											className="w-full"
+										>
 											Reject
 										</Button>
 									</div>

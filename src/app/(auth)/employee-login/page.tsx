@@ -18,7 +18,8 @@ export default function LoginPage() {
 			<Tabs
 				value={value}
 				onChange={handleChange}
-				centered>
+				centered
+			>
 				<Tab label="Employee" />
 			</Tabs>
 

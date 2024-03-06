@@ -7,7 +7,6 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
-		//console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;
@@ -80,10 +79,41 @@ export const config = {
 
 const paths = [
 	{
-		path: "/register",
-		permission: ["user.access", "user.all", "home.access"],
+		path: "/app",
+		permission: ["app.view"],
 	},
-
+	{
+		path: "/app/user",
+		permission: ["user.view", "User"],
+	},
+	{
+		path: "/app/user/change-password",
+		permission: ["password.change"],
+	},
+	{
+		path: "/app/user/packages",
+		permission: ["packages.view"],
+	},
+	{
+		path: "/app/user/create-package",
+		permission: ["package.create"],
+	},
+	{
+		path: "/app/user/add-address",
+		permission: ["address.create"],
+	},
+	{
+		path: "/app/user/addresses/receiver",
+		permission: ["addresses.view"],
+	},
+	{
+		path: "/app/user/addresses/sender",
+		permission: ["addresses.view"],
+	},
+	{
+		path: "/app/user/addresses",
+		permission: ["addresses.view"],
+	},
 	{
 		path: "/app/admin/users",
 		permission: ["Admin"],
@@ -113,7 +143,7 @@ const paths = [
 
 	{
 		path: "/app/employee",
-		permission: ["user.access", "Employee", "Branch Manager"],
+		permission: ["user.access", "Employee", "Branch Manager", "Delivery"],
 	},
 	{
 		path: "/app/historylogs",
@@ -125,11 +155,6 @@ const paths = [
 			"Warehouse",
 		],
 	},
-	{
-		path: "/app/user",
-		permission: ["user.access", "User"],
-	},
-
 	{
 		path: "/app/branches",
 		permission: ["user.access", "Admin"],

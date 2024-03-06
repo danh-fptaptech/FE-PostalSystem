@@ -186,7 +186,8 @@ export default function EmployeeInfoPage() {
 							className="my-3"
 							variant="contained"
 							color="secondary"
-							onClick={() => setOpenDialogUpdatedResquest(true)}>
+							onClick={() => setOpenDialogUpdatedResquest(true)}
+						>
 							Update Information
 						</Button>
 					</Box>
@@ -194,7 +195,8 @@ export default function EmployeeInfoPage() {
 					{/* Dialog send updated info */}
 					<Dialog
 						open={openDialogUpdatedResquest}
-						className="max-w-[500px] mx-auto">
+						className="max-w-[500px] mx-auto"
+					>
 						<Tooltip title="Close">
 							<CloseOutlined
 								onClick={() => setOpenDialogUpdatedResquest(false)}
@@ -212,7 +214,8 @@ export default function EmployeeInfoPage() {
 						<DialogContent>
 							<form
 								onSubmit={handleUpdatedSubmit(SendUpdatedRequest)}
-								className="text-xs">
+								className="text-xs"
+							>
 								<div className="my-3">
 									<label className="font-semibold">EmployeeCode:</label>
 									<input
@@ -265,7 +268,8 @@ export default function EmployeeInfoPage() {
 										{...updatedRegister("address", {
 											required: "Address is required.",
 										})}
-										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"></textarea>
+										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
+									></textarea>
 								</div>
 
 								<div className="my-3 flex">
@@ -274,12 +278,14 @@ export default function EmployeeInfoPage() {
 										<select
 											{...updatedRegister("province")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											id="province">
+											id="province"
+										>
 											<option value="">Select province</option>
 											{provinces.map(province => (
 												<option
 													key={province.id}
-													value={province.locationName}>
+													value={province.locationName}
+												>
 													{province.locationName}
 												</option>
 											))}
@@ -292,12 +298,14 @@ export default function EmployeeInfoPage() {
 											{...updatedRegister("district")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											id="district"
-											disabled={districts.length === 0}>
+											disabled={districts.length === 0}
+										>
 											<option value="">Select district</option>
 											{districts.map(district => (
 												<option
 													key={district.id}
-													value={district.locationName}>
+													value={district.locationName}
+												>
 													{district.locationName}
 												</option>
 											))}
@@ -341,7 +349,8 @@ export default function EmployeeInfoPage() {
 									type="submit"
 									color="success"
 									variant="contained"
-									className="w-full mr-2">
+									className="w-full mr-2"
+								>
 									{!loading ? "Send" : <Loading />}
 								</Button>
 							</form>
