@@ -68,11 +68,11 @@ function Page() {
   const [newCitySelected, setNewCitySelected] = useState(false)
   const [newCitySelectedTo, setNewCitySelectedTo] = useState(false)
 
-  const [newDistrictSelected, setNewDistrictSelected] = useState(false)
-  const [newDistrictSelectedTo, setNewDistrictSelectedTo] = useState(false)
+  // const [newDistrictSelected, setNewDistrictSelected] = useState(false)
+  // const [newDistrictSelectedTo, setNewDistrictSelectedTo] = useState(false)
 
-  const [postalCodeFrom, setPostalCodeFrom] = useState('')
-  const [postalCodeTo, setPostalCodeTo] = useState('')
+  // const [postalCodeFrom, setPostalCodeFrom] = useState('')
+  // const [postalCodeTo, setPostalCodeTo] = useState('')
 
   const router = useRouter() // Initialize the useRouter hook
 
@@ -120,15 +120,15 @@ function Page() {
 
   const handleDistrictSelect = (value: Location | null) => {
     setSelectedDistrict(value)
-    setPostalCodeFrom(value?.postalCode || '')
+    // setPostalCodeFrom(value?.postalCode || '')
     setNewCitySelected(false) // Set newCitySelected to false when a district is selected
-    setNewDistrictSelected(true) // Set newDistrictSelected to true when a new district is selected
+    // setNewDistrictSelected(true) // Set newDistrictSelected to true when a new district is selected
   }
   const handleDistrictSelectTo = (value: Location | null) => {
     setSelectedDistrictTo(value)
-    setPostalCodeTo(value?.postalCode || '')
+    // setPostalCodeTo(value?.postalCode || '')
     setNewCitySelectedTo(false) // Set newCitySelected to false when a district is selected
-    setNewDistrictSelectedTo(true) // Set newDistrictSelected to true when a new district is selected
+    // setNewDistrictSelectedTo(true) // Set newDistrictSelected to true when a new district is selected
   }
 
   const handleTraCuuEstimateCost = async () => {
@@ -167,7 +167,7 @@ function Page() {
         toast.error('Error fetching data')
       }
     } catch (error) {
-      console.error('Error:', error)
+      // console.error('Error:', error)
       toast.error('An error occurred')
     }
   }
@@ -233,7 +233,7 @@ function Page() {
               <Typography sx={{ fontWeight:550 }} variant="h5" component="h5">
                 Estimate Cost
               </Typography>
-              <Typography sx={{ my:2, fontWeight:'550' }}>Gửi từ *</Typography>
+              <Typography sx={{ my:2, fontWeight:'550' }}>From *</Typography>
               <Autocomplete
                 id="city-select-demo"
                 options={locations}

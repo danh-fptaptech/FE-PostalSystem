@@ -215,7 +215,7 @@ const EstimatePage: React.FC = () => {
                                 fullWidth
                             >
                                 <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                {listProvinces&&listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
                                     )
@@ -234,7 +234,7 @@ const EstimatePage: React.FC = () => {
                                 fullWidth
                             >
                                 <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                {listProvinces&& listProvinces.length > 0 && listProvinces.map((province, index) => {
                                     return (
                                         <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
                                     )

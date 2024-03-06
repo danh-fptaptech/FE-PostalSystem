@@ -39,8 +39,24 @@ function Page() {
 
   //submit form
   const handleSubmit = async () => {
-    if (!title || !slug || !content || !author || !employeeId) {
-      toast.error('Please fill all the fields')
+    if (!title || title.length < 5 || title.length > 100) {
+      toast.error('Title must be between 5 and 100 characters')
+      return
+    }
+    if (!slug || !/^[\w-]+$/.test(slug)) {
+      toast.error('Slug must only contain letters, numbers, underscores and hyphens')
+      return
+    }
+    if (!content || content.length < 20) {
+      toast.error('Content must be at least 20 characters')
+      return
+    }
+    if (!author || author.length < 3 || author.length > 50) {
+      toast.error('Author name must be between 3 and 50 characters')
+      return
+    }
+    if (!employeeId) {
+      toast.error('Please select an employee')
       return
     }
 
@@ -198,7 +214,7 @@ function Page() {
                 /> */}
               </Grid>
             </Grid>
-            <Button sx={{ my:1 }} variant="contained" onClick={handleSubmit}>Back</Button>
+            <Button sx={{ my:1 }} variant="contained" onClick={handleSubmit}>CREATE</Button>
           </Box>
         </Paper>
       </Box>
