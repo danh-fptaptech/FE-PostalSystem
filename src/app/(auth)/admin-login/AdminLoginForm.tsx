@@ -22,27 +22,24 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { toast } from "sonner";
 
 const schema = z.object({
-	userId: z
-		.string({
-			required_error: "Username is required!",
-		})
-		.min(3, "Username must be at least 3 characters!")
-		.max(50),
+	userId: z.string({
+		required_error: "Email is required!",
+	}),
 	password: z
 		.string({
 			required_error: "Password is required!",
 		})
-		.min(3, "Password must be at least 3 characters!")
+		.min(8, "Password must be at least 8 characters!")
 		.max(50),
 });
 
 type Schema = z.infer<typeof schema>;
 
-const UserLoginForm = () => {
+const AdminLoginForm = () => {
 	const [showPassword, setShowPassword] = React.useState(false);
-
 	const [error, setError] = React.useState("");
 	const router = useRouter();
 	const {
@@ -65,24 +62,25 @@ const UserLoginForm = () => {
 	};
 
 	const onSubmit = async (data: Schema) => {
+		const loadingId = toast.loading("Loading ... ");
 		try {
-			const res = await signIn("credentials", {
+			const employeeRes = await signIn("credentials", {
 				redirect: false,
 				username: data.userId,
 				password: data.password,
-				role: "User",
-				//			callbackUrl,
+				role: "Employee",
+				// callbackUrl,
 			});
 
-			if (!res?.error) {
-				//router.push(callbackUrl);
-				router.push("/app/user");
+			if (!employeeRes?.error) {
+				router.push("/app/admin/employees");
 			} else {
 				setError("Invalid email or password");
 			}
 		} catch (error) {
 			setError("An unexpected error happened");
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (
@@ -111,7 +109,7 @@ const UserLoginForm = () => {
 			</Typography>
 			<TextField
 				fullWidth
-				label="Username"
+				label="Email"
 				{...register("userId", {
 					setValueAs: v => (v === "" ? undefined : v),
 				})}
@@ -162,21 +160,12 @@ const UserLoginForm = () => {
 					component={LinkBehaviour}
 					href="/forgot-password"
 					variant="body2"
-					className="text-decoration-none">
+					className="text-decoration-none hover:font-semibold">
 					Forgot Password?
 				</Link>
-				<Box mt={1}>
-					<Link
-						component={LinkBehaviour}
-						href="/register"
-						variant="body2"
-						className="text-decoration-none hover:font-semibold">
-						Don&apos;t have an account? Sign Up
-					</Link>
-				</Box>
 			</Box>
 		</Box>
 	);
 };
 
-export default UserLoginForm;
+export default AdminLoginForm;

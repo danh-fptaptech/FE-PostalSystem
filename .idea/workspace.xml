@@ -5,12 +5,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/app/(auth)/admin-login/AdminLoginForm.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/(auth)/admin-login/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/(auth)/employee-login/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/_data/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/employees/[employeeCode]/changeStatus/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/locations/getchildlocation/[id]/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/api/user/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/historylogs/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/user/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/branches/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/branches/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/EmployeeLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/employee-login/EmployeeLoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(public)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(public)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/employees/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/employees/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/locations/getlistprovince/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/locations/getlistprovince/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/roles/[roleId]/permission/[permissionName]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/[roleId]/permission/[permissionName]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/roles/[roleId]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/[roleId]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/roles/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/RoleManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/ChangePassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/ChangePassword.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/EmployeeInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/layout.tsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FormInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FormInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/login/EmployeeLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/EmployeeLoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AvatarMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvatarMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Loading.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MenuGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MenuGroup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/RemoveDialog.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/libs/data.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/next-auth.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/next-auth.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +80,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -54,23 +93,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merge-3.3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;G:/eProject/tars-delivery-fe/src/app/api/packages/create&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ImportCost&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging Merge-6.3",
+    "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/api/packages/create",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ImportCost",
+    "ts.external.directory.path": "G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactBuddySettings">
     <option name="extensionsIgnore" value="true" />
   </component>

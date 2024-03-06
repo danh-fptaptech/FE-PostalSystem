@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: { id: number } }
+) {
 	try {
 		const res = await fetch(
 			process.env.NEXT_PUBLIC_API_URL +
-				"/Location/GetListLocationByLevel/Province",
+				"/Location/GetChildLocation/" +
+				params.id,
 			{
 				method: req.method,
 				headers: req.headers,

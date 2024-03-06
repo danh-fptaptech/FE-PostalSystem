@@ -22,6 +22,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const schema = z.object({
 	userId: z.string({
@@ -38,9 +40,8 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 const EmployeeLoginForm = () => {
+	const { data: session } = useSession();
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [isLoading, setIsLoading] = React.useState(false);
-
 	const [error, setError] = React.useState("");
 	const router = useRouter();
 	const {
@@ -63,8 +64,9 @@ const EmployeeLoginForm = () => {
 	};
 
 	const onSubmit = async (data: Schema) => {
+		const loadingId = toast.loading("Loading ... ");
 		try {
-			const res = await signIn("credentials", {
+			const employeeRes = await signIn("credentials", {
 				redirect: false,
 				username: data.userId,
 				password: data.password,
@@ -72,15 +74,15 @@ const EmployeeLoginForm = () => {
 				// callbackUrl,
 			});
 
-			if (!res?.error) {
-				//router.push(callbackUrl);
-				router.push("/app/dashboard");
+			if (!employeeRes?.error) {
+				router.push("/app/employee");
 			} else {
 				setError("Invalid email or password");
 			}
 		} catch (error) {
 			setError("An unexpected error happened");
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (
@@ -159,17 +161,10 @@ const EmployeeLoginForm = () => {
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2">
+					variant="body2"
+					className="text-decoration-none hover:font-semibold">
 					Forgot Password?
 				</Link>
-				<Box mt={1}>
-					<Link
-						component={LinkBehaviour}
-						href="/register"
-						variant="body2">
-						Don&apos;t have an account? Sign Up
-					</Link>
-				</Box>
 			</Box>
 		</Box>
 	);

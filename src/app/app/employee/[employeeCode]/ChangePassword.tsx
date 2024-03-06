@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { VisibilityOff, Visibility, Update } from "@mui/icons-material";
 import {
 	FormControl,
 	InputLabel,
@@ -13,15 +13,16 @@ import {
 	IconButton,
 	FormHelperText,
 	Button,
+	CircularProgress,
 } from "@mui/material";
 import React from "react";
 import { toast } from "sonner";
-import { Employee } from "@/libs/data";
-import { ApiResponse } from "@/types/types";
+import { ApiResponse, Employee } from "@/types/types";
 
 export default function ChangePasswordPage() {
 	const [employee, setEmployee] = React.useState<Employee>();
 	const [showPassword, setShowPassword] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
 	const { data: session } = useSession();
 	const schema = z
 		.object({
@@ -93,8 +94,8 @@ export default function ChangePasswordPage() {
 		<>
 			<form
 				onSubmit={handlePasswordSubmit(ChangePassword)}
-				className="text-xs mt-4">
-				<div className="my-3">
+				className="text-xs my-4">
+				<div className="mx-3">
 					<label className="font-semibold">Current password:</label>
 					<FormControl
 						fullWidth
@@ -130,7 +131,7 @@ export default function ChangePasswordPage() {
 					</FormControl>
 				</div>
 
-				<div className="my-3">
+				<div className="mx-3">
 					<label className="font-semibold">New password:</label>
 					<FormControl
 						fullWidth
@@ -166,7 +167,7 @@ export default function ChangePasswordPage() {
 					</FormControl>
 				</div>
 
-				<div className="my-3">
+				<div className="mx-3">
 					<label className="font-semibold">Confirm password:</label>
 					<FormControl
 						fullWidth
@@ -202,19 +203,20 @@ export default function ChangePasswordPage() {
 					</FormControl>
 				</div>
 
-				<div className="flex justify-around mb-2 mt-10">
+				<div className="flex justify-around mx-3 mt-10">
 					<Button
 						variant="contained"
 						color="success"
 						type="submit"
-						className="w-full mr-2">
+						className="w-full mr-2 mb-3"
+						startIcon={loading ? <CircularProgress size={24} /> : <Update />}>
 						Change
 					</Button>
 					<Button
 						variant="contained"
 						color="primary"
 						type="reset"
-						className="w-full">
+						className="w-full mb-3">
 						Cancel
 					</Button>
 				</div>

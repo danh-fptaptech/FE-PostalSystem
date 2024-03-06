@@ -8,7 +8,11 @@ export async function GET() {
 			cache: "no-cache",
 		});
 
-		const data = await res.json();
+		let data = null;
+		if (res.ok) {
+			data = await res.json();
+			//console.log(data);
+		}
 
 		if (res.ok) {
 			return NextResponse.json({
@@ -37,7 +41,7 @@ export async function GET() {
 // POST
 export async function POST(req: Request) {
 	const employee = await req.json();
-	employee.avatar = "asssa";
+	employee.avatar = "avatar.jpg";
 	try {
 		const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/Employee`, {
 			method: "POST",
@@ -46,6 +50,8 @@ export async function POST(req: Request) {
 			},
 			body: JSON.stringify(employee),
 		});
+
+		console.log(employee);
 
 		if (res.ok) {
 			return NextResponse.json({
