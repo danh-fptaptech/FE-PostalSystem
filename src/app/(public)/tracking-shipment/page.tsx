@@ -5,7 +5,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Grid, Typography, TextField, Button } from '@mui/material'
 import Image from 'next/image'
 import trackingSvg from '../../../../public/tracking-img.svg'
 import { toast } from 'sonner'
@@ -43,7 +43,16 @@ function Page() {
     8: 'Returned',
     9: 'Lost'
   }
+  const itemTypeMap = {
+    0: 'Document',
+    1: 'Package',
+    2: 'Money'
+  }
   const [trackingCode, setTrackingCode] = useState(data?.trackingCode || '')
+  // Handle modal open/close
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   let formattedCreatedDate = ''
   if (data?.createdAt) {
@@ -139,8 +148,7 @@ function Page() {
         <Stack>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
+            aria-label="breadcrumb">
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
@@ -192,7 +200,7 @@ function Page() {
                     Tracking code:
                   </Typography>
                   <Typography sx={{ py:2 }}>
-                    Order Detail:
+                    Package Detail:
                   </Typography>
                   <Typography sx={{ py:2 }}>
                     Sender name:
@@ -205,8 +213,8 @@ function Page() {
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.trackingCode}
                   </Typography>
-                  <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    Xem them
+                  <Typography onClick={handleOpen} sx={{ textDecoration:'underline', textAlign:'right', pr:2, fontWeight:'550', py:2, cursor: 'pointer' }}>
+                    More detail
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.nameFrom}
@@ -230,7 +238,7 @@ function Page() {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {data.packageSize? data.packageSize : '1'}
+                    {data.items.reduce((total, item) => total + item.itemWeight, 0)} gram
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.service?.serviceName}
@@ -269,6 +277,57 @@ function Page() {
         </Box>
         <HistoryLogs trackingData={trackingData} statusMapping={statusMapping} />
       </Box>
+
+      {/* Modal package detail */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%', // adjust as needed
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4
+          }}
+        >
+          <Typography variant="h6" id="modal-modal-title" sx={{ fontWeight: 550 }}>
+            Package Detail
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow >
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Name</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Quantity</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Weight(gram)</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Value</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Type</TableCell>
+                  {/* Add more columns as needed */}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.items.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemName}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemQuantity}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemWeight}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemValue.toLocaleString()} VND</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{itemTypeMap[item.itemType as keyof typeof itemTypeMap]}</TableCell>
+                    {/* Add more cells as needed */}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Modal>
     </>
   )
 }
