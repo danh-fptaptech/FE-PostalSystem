@@ -64,7 +64,9 @@ export default function DrawerMenu() {
 			"package.view",
 		]),
 
-		createMenu("User Management", GroupOutlined, "/app/admin/users", ["user"]),
+		createMenu("User Management", GroupOutlined, "/app/admin/users", [
+			"users.view",
+		]),
 
 		createMenu(
 			"Employee Management",
@@ -73,25 +75,25 @@ export default function DrawerMenu() {
 			["admin"],
 			[
 				createMenu("List Employees", GroupOutlined, "/app/admin/employees", [
-					"admin.employee",
+					"admin.view, admin.create, admin.update",
 				]),
 				createMenu(
 					"Updated Requests",
 					DriveFileRenameOutlineOutlined,
 					"/app/admin/requests",
-					["admin.request"]
+					["admin.update"]
 				),
 				createMenu(
 					"Role Management",
 					ManageAccountsOutlined,
 					"/app/admin/roles",
-					["admin.role"]
+					["admin.create, admin.update, admin.delete"]
 				),
 			]
 		),
 
 		createMenu("HistoryLogs", ViewListOutlined, "/app/historylogs", [
-			"historylogs.view",
+			"historylog.view",
 		]),
 	];
 
