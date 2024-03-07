@@ -1,3 +1,4 @@
+// @ts-ignore
 import { UserWithAll } from "@/types";
 import React from "react";
 import { useSession } from "next-auth/react";

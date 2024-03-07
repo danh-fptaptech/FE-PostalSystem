@@ -48,7 +48,7 @@ import {
 	fetchBranches,
 	fetchRolesWithPermission,
 	fetchChangeStatus,
-} from "@/app/_data/index";
+} from "@/app/_data/data";
 
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);

@@ -9,7 +9,8 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import { Box, Typography, Button } from "@mui/material";
 import { toast } from "sonner";
-import { getUserById, refreshToken, updateUserById } from "@/app/_data";
+// @ts-ignore
+import { getUserById, refreshToken, updateUserById } from "@/app/_data/method";
 
 const schema = z.object({
 	fullname: z

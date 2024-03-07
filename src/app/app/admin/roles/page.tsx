@@ -1,7 +1,7 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { fetchPermissions, fetchRolesWithPermission } from "@/app/_data/index";
+import { fetchPermissions, fetchRolesWithPermission } from "@/app/_data/data";
 import {
 	Avatar,
 	Button,

@@ -75,7 +75,7 @@ const UserLoginForm = () => {
 				}),
 				{
 					success(data) {
-						router.push("/app/user");
+						router.push("/app");
 						return "Logged in successfully";
 					},
 					loading: "Logging in...",

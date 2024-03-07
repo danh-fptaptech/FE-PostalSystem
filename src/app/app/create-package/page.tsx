@@ -1,6 +1,6 @@
 'use client'
 import {Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import BoxInputInfo from "@/components/BoxInputInfo";
 import {useForm} from "react-hook-form";
 import {PackageCreateContext} from "@/context/PackageCreateContext";
@@ -15,6 +15,9 @@ import {useSession} from "next-auth/react";
 import Image from "next/image";
 import useS3 from "@/hooks/useS3";
 import {useRouter} from "next/navigation";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 
 // @ts-ignore
 const CreatePackage = () => {
@@ -26,7 +29,6 @@ const CreatePackage = () => {
         control,
         resetField,
         trigger,
-        reset
     } = useForm({mode: "onBlur",});
 
     // Context
@@ -83,14 +85,14 @@ const CreatePackage = () => {
     const [fee, setFee] = useState(0);
     const [packageNote, setPackageNote] = useState("");
     const [timeProcess, setTimeProcess] = useState(0);
-    const [empProcess, setEmpProcess] = useState(true);
+    const [empProcess, setEmpProcess] = useState(false);
     const [historyNote, setHistoryNote] = useState("");
     const [nextEmployee, setNextEmployee] = useState(null);
     const [nowStep, setNowStep] = useState(0);
     const [listBranch, setListBranch] = useState([]);
     const [nextBranch, setNextBranch] = useState(null);
     const [listEmployee, setListEmployee] = useState([]);
-
+    const [onCreatePackage, setOnCreatePackage] = useState(false);
 
     const step = {
         1: "Create Package",
@@ -107,10 +109,10 @@ const CreatePackage = () => {
     const fetchListBranch = async () => {
         const response = await fetch("/api/branches");
         const data = await response.json();
-        if(data.status === 404) {
+        if (data.status === 404) {
             toast.error(data.message);
         }
-        if(data.error) {
+        if (data.error) {
             toast.error(data.error);
             router.push('/app')
         }
@@ -119,7 +121,7 @@ const CreatePackage = () => {
 
     const fetchEmployees = async () => {
         // @ts-ignore
-        const branchId = [0,3].includes(nowStep) ? nextBranch?.id : session?.user?.branchId;
+        const branchId = [0, 3].includes(nowStep) ? nextBranch?.id : session?.user?.branchId;
 
         const response = await fetch(`/api/branches/getbyid/${branchId}`, {
             method: "GET",
@@ -263,41 +265,32 @@ const CreatePackage = () => {
             province: formData.province_receiver,
             ward: formData.ward_receiver,
         } : formData.select_receiver;
-
-
-        const response = await fetch("/api/packages/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                sender: InfoSender,
-                receiver: InfoReceiver,
-                items: formData.list_items,
-                type: formData.type_package,
-                fee: fee,
-                cod: cod,
-                service: selectedService,
-                packageNote: packageNote,
-                packageSize: formData.package_size,
-                employeeProcess: await employeeProcess(),
-                submitBy: session?.user || {
-                    id: 1,
-                    fullName: 'Admin',
-                    employeeCode: 'EMP001',
-                    email: 'admin@localhost',
-                    phoneNumber: '0123456789',
-                    avatar: 'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Admin',
-                    role: {
-                        name: 'Admin',
-                        permissions: ['admin']
-                    }
-                },
-            })
-        });
-        const data = await response.json();
-        console.log("Data service:", data.data);
-        return data.data;
+        try {
+             const response = await fetch("/api/packages/add", {
+                 method: "POST",
+                 headers: {
+                     "Content-Type": "application/json",
+                 },
+                 body: JSON.stringify({
+                     sender: InfoSender,
+                     receiver: InfoReceiver,
+                     items: formData.list_items,
+                     type: formData.type_package,
+                     fee: fee,
+                     cod: cod,
+                     service: selectedService,
+                     packageNote: packageNote,
+                     packageSize: formData.package_size,
+                     employeeProcess: await employeeProcess(),
+                     submitBy: session?.user,
+                 })
+             });
+             const data = await response.json();
+             return data.data;
+        } catch (error) {
+            setOnCreatePackage(false);
+            toast.error("Error to create package");
+        }
     }
 
 
@@ -360,22 +353,26 @@ const CreatePackage = () => {
     useEffect(() => {
         if (session?.user?.employeeCode) {
             setEmpProcess(!!(session?.user?.employeeCode));
-        } else {
-            setEmpProcess(true);
         }
     }, [session]);
     useEffect(() => {
-        if([0,3].includes(nowStep)) {
+        if ([0, 3].includes(nowStep)) {
             fetchListBranch().then(r => setListBranch(r));
-        }else {
+        } else {
             fetchEmployees().then(r => setListEmployee(r));
         }
     }, [nowStep]);
     useEffect(() => {
-        if(nextBranch) {
+        if (nextBranch) {
             fetchEmployees().then(r => setListEmployee(r));
         }
     }, [nextBranch]);
+
+    useEffect(() => {
+        if (onCreatePackage) {
+            SubmitPackage()
+        }
+    }, [onCreatePackage]);
 
     // @ts-ignore
     return (
@@ -601,7 +598,11 @@ const CreatePackage = () => {
                                                 margin="dense"
                                                 label="Employee"
                                                 type="text"
-                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                InputProps={{
+                                                    startAdornment: <PersonOutlineIcon
+                                                        fontSize={"small"}></PersonOutlineIcon>,
+                                                }}
+                                                value={session?.user?.employeeCode}
                                                 disabled
                                                 size={"small"}
                                                 autoComplete={"off"}
@@ -823,7 +824,10 @@ const CreatePackage = () => {
                                     startIcon={<TextSnippetIcon/>}
                                     variant="contained"
                                     color={"success"}
-                                    onClick={SubmitPackage}
+                                    onClick={()=>{
+                                        setOnCreatePackage(true)
+                                    }}
+                                    disabled={onCreatePackage}
                                 >
                                     Submit Package
                                 </Button>
@@ -846,6 +850,12 @@ const CreatePackage = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <Backdrop
+                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                open={onCreatePackage}
+            >
+                <CircularProgress color="inherit"/>
+            </Backdrop>
         </PackageCreateContext.Provider>
     )
 }

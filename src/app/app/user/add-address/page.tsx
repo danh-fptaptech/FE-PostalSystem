@@ -24,7 +24,7 @@ import {
 	getChildrenLocationsByParentId,
 	addAddressByUserId,
 	refreshToken,
-} from "@/app/_data/index";
+} from "@/app/_data/method";
 import { Province } from "@/types/types";
 
 const schema = z.object({

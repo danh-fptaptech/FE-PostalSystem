@@ -27,6 +27,7 @@ export const authOptions: NextAuthOptions = {
 				}
 				try {
 					const res = await fetch(url, {
+						cache: "no-cache",
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",

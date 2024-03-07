@@ -141,7 +141,7 @@ const AppLayout = (props: { children: React.ReactNode; window?: Window }) => {
 					minHeight: "100vh",
 				}}>
 				<Toolbar />
-				<Container>{props.children}</Container>
+				<Container maxWidth={"xl"}>{props.children}</Container>
 			</Box>
 		</Box>
 	);

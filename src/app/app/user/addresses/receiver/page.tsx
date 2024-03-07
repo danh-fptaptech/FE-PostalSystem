@@ -4,7 +4,7 @@ import React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
 import { Address } from "@/types/types";
-import { getReceiverAddressesByUserId, refreshToken } from "@/app/_data";
+import { getReceiverAddressesByUserId, refreshToken } from "@/app/_data/method";
 
 const columns: GridColDef[] = [
 	{ field: "name", headerName: "Name", minWidth: 150 },

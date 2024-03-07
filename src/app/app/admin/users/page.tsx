@@ -44,7 +44,7 @@ import {
 	fetchUsers,
 	fetchRolesWithPermission,
 	fetchChangeStatus,
-} from "@/app/_data/index";
+} from "@/app/_data/data";
 import { useSession } from "next-auth/react";
 
 export default function UserManagement() {

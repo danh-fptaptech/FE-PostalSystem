@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchUpdatedRequests } from "@/app/_data/index";
+import { fetchUpdatedRequests } from "@/app/_data/data";
 import {
 	Box,
 	Button,

@@ -5,51 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/(auth)/admin-login/AdminLoginForm.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/(auth)/admin-login/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/(auth)/employee-login/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/_data/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/api/employees/[employeeCode]/changeStatus/route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/api/locations/getchildlocation/[id]/route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/api/user/route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/app/historylogs/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/app/user/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/access-denied/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/EmployeeLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/employee-login/EmployeeLoginForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/login/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(public)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(public)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/employees/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/employees/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/locations/getlistprovince/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/locations/getlistprovince/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/roles/[roleId]/permission/[permissionName]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/[roleId]/permission/[permissionName]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/roles/[roleId]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/[roleId]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/roles/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/roles/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/EmployeeManagement.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/RoleManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/UpdatedRequestManagement.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@admin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/ChangePassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/ChangePassword.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/EmployeeInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/[employeeCode]/HistoryLogs.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@employees/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/@user/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/dashboard/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_data/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_data/method.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_data/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_data/data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/packages/add/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/packages/zxczxc/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/EmployeeLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/EmployeeLoginForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AvatarMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AvatarMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/add-address/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/add-address/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/addresses/receiver/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/addresses/receiver/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/addresses/sender/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/addresses/sender/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Loading.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MenuGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MenuGroup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/RemoveDialog.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/libs/data.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NewsHomepage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NewsHomepage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contexts/UserContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/UserContext.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/next-auth.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/next-auth.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,14 +56,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/app/api/users/refresh-token/route.ts" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/app/app/branches/page.tsx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/app/app/create-package/page.tsx" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -98,8 +85,8 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging Merge-6.3",
-    "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/api/packages/create",
+    "git-widget-placeholder": "Merge-6.3",
+    "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/access-denied",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -124,11 +111,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\eProject\tars-delivery-fe\src\app\access-denied" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\packages\create" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\aws-s3" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlocationsbyid" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlistprovince" />
-      <recent name="G:\eProject\tars-delivery-fe\src\app\api\user\address\getlistsender" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="G:\eProject\tars-delivery-fe\src\hooks" />

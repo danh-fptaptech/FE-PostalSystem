@@ -6,7 +6,7 @@ import {
 	fetchLocations,
 	getChildrenLocationsByParentId,
 	getProvinces,
-} from "@/app/_data/index";
+} from "@/app/_data/data";
 import React from "react";
 import {
 	ApiResponse,
