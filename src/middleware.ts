@@ -80,58 +80,50 @@ export const config = {
 
 const paths = [
 	{
+		path: "/app",
+		permission: ["user.access", "user.all", "home.access", "app.view"],
+	},
+	{
 		path: "/register",
 		permission: ["user.access", "user.all", "home.access"],
 	},
 
 	{
-		path: "/app/admin/users",
-		permission: ["Admin"],
-	},
-	{
-		path: "/app/admin/employees",
-		permission: ["Admin", "Branch Manager"],
-	},
-	{
-		path: "/app/admin/roles",
-		permission: ["Admin"],
-	},
-	{
-		path: "/app/admin/requests",
-		permission: ["Admin"],
-	},
-
-	{
-		path: "/app/admin/users",
-		permission: ["Admin"],
-	},
-
-	{
 		path: "/app/packages",
-		permission: ["user.access", "Employee", "Branch Manager", "Admin"],
+		permission: ["user.access", "app.view"],
 	},
-
 	{
 		path: "/app/employee",
-		permission: ["user.access", "Employee", "Branch Manager"],
+		permission: ["user.access"],
 	},
 	{
 		path: "/app/historylogs",
-		permission: [
-			"user.access",
-			"Employee",
-			"Branch Manager",
-			"Delivery",
-			"Warehouse",
-		],
-	},
-	{
-		path: "/app/user",
-		permission: ["user.access", "User"],
+		permission: ["user.access"],
 	},
 
+	//admin
 	{
 		path: "/app/branches",
-		permission: ["user.access", "Admin"],
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/admin/users",
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/admin/employees",
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/admin/roles",
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/admin/requests",
+		permission: ["app.view"],
+	},
+	{
+		path: "/app/services",
+		permission: ["user.access", "user.all", "home.access"],
 	},
 ];

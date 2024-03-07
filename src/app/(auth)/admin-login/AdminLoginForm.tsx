@@ -73,7 +73,7 @@ const AdminLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				router.push("/app/admin/employees");
+				router.push("/app/admin/users");
 			} else {
 				setError("Invalid email or password");
 			}

@@ -49,33 +49,26 @@ export default function DrawerMenu() {
 
 	const menu = [
 		createMenu("Dashboard", AppsOutlined, "/app", "app.view"),
+
 		createMenu(
 			"Create Package",
 			NoteAddOutlined,
 			"/app/create-package",
 			"package.create"
 		),
-		createMenu("Packages", Inventory2Outlined, "/app/packages", "package.view"),
-
 		createMenu(
-			"HistoryLogs",
-			WorkHistoryOutlined,
-			"/app/historylogs",
-			"historylogs.view"
+			"Packages",
+			Inventory2Outlined,
+			"/app/packages",
+			"packages.view"
 		),
 
-		createMenu(
-			"User Management",
-			GroupOutlined,
-			"/app/admin/users",
-			"users.view"
-		),
-		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branches.view", [
+		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch.view", [
 			createMenu(
 				"List Branches",
 				DomainOutlined,
 				"/app/branches",
-				"branches.view"
+				"branch.view"
 			),
 			createMenu(
 				"Create Branch",
@@ -86,32 +79,36 @@ export default function DrawerMenu() {
 		]),
 
 		createMenu(
-			"Employee Management",
-			BadgeOutlined,
-			"/app/admin",
-			"employees.view",
-			[
-				createMenu(
-					"List Employees",
-					GroupOutlined,
-					"/app/admin/employees",
-					"employees.view"
-				),
-				createMenu(
-					"Updated Requests",
-					DriveFileRenameOutlineOutlined,
-					"/app/admin/requests",
-					"requests.view"
-				),
-				createMenu(
-					"Role Management",
-					ManageAccountsOutlined,
-					"/app/admin/roles",
-					"roles.view"
-				),
-			]
+			"User Management",
+			GroupOutlined,
+			"/app/admin/users",
+			"user.view"
 		),
-		createMenu("Profile", AccountBoxOutlined, "/app/user", "user.view"),
+
+		createMenu("Employee Management", BadgeOutlined, "/app/admin", "emp.view", [
+			createMenu(
+				"List Employees",
+				GroupOutlined,
+				"/app/admin/employees",
+				"emp.view"
+			),
+			createMenu(
+				"Updated Requests",
+				DriveFileRenameOutlineOutlined,
+				"/app/admin/requests",
+				"emp.view"
+			),
+			createMenu(
+				"Role Management",
+				ManageAccountsOutlined,
+				"/app/admin/roles",
+				"roles.view"
+			),
+		]),
+
+		createMenu("Profile", AccountBoxOutlined, "/app/employee", "profile.view"),
+
+		createMenu("Profile", AccountBoxOutlined, "/app/user", "profile.view"),
 
 		createMenu(
 			"Change Password",
@@ -119,18 +116,21 @@ export default function DrawerMenu() {
 			"/app/user/change-password",
 			"password.change"
 		),
-		createMenu(
-			"Packages",
-			Inventory2Outlined,
-			"/app/user/packages",
-			"packages.view"
-		),
+
+		// createMenu(
+		// 	"Packages",
+		// 	Inventory2Outlined,
+		// 	"/app/user/packages",
+		// 	"package.view"
+		// ),
+
 		createMenu(
 			"Create Package",
 			NoteAddOutlined,
 			"/app/user/create-package",
 			"package.create"
 		),
+
 		createMenu(
 			"Addresses",
 			BusinessOutlined,

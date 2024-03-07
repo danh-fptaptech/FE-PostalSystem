@@ -51,6 +51,7 @@ import {
 	fetchRolesWithPermission,
 	fetchChangeStatus,
 } from "@/app/_data/data";
+import PermissionCheck from "@/components/PermissionCheck";
 
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);
@@ -406,14 +407,16 @@ export default function EmployeeManagement() {
 				) : (
 					<>
 						<Box className="mb-3 flex justify-between items-center">
-							<Button
-								color="secondary"
-								variant="contained"
-								className="rounded-md"
-								size="small"
-								onClick={() => setOpenAddForm(true)}>
-								+ Add
-							</Button>
+							<PermissionCheck permission="emp.create">
+								<Button
+									color="secondary"
+									variant="contained"
+									className="rounded-md"
+									size="small"
+									onClick={() => setOpenAddForm(true)}>
+									+ Add
+								</Button>
+							</PermissionCheck>
 							{/* Handle Search */}
 							<form
 								onSubmit={handleSearch}
@@ -535,19 +538,21 @@ export default function EmployeeManagement() {
 													/>
 												</TableCell>
 												<TableCell align="center">
-													<Tooltip title="Edit">
-														<Button
-															type="button"
-															endIcon={
-																<DriveFileRenameOutline fontSize="medium" />
-															}
-															variant="text"
-															color="success"
-															onClick={() => {
-																setEmployee(employee);
-																setOpenUpdateForm(true);
-															}}></Button>
-													</Tooltip>
+													<PermissionCheck permission="emp.update">
+														<Tooltip title="Edit">
+															<Button
+																type="button"
+																endIcon={
+																	<DriveFileRenameOutline fontSize="medium" />
+																}
+																variant="text"
+																color="success"
+																onClick={() => {
+																	setEmployee(employee);
+																	setOpenUpdateForm(true);
+																}}></Button>
+														</Tooltip>
+													</PermissionCheck>
 												</TableCell>
 											</TableRow>
 										))}
