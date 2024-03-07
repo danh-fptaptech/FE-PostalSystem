@@ -43,12 +43,13 @@ function Page() {
     8: 'Returned',
     9: 'Lost'
   }
-  const itemTypeMap = {
+  const packageTypeMap = {
     0: 'Document',
     1: 'Package',
     2: 'Money'
   }
   const [trackingCode, setTrackingCode] = useState(data?.trackingCode || '')
+  const [phoneFrom, setPhoneFrom] = useState(data?.phoneFrom || '')
   // Handle modal open/close
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -76,15 +77,18 @@ function Page() {
   const handleTrackingCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrackingCode(event.target.value)
   }
+  const handlePhoneFromChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneFrom(event.target.value)
+  }
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}`)
+      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}/${phoneFrom}`)
       if (response.status === 200) {
         const data = await response.json()
         // Update the state with the fetched data
         setData(data)
-        // Store the data in the local storage
+        // Store the data in the local storage/
         const now = new Date()
         const item = {
           value: data,
@@ -125,7 +129,8 @@ function Page() {
   // 4. Use the useEffect hook to update the tracking code state
   useEffect(() => {
     setTrackingCode(data?.trackingCode || '')
-  }, [data?.trackingCode])
+    setPhoneFrom(data?.phoneFrom || '')
+  }, [data?.trackingCode, data?.phoneFrom])
 
   // TrackingBoard code section
   const [trackingData, setTrackingData] = useState<TrackingData | null>(null)
@@ -164,7 +169,7 @@ function Page() {
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
               <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }} type="text" placeholder='Example: 123456' value={trackingCode} onChange={handleTrackingCodeChange}/>
-              {/* <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Enter phone number'/> */}
+              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Enter phone number' value={phoneFrom} onChange={handlePhoneFromChange}/>
               <Button sx={{
                 my:2,
                 color:'white',
@@ -235,16 +240,22 @@ function Page() {
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
                     Status:
                   </Typography>
+                  <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
+                    Package type:
+                  </Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data.items.reduce((total, item) => total + item.itemWeight, 0)} gram
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {data?.service?.serviceName}
+                    {data?.service?.serviceType?.serviceName}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {stepMapping[data?.step] || 'Lỗi rôi  !!'}
+                  </Typography>
+                  <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
+                    {packageTypeMap[data?.packageType as keyof typeof packageTypeMap]}
                   </Typography>
                 </Grid>
               </Grid>
@@ -308,7 +319,7 @@ function Page() {
                   <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Quantity</TableCell>
                   <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Weight(gram)</TableCell>
                   <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Value</TableCell>
-                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Type</TableCell>
+                  {/* <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Type</TableCell> */}
                   {/* Add more columns as needed */}
                 </TableRow>
               </TableHead>
@@ -319,7 +330,7 @@ function Page() {
                     <TableCell style={{ fontSize:'14px' }} align="right">{item.itemQuantity}</TableCell>
                     <TableCell style={{ fontSize:'14px' }} align="right">{item.itemWeight}</TableCell>
                     <TableCell style={{ fontSize:'14px' }} align="right">{item.itemValue.toLocaleString()} VND</TableCell>
-                    <TableCell style={{ fontSize:'14px' }} align="right">{itemTypeMap[item.itemType as keyof typeof itemTypeMap]}</TableCell>
+                    {/* <TableCell style={{ fontSize:'14px' }} align="right">{itemTypeMap[item.itemType as keyof typeof itemTypeMap]}</TableCell> */}
                     {/* Add more cells as needed */}
                   </TableRow>
                 ))}

@@ -12,7 +12,9 @@ import Drawer from '@mui/material/Drawer'
 import MenuIcon from '@mui/icons-material/Menu'
 import ToggleColorMode from './ToggleColorMode'
 import Link from 'next/link'
-
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { PersonAddAlt, Login } from '@mui/icons-material'
+import LinkBehaviour from '@/components/LinkBehaviour'
 
 interface AppAppBarProps {
   mode: PaletteMode
@@ -20,6 +22,7 @@ interface AppAppBarProps {
 }
 
 function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
+  const { data: session, status } = useSession()
   const [open, setOpen] = React.useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -43,7 +46,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   return (
     <div>
       <AppBar
-        position="fixed"
+        position='fixed'
         sx={{
           boxShadow: 0,
           backgroundColor: 'transparent',
@@ -51,9 +54,9 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
           mt: 2
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth='xl'>
           <Toolbar
-            variant="regular"
+            variant='regular'
             sx={(theme) => ({
               display: 'flex',
               alignItems: 'center',
@@ -91,7 +94,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant='body2' color='text.primary'>
                     Features
                   </Typography>
                 </MenuItem>
@@ -99,7 +102,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   onClick={() => scrollToSection('testimonials')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant='body2' color='text.primary'>
                     Testimonials
                   </Typography>
                 </MenuItem>
@@ -107,7 +110,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   onClick={() => scrollToSection('highlights')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant='body2' color='text.primary'>
                     Highlights
                   </Typography>
                 </MenuItem>
@@ -115,7 +118,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   onClick={() => scrollToSection('pricing')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant='body2' color='text.primary'>
                     Pricing
                   </Typography>
                 </MenuItem>
@@ -123,7 +126,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   onClick={() => scrollToSection('faq')}
                   sx={{ py: '6px', px: '12px' }}
                 >
-                  <Typography variant="body2" color="text.primary">
+                  <Typography variant='body2' color='text.primary'>
                     FAQ
                   </Typography>
                 </MenuItem>
@@ -136,26 +139,68 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 alignItems: 'center'
               }}
             >
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                 
-              >
-                <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
-              </Button>
+              <div>
+                {session ? (
+                  <Button
+                    startIcon={<Login fontSize='small' />}
+                    variant='text'
+                    color='primary'
+                    className='mr-2 hover:shadow-lg'
+                    onClick={() => signOut()}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Link
+                    component={LinkBehaviour}
+                    color="primary"
+                    className="uppercase text-decoration-none"
+                    href="/login"
+                  >
+                    <Button
+                      startIcon={<Login fontSize="small" />}
+                      variant="text"
+                      color="primary"
+                      className="mr-2 hover:shadow-lg"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              <div>
+                <Button
+                  startIcon={<PersonAddAlt fontSize='small' />}
+                  variant='text'
+                  color='primary'
+                  className='uppercase mr-2 hover:shadow-lg'
+                  href='/register'
+                >
+                  Register
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant='text'
+                  href='/app'
+                  color='primary'
+                >
+                  To App
+                </Button>
+              </div>
+              {/* <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link> */}
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button
-                variant="text"
-                color="primary"
-                aria-label="menu"
+                variant='text'
+                color='primary'
+                aria-label='menu'
                 onClick={toggleDrawer(true)}
                 sx={{ minWidth: '30px', p: '4px' }}
               >
                 <MenuIcon />
               </Button>
-              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
                 <Box
                   sx={{
                     minWidth: '60dvw',
@@ -172,7 +217,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                       flexGrow: 1
                     }}
                   >
-                    <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+                    {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
                   </Box>
                   {/* <MenuItem onClick={() => scrollToSection('features')}>
                     Features
@@ -190,11 +235,29 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   <Divider />
                   <MenuItem>
                     <Button
-                      color="primary"
-                      variant="contained"
+                      color='primary'
+                      variant='contained'
                       sx={{ width: '100%' }}
                     >
                       <Link href={'/app'} style={{ textDecoration:'none', color:'white' }}>To App</Link>
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      sx={{ width: '100%' }}
+                    >
+                      <Link href={'/login'} style={{ textDecoration:'none', color:'white' }}>Login</Link>
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      sx={{ width: '100%' }}
+                    >
+                      <Link href={'/register'} style={{ textDecoration:'none', color:'white' }}>Register</Link>
                     </Button>
                   </MenuItem>
                 </Box>

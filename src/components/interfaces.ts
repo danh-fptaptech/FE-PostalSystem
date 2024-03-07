@@ -67,13 +67,22 @@ export interface Item {
 
 export interface Service {
   id: number;
-  serviceName: string;
+  serviceType: ServiceType;
+  serviceTypeId: number;
+  status: number;
+  weightFrom: number;
+  weightTo: number;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServiceType {
+  id: number;
+  serviceName: string;
   serviceDescription: string;
   status: number;
+  createdAt: string;
   updatedAt: string;
-  weighFrom: number;
-  weighTo: number;
 }
 
 export interface Data {
@@ -88,9 +97,12 @@ export interface Data {
   nameTo: string;
   packageNote: string;
   packageSize: string | null;
+  packageType: number;
   postalCodeFrom: string;
+  phoneFrom: string;
   postalCodeTo: string;
   service: Service;
+
   serviceId: number;
   status: number;
   step: number;

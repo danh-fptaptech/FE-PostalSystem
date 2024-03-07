@@ -7,7 +7,6 @@ import { BlogItem } from './interfaces'
 import moment from 'moment'
 import Link from 'next/link'
 import './NewsHomepage.css'
-import moment from "moment";
 
 interface TabPanelProps {
     children?: React.ReactNode

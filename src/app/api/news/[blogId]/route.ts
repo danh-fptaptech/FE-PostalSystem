@@ -2,7 +2,7 @@ import { BlogItem } from '@/components/interfaces'
 import { NextResponse } from 'next/server'
 export async function GET(req: Request, { params }: { params: { blogId: string } }) {
   const { blogId } = params
-  const url = `${process.env.NEXT_PUBLIC_API_URL}api/Blog/getbyid/${blogId}`
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Blog/getbyid/${blogId}`
   try {
     const res = await fetch(url, { cache: 'no-store' })
     const data:BlogItem[] = await res.json()
