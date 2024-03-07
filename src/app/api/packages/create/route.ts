@@ -11,10 +11,10 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify(data),
         });
-        const res = await response.text();
-        return NextResponse.json({data: res});
+        console.log("Response:",response)
+        return NextResponse.json({data: response, ok:true, message: "Package created successfully"});
     } catch (error) {
         console.log("Error:",error)
-        return NextResponse.json({error: "api backend error"});
+        return NextResponse.json({status:false, message: "Package creation failed"});
     }
 }

@@ -15,24 +15,32 @@ import Box from "@mui/material/Box";
 import FormInfo from "@/components/FormInfo";
 import {PackageCreateContext} from "@/context/PackageCreateContext";
 import splitAddressAndWard from "@/helper/splitAddressAndWard";
+import {useSession} from "next-auth/react";
 
 const BoxInputInfo = (props: any) => {
+    const {data: session} = useSession();
     const {typeBox, xs} = props;
     // @ts-ignore
     const {register, errors, handleFormChange} = useContext(PackageCreateContext);
     const [listAddress, setListAddress] = React.useState([]);
     const [chooseAddress, setChooseAddress] = React.useState('true');
     const fetchAddress = async () => {
-        const res = await fetch(`/api/user/address/getlist${typeBox}`);
-        const data = await res.json();
-        console.log("Get list address")
-        return data.data;
+        // @ts-ignore
+        if (!session?.user?.role.name === "User") {
+            const res = await fetch(`/api/user/address/getlist${typeBox}`);
+            const data = await res.json();
+            console.log("Get list address")
+            return data.data;
+        }
+        return [];
     }
 
 
     React.useEffect(() => {
-        fetchAddress().then(r => setListAddress(r));
-    }, []);
+        if (session?.user) {
+            fetchAddress().then(r => setListAddress(r));
+        }
+    }, [session?.user]);
 
     // @ts-ignore
     return (
@@ -54,7 +62,8 @@ const BoxInputInfo = (props: any) => {
                 </Typography>
             </Box>
             <CardContent>
-                {listAddress.length !== 0 ?
+                {listAddress.length == 0 ?
+                    <FormInfo type={typeBox}/> :
                     <>
                         <RadioGroup
                             sx={{m: 2}}
@@ -113,7 +122,13 @@ const BoxInputInfo = (props: any) => {
                                         // @ts-ignore
                                         const {address, ward} = splitAddressAndWard(value.address);
                                         // @ts-ignore
-                                        handleFormChange({target: {name: `select_${typeBox}`, value: {...value, address: address, ward: ward}}});
+                                        handleFormChange({
+                                            target: {
+                                                name: `select_${typeBox}`,
+                                                // @ts-ignore
+                                                value: {...value, address: address, ward: ward}
+                                            }
+                                        });
                                     }}
                                     renderInput={(params) => (
                                         <TextField
@@ -132,8 +147,7 @@ const BoxInputInfo = (props: any) => {
                             </>
                         }
                     </>
-                    :
-                    <FormInfo type={typeBox}/>}
+                }
             </CardContent>
         </Card>
     );

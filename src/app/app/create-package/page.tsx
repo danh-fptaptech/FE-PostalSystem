@@ -266,27 +266,31 @@ const CreatePackage = () => {
             ward: formData.ward_receiver,
         } : formData.select_receiver;
         try {
-             const response = await fetch("/api/packages/add", {
-                 method: "POST",
-                 headers: {
-                     "Content-Type": "application/json",
-                 },
-                 body: JSON.stringify({
-                     sender: InfoSender,
-                     receiver: InfoReceiver,
-                     items: formData.list_items,
-                     type: formData.type_package,
-                     fee: fee,
-                     cod: cod,
-                     service: selectedService,
-                     packageNote: packageNote,
-                     packageSize: formData.package_size,
-                     employeeProcess: await employeeProcess(),
-                     submitBy: session?.user,
-                 })
-             });
-             const data = await response.json();
-             return data.data;
+            const response = await fetch("/api/packages/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sender: InfoSender,
+                    receiver: InfoReceiver,
+                    items: formData.list_items,
+                    type: formData.type_package,
+                    fee: fee,
+                    cod: cod,
+                    service: selectedService,
+                    packageNote: packageNote,
+                    packageSize: formData.package_size,
+                    employeeProcess: await employeeProcess(),
+                    submitBy: session?.user,
+                })
+            });
+            const res = await response.json();
+            if (res.status) {
+                setOnCreatePackage(false);
+                toast.success(res.message);
+                router.push(`/app/print-label/${res.data.trackingCode}`);
+            }
         } catch (error) {
             setOnCreatePackage(false);
             toast.error("Error to create package");
@@ -356,7 +360,7 @@ const CreatePackage = () => {
         }
     }, [session]);
     useEffect(() => {
-        if ([0, 3].includes(nowStep)) {
+        if ([0, 3].includes(nowStep) && session?.user?.employeeCode) {
             fetchListBranch().then(r => setListBranch(r));
         } else {
             fetchEmployees().then(r => setListEmployee(r));
@@ -824,7 +828,7 @@ const CreatePackage = () => {
                                     startIcon={<TextSnippetIcon/>}
                                     variant="contained"
                                     color={"success"}
-                                    onClick={()=>{
+                                    onClick={() => {
                                         setOnCreatePackage(true)
                                     }}
                                     disabled={onCreatePackage}

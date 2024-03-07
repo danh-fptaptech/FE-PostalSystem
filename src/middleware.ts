@@ -34,9 +34,6 @@ export default withAuth(
 
             if (!hasPermission) {
                 return NextResponse.redirect(new URL("/access-denied", req.url));
-            }else {
-
-                console.log(hasPermission);
             }
 
             return NextResponse.next();
