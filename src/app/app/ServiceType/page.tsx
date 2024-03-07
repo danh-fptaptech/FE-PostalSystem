@@ -194,7 +194,7 @@ export default function Page({
                         <TableContainer>
                             <Table>
                                 <TableHead>
-                                    <TableRow sx={{ bgcolor: 'primary.main' }}>
+                                    <TableRow >
                                         <TableCell>ID</TableCell>
                                         <TableCell>Service Name</TableCell>
                                         <TableCell>Service Description</TableCell>

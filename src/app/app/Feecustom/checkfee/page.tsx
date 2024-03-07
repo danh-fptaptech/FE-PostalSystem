@@ -177,136 +177,136 @@ const CheckFee: React.FC = () => {
     return (
         <div style={{ marginLeft: '50px', marginRight: '50px' }}>
             <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px" }}>
-            <Typography className="mt-5 mb-5" variant="h4">Fare Estimate</Typography>
-            <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
-                <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}></Divider>
-            </Grid>
-            <div className="border-2 border-slate-200 rounded-lg">
-                <form className=" p-5 pr-0" onSubmit={handleSubmit}>
-                    <Grid item container rowSpacing={2} columnSpacing={{ xs: 1, sm: 20, md: 3 }}>
-                        <Grid item xs={12}>
-                            <InputLabel className='mt-4 mb-4'>
-                                <span><ViewInArIcon /></span>PACKAGE INFORMATION
-                            </InputLabel>
-                            {errors && errors.length > 0 && (
-                                <Alert severity="error">
-                                    <AlertTitle>Error</AlertTitle>
-                                    {errors.map((err, index) => (
-                                        <div key={index}> {err} </div>
-                                    ))}
-                                </Alert>
-                            )}
-                            <InputLabel sx={{ marginBottom: '10px', marginTop: '10px' }}>
-                                Package Weight
-                            </InputLabel>
-                            <TextField
-                                label="Trọng lượng (kg)"
-                                type="number"
-                                value={weight}
-                                onChange={(e) => setWeight(e.target.value)}
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item className="pr-2" xs={6}>
-                            <InputLabel className='mt-4 mb-4'>
-                                <span><PersonOutlineIcon /></span>SENDER
-                            </InputLabel>
-                            <Select
-                                label="Province (sender)"
-                                value={senderProvince !== 0 ? senderProvince.toString() : "99"}
-                                onChange={handleOnchange}
-                                name="senderProvince"
-                                fullWidth
-                            >
-                                <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
-                                    return (
-                                        <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </Grid>
-                        <Grid item className="pl-2" xs={6}>
-                            <InputLabel className='mt-4 mb-4'>
-                                <span><PersonOutlineIcon /></span>RECEIVER
-                            </InputLabel>
-                            <Select
-                                label="Province (receiver)"
-                                value={receiverProvince !== 0 ? receiverProvince.toString() : "99"}
-                                onChange={handleOnchange}
-                                name="receiverProvince"
-                                fullWidth
-                            >
-                                <MenuItem value="99">Select Province</MenuItem>
-                                {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
-                                    return (
-                                        <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </Grid>
-                        <Grid item className="pr-2" xs={6}>
-                            <InputLabel className='mt-4 mb-4'>
-                                Districts
-                            </InputLabel>
-                            <Autocomplete
-                                style={{ width: '100%', marginTop: '10px' }}
-                                disablePortal
-                                id="listDistrictsSender"
-                                options={listDistrictsSender || []}
-                                getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
-                                getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
-                                sx={{ width: 300 }}
-                                value={senderDistrictSelected}
-                                onChange={(event, value) => {
-                                    setSenderDistrictSelected(value);
-                                    handleAutocompleteOnchange(event, value, "listDistrictsSender")
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Districts" />}
-                            />
-                        </Grid>
-                        <Grid item className="pl-2" xs={6}>
-                            <InputLabel className='mt-4 mb-4'>
-                                Districts
-                            </InputLabel>
-                            <Autocomplete
-                                style={{ width: '100%', marginTop: '10px' }}
-                                disablePortal
-                                id="listDistrictsReceiver"
-                                options={listDistrictsReceiver || []}
-                                getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
-                                getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
-                                sx={{ width: 300 }}
-                                value={receiverDistrictSelected}
-                                onChange={(event, value) => {
-                                    setReceiverDistrictSelected(value);
-                                    handleAutocompleteOnchange(event, value, "listDistrictsReceiver")
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Districts" />}
-                            />
-                        </Grid>
-                        <Button type="submit" style={{ marginLeft: '24px', marginTop: '12px' }} variant="outlined" startIcon={<SearchIcon />}>
-                            Tra Cứu
-                        </Button>
-
-                    </Grid>
-                </form>
-            </div>
-            </Paper>
-            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px", marginTop: '15px'}}>
-            <div className="m-5 border-2 rounded-lg">
+                <Typography className="mt-5 mb-5" variant="h4">Fare Estimate</Typography>
                 <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
-                    <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
+                    <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}></Divider>
                 </Grid>
-                <Grid className="mt-5 mb-5 p-5">
-                    {listFee && listFee.length === 0 && (
-                        <Alert variant="outlined" severity="warning" sx={{ display: 'flex', justifyContent: 'center' }}>
-                            Not Found!!!
-                        </Alert>
-                    )}
-                    {listFee && listFee.length > 0 && renderListFee(listFee)}
-                </Grid>
-            </div>
+                <div className="border-2 border-slate-200 rounded-lg">
+                    <form className=" p-5 pr-0" onSubmit={handleSubmit}>
+                        <Grid item container rowSpacing={2} columnSpacing={{ xs: 1, sm: 20, md: 3 }}>
+                            <Grid item xs={12}>
+                                <InputLabel className='mt-4 mb-4'>
+                                    <span><ViewInArIcon /></span>PACKAGE INFORMATION
+                                </InputLabel>
+                                {errors && errors.length > 0 && (
+                                    <Alert severity="error">
+                                        <AlertTitle>Error</AlertTitle>
+                                        {errors.map((err, index) => (
+                                            <div key={index}> {err} </div>
+                                        ))}
+                                    </Alert>
+                                )}
+                                <InputLabel sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                                    Package Weight
+                                </InputLabel>
+                                <TextField
+                                    label="Weight (kg)"
+                                    type="number"
+                                    value={weight}
+                                    onChange={(e) => setWeight(e.target.value)}
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item className="pr-2" xs={6}>
+                                <InputLabel className='mt-4 mb-4'>
+                                    <span><PersonOutlineIcon /></span>SENDER
+                                </InputLabel>
+                                <Select
+                                    label="Province (sender)"
+                                    value={senderProvince !== 0 ? senderProvince.toString() : "99"}
+                                    onChange={handleOnchange}
+                                    name="senderProvince"
+                                    fullWidth
+                                >
+                                    <MenuItem value="99">Select Province</MenuItem>
+                                    {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                        return (
+                                            <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </Grid>
+                            <Grid item className="pl-2" xs={6}>
+                                <InputLabel className='mt-4 mb-4'>
+                                    <span><PersonOutlineIcon /></span>RECEIVER
+                                </InputLabel>
+                                <Select
+                                    label="Province (receiver)"
+                                    value={receiverProvince !== 0 ? receiverProvince.toString() : "99"}
+                                    onChange={handleOnchange}
+                                    name="receiverProvince"
+                                    fullWidth
+                                >
+                                    <MenuItem value="99">Select Province</MenuItem>
+                                    {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
+                                        return (
+                                            <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </Grid>
+                            <Grid item className="pr-2" xs={6}>
+                                <InputLabel className='mt-4 mb-4'>
+                                    Districts
+                                </InputLabel>
+                                <Autocomplete
+                                    style={{ width: '100%', marginTop: '10px' }}
+                                    disablePortal
+                                    id="listDistrictsSender"
+                                    options={listDistrictsSender || []}
+                                    getOptionLabel={(listDistrictsSender) => listDistrictsSender.locationName}
+                                    getOptionKey={(listDistrictsSender) => listDistrictsSender.id}
+                                    sx={{ width: 300 }}
+                                    value={senderDistrictSelected}
+                                    onChange={(event, value) => {
+                                        setSenderDistrictSelected(value);
+                                        handleAutocompleteOnchange(event, value, "listDistrictsSender")
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Districts" />}
+                                />
+                            </Grid>
+                            <Grid item className="pl-2" xs={6}>
+                                <InputLabel className='mt-4 mb-4'>
+                                    Districts
+                                </InputLabel>
+                                <Autocomplete
+                                    style={{ width: '100%', marginTop: '10px' }}
+                                    disablePortal
+                                    id="listDistrictsReceiver"
+                                    options={listDistrictsReceiver || []}
+                                    getOptionLabel={(listDistrictsReceiver) => listDistrictsReceiver.locationName}
+                                    getOptionKey={(listDistrictsReceiver) => listDistrictsReceiver.id}
+                                    sx={{ width: 300 }}
+                                    value={receiverDistrictSelected}
+                                    onChange={(event, value) => {
+                                        setReceiverDistrictSelected(value);
+                                        handleAutocompleteOnchange(event, value, "listDistrictsReceiver")
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Districts" />}
+                                />
+                            </Grid>
+                            <Button type="submit" style={{ marginLeft: '24px', marginTop: '12px' }} variant="outlined" startIcon={<SearchIcon />}>
+                                Check Fee
+                            </Button>
+
+                        </Grid>
+                    </form>
+                </div>
+            </Paper>
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px", marginTop: '15px' }}>
+                <div className="m-5 border-2 rounded-lg">
+                    <Grid className='bg-zinc-200 pt-4 pb-4 p-5'>
+                        <Divider sx={{ marginBottom: '15px', marginTop: '15px' }}><InputLabel>MY SERVICES</InputLabel></Divider>
+                    </Grid>
+                    <Grid className="mt-5 mb-5 p-5">
+                        {listFee && listFee.length === 0 && (
+                            <Alert variant="outlined" severity="warning" sx={{ display: 'flex', justifyContent: 'center' }}>
+                                Not Found!!!
+                            </Alert>
+                        )}
+                        {listFee && listFee.length > 0 && renderListFee(listFee)}
+                    </Grid>
+                </div>
             </Paper>
         </div>
     );

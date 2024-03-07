@@ -296,7 +296,7 @@ const LocationsPage = () => {
             <TableContainer sx={{ marginTop: '10px' }}>
                 <Table aria-label="collapsible table">
                     <TableHead>
-                        <TableRow sx={{ bgcolor: 'primary.main' }}>
+                        <TableRow >
                             <TableCell />
                             <TableCell>Location Id</TableCell>
                             <TableCell align="right">Location Name</TableCell>

@@ -49,10 +49,10 @@ export default function DrawerMenu() {
             createMenu("Services Manager", LanOutlined, "/app/Services", ["services.view"]),
         ]),
         createMenu("Locations", LocationOnOutlined, "/app/Locations", ["locations.view"]),
-        createMenu("Check Fee", PaidOutlined, "/app/Feecustom/checkfee", ["checkFee.view"]),
         createMenu("Fee Custom", PaidOutlined, "/app/Feecustom", ["feecustom"], [
             createMenu("List Fee", FormatListBulletedOutlined, "/app/Feecustom", ["feecustom.view"]),
             createMenu("Manager Fee", LocalAtmOutlined, "/app/Feecustom/Manager", ["feecustom.create"]),
+            createMenu("Check Fee", PaidOutlined, "/app/Feecustom/checkfee", ["feecustom.checkfee"]),
         ]),
     ]
 

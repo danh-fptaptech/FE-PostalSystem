@@ -150,6 +150,7 @@ export default function ModalAddNew({
                     setErrors([]);
                     setEditItemId(null);
                     console.log('Update Service successfully!');
+                    reset();
                 } else {
                     if (response.status === 400) {
                         const error = await response.text();
@@ -216,6 +217,7 @@ export default function ModalAddNew({
                     setErrors([]);
                     setEditItemId(null);
                     console.log('Create a new Service successfully!');
+                    reset();
                 } else {
                     if (response.status === 400) {
                         const error = await response.text();
@@ -231,6 +233,14 @@ export default function ModalAddNew({
                 console.error('Error', error);
             }
         }
+    }
+    const reset = () => {
+        setServiceTypeId(null);
+        setWeighFrom(0);
+        setWeighTo(0);
+        setStatus(1);
+        SetServiceTypeSelect(null);
+        setErrors([]);
     }
     const validateWeight = async (serviceTypeId: number, weightFrom: number, weightTo: number, serviceId: number) => {
         const res = await fetch(`/api/services/ValidateServiceWeight/${serviceTypeId}/${weightFrom}/${weightTo}/${serviceId}`);
@@ -305,7 +315,7 @@ export default function ModalAddNew({
                 <Fade in={open}>
                     <Box sx={style}>
                     <Typography id="transition-modal-title" variant="h6" component="h2" style={{ textAlign: 'center' }}>
-                    Add Service
+                    {editItemId == null? 'Add Service':'Edit Service'}
                     {weightAllowRange && weightAllowRange.length>0 && (
                         <Tooltip title={
                             <React.Fragment>

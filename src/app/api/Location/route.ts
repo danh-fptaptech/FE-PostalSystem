@@ -30,11 +30,13 @@ export async function POST(req: Request) {
 			});
 		}
 
-		return NextResponse.json({
-			ok: false,
-			status: "server error",
-			message: "Fail to add location",
-		});
+		if(res.status === 400){
+			return NextResponse.json({
+				ok: false,
+				status: 400,
+				message: res.text(),
+			});
+		}
 	} catch (error) {
 		return console.log("Error add location: ", error);
 	}
@@ -56,6 +58,14 @@ export async function PUT(req: Request) {
 				ok: true,
 				status: "success",
 				message: "Edit Location successfully",
+			});
+		}
+
+		if(res.status === 400){
+			return NextResponse.json({
+				ok: false,
+				status: 400,
+				message: res.text(),
 			});
 		}
 
