@@ -18,7 +18,8 @@ const Layout = ({ children }: any) => {
 								display: "flex",
 								justifyContent: "space-between",
 								alignItems: "center",
-							}}>
+							}}
+						>
 							<h1>Tars Postal</h1>
 							<div>
 								{session ? (
@@ -27,7 +28,8 @@ const Layout = ({ children }: any) => {
 										variant="text"
 										color="inherit"
 										className="mr-2 hover:shadow-lg"
-										onClick={() => signOut()}>
+										onClick={() => signOut()}
+									>
 										Logout
 									</Button>
 								) : (
@@ -35,12 +37,14 @@ const Layout = ({ children }: any) => {
 										component={LinkBehaviour}
 										color="inherit"
 										className="text-white uppercase text-decoration-none"
-										href="/login">
+										href="/login"
+									>
 										<Button
 											startIcon={<Login fontSize="small" />}
 											variant="text"
 											color="inherit"
-											className="mr-2 hover:shadow-lg">
+											className="mr-2 hover:shadow-lg"
+										>
 											Login
 										</Button>
 									</Link>
@@ -51,13 +55,15 @@ const Layout = ({ children }: any) => {
 									variant="text"
 									color="inherit"
 									className="text-white uppercase mr-2 hover:shadow-lg"
-									href="/register">
+									href="/register"
+								>
 									Register
 								</Button>
 								<Button
 									variant="contained"
 									href="/app"
-									color="secondary">
+									color="secondary"
+								>
 									To App
 								</Button>
 							</div>

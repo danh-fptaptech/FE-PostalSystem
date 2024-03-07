@@ -1,9 +1,14 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { NextRequest } from "next/server";
+import { cookies, headers } from "next/headers";
+import { parse } from "cookie";
 
-const url = process.env.NEXT_PUBLIC_API_URL + "/Auth/Login";
+interface RouteHandlerContext {
+	params: { nextauth: string[] };
+}
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
 	// Configure one or more authentication providers
 	providers: [
 		CredentialsProvider({
@@ -11,11 +16,18 @@ export const authOptions = {
 			credentials: {
 				username: { label: "Username", type: "text" },
 				password: { label: "Password", type: "password" },
-				role: { label: "Role" },
+				role: { label: "Role", type: "text" },
 			},
 			async authorize(credentials, req) {
+				let url = "";
+				if (credentials?.role) {
+					url = `${process.env.NEXT_PUBLIC_API_URL}/Auth/Login`;
+				} else {
+					url = `${process.env.NEXT_PUBLIC_API_URL}/Users/Login`;
+				}
 				try {
 					const res = await fetch(url, {
+						cache: "no-cache",
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
@@ -23,12 +35,44 @@ export const authOptions = {
 						body: JSON.stringify({
 							userId: credentials?.username,
 							password: credentials?.password,
-							role: credentials?.role,
 						}),
+						credentials: "include",
 					});
 
 					if (res.ok) {
 						const user = await res.json();
+
+						const apiCookies = res.headers.getSetCookie();
+
+						if (apiCookies && apiCookies.length > 0) {
+							apiCookies.forEach(cookie => {
+								const parsedCookie = parse(cookie);
+								const [cookieName, cookieValue] =
+									Object.entries(parsedCookie)[0];
+								const httpOnly = cookie.includes("httponly");
+
+								cookies().set({
+									name: cookieName,
+									value: cookieValue,
+									httpOnly: httpOnly,
+									expires: new Date(parsedCookie.expires),
+								});
+							});
+						}
+
+						if (!user.role) {
+							user.role = {
+								name: "User",
+								permissions: [
+									"user.view",
+									"password.change",
+									"packages.view",
+									"package.create",
+									"address.create",
+									"addresses.view",
+								],
+							};
+						}
 
 						return user;
 					}
@@ -45,55 +89,29 @@ export const authOptions = {
 		signIn: "/login",
 	},
 	callbacks: {
-		async jwt({ token, user }) {
-			// This will only be executed at login. Each next invocation will skip this part.
-			// update token
+		async jwt({ token, user, trigger, session }) {
 			if (user) {
-				token.accessToken = user.token;
+				token = { ...user, id: +user.id };
 			}
+
+			if (trigger === "update") {
+				token.token = session.token;
+			}
+
 			// return final token
 			return token;
 		},
 
 		async session({ session, token, user }) {
-			session.token = token;
-			try {
-				const res = await fetch(
-					process.env.NEXT_PUBLIC_API_URL + "/auth/profile",
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${token.accessToken}`,
-						},
-					}
-				);
+			session.user = { ...token };
 
-				if (res.ok) {
-					const data = await res.json();
-
-					session.user = data;
-					if (!data.role) {
-						session.user.role = {
-							name: "User",
-							permissions: ["home.access", "user.access"],
-						};
-						session.token.role = {
-							name: "User",
-							permissions: ["home.access", "user.access"],
-						};
-					} else {
-						session.token.role = data.role;
-					}
-				}
-			} catch (error) {
-				console.log("Error session auth:", error);
-			}
 			return session;
 		},
 	},
 };
 
-const handler = NextAuth(authOptions);
+const handler = async (req: NextRequest, context: RouteHandlerContext) => {
+	return NextAuth(req, context, authOptions);
+};
 
 export { handler as GET, handler as POST };

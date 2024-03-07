@@ -224,7 +224,8 @@ export default function RoleManagement() {
 							variant="contained"
 							size="small"
 							className="mb-3"
-							onClick={() => setOpenAddRole(true)}>
+							onClick={() => setOpenAddRole(true)}
+						>
 							<Tooltip title="Add Role">
 								<Typography>+ Add</Typography>
 							</Tooltip>
@@ -236,7 +237,8 @@ export default function RoleManagement() {
 						{roles.map(role => (
 							<Card
 								key={role.id}
-								className="relative mx-2 px-1 rounded-md hover:shadow-lg cursor-pointer">
+								className="relative mx-2 px-1 rounded-md hover:shadow-lg cursor-pointer"
+							>
 								<CardContent className="relative">
 									<Box className="w-full h-full flex justify-between items-center">
 										<Avatar
@@ -250,7 +252,8 @@ export default function RoleManagement() {
 													role.name === "Admin"
 														? "text-green-700 font-semibold"
 														: "text-orange-400"
-												}>
+												}
+											>
 												{role.name}
 											</Typography>
 										</Box>
@@ -283,7 +286,8 @@ export default function RoleManagement() {
 											size="small"
 											color="info"
 											variant="text"
-											className="rounded-full hover:opacity-75">
+											className="rounded-full hover:opacity-75"
+										>
 											<AddCircle fontSize="small" />
 										</Button>
 									</Tooltip>
@@ -298,7 +302,8 @@ export default function RoleManagement() {
 											size="small"
 											color="error"
 											variant="text"
-											className="rounded-full hover:opacity-75">
+											className="rounded-full hover:opacity-75"
+										>
 											<DeleteOutline fontSize="small" />
 										</Button>
 									</Tooltip>
@@ -311,7 +316,8 @@ export default function RoleManagement() {
 					<Dialog
 						open={openAddRole}
 						onClose={() => setOpenAddRole(false)}
-						className="max-w-[500px] mx-auto">
+						className="max-w-[500px] mx-auto"
+					>
 						<Tooltip title="Close">
 							<CloseOutlined
 								onClick={() => setOpenAddRole(false)}
@@ -325,7 +331,8 @@ export default function RoleManagement() {
 						<DialogContent>
 							<form
 								onSubmit={roleHandleSubmit(AddRole)}
-								className="text-xs">
+								className="text-xs"
+							>
 								<div className="my-3">
 									<div>
 										<label className="font-semibold">Name:</label>
@@ -349,7 +356,8 @@ export default function RoleManagement() {
 										variant="contained"
 										size="medium"
 										type="submit"
-										className="w-full">
+										className="w-full"
+									>
 										+ Add New
 									</Button>
 								</div>
@@ -361,7 +369,8 @@ export default function RoleManagement() {
 					<Dialog
 						open={openAddPermisson}
 						onClose={() => setOpenAddPermisson(false)}
-						className="mx-auto">
+						className="mx-auto"
+					>
 						<Tooltip title="Close">
 							<CloseOutlined
 								onClick={() => setOpenAddPermisson(false)}
@@ -388,7 +397,8 @@ export default function RoleManagement() {
 									renderOption={(props, option, { selected }) => (
 										<li
 											key={option.permissionName}
-											{...props}>
+											{...props}
+										>
 											<Checkbox
 												icon={<CheckBoxOutlineBlank fontSize="small" />}
 												checkedIcon={<CheckBox fontSize="small" />}
@@ -397,7 +407,8 @@ export default function RoleManagement() {
 											/>
 											{option.permissionName}
 											<Button
-												onClick={() => setCreatePermission(true)}></Button>
+												onClick={() => setCreatePermission(true)}
+											></Button>
 										</li>
 									)}
 									style={{ width: 350 }}
@@ -413,7 +424,8 @@ export default function RoleManagement() {
 								<Button
 									color="secondary"
 									variant="text"
-									onClick={() => setCreatePermission(true)}>
+									onClick={() => setCreatePermission(true)}
+								>
 									Add other permission
 								</Button>
 
@@ -424,7 +436,8 @@ export default function RoleManagement() {
 										color="success"
 										variant="contained"
 										size="medium"
-										className="w-full">
+										className="w-full"
+									>
 										+ Add permission
 									</Button>
 								</div>
@@ -436,7 +449,8 @@ export default function RoleManagement() {
 					<Dialog
 						open={createPermission}
 						onClose={() => setCreatePermission(false)}
-						className="max-w-[500px] mx-auto">
+						className="max-w-[500px] mx-auto"
+					>
 						<Tooltip title="Close">
 							<CloseOutlined
 								onClick={() => setCreatePermission(false)}
@@ -448,7 +462,8 @@ export default function RoleManagement() {
 						<DialogContent>
 							<form
 								onSubmit={handleSubmit(createOnePermission)}
-								className="text-xs">
+								className="text-xs"
+							>
 								<div className="my-3">
 									<div>
 										<label className="font-semibold">Name:</label>
@@ -472,7 +487,8 @@ export default function RoleManagement() {
 										variant="contained"
 										size="medium"
 										type="submit"
-										className="w-full">
+										className="w-full"
+									>
 										+ Add New
 									</Button>
 								</div>

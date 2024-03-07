@@ -7,7 +7,6 @@ export default withAuth(
 	// `withAuth` augments your `Request` with the user's token.
 	async function middleware(req) {
 		const token = req.nextauth.token;
-		//console.log(token);
 
 		if (token) {
 			const pathname = req.nextUrl.pathname;
@@ -29,13 +28,14 @@ export default withAuth(
 			}
 
 			const userPermissions = token.role.permissions || [];
-
 			const hasPermission = path.permission.some(p =>
 				userPermissions.includes(p)
 			);
 
 			if (!hasPermission) {
 				return NextResponse.redirect(new URL("/access-denied", req.url));
+			} else {
+				console.log(hasPermission);
 			}
 
 			return NextResponse.next();

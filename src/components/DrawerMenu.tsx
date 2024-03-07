@@ -3,29 +3,36 @@ import Toolbar from "@mui/material/Toolbar";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import {
+	AccountBoxOutlined,
 	AppsOutlined,
+	BadgeOutlined,
+	BusinessOutlined,
 	DomainAddOutlined,
 	DomainOutlined,
+	DriveFileRenameOutlineOutlined,
+	FactCheckOutlined,
+	FormatListBulletedOutlined,
+	GroupOutlined,
 	HomeWorkOutlined,
 	Inventory2Outlined,
-	NoteAddOutlined,
-	AccountBoxOutlined,
-	PasswordOutlined,
-	GroupOutlined,
-	BadgeOutlined,
-	DriveFileRenameOutlineOutlined,
+	LanOutlined,
+	LocalAtmOutlined,
+	LocationOnOutlined,
 	ManageAccountsOutlined,
-	BusinessOutlined,
-	OutboxOutlined,
 	MoveToInboxOutlined,
+	NoteAddOutlined,
+	OutboxOutlined,
+	PaidOutlined,
+	PasswordOutlined,
+	TypeSpecimenOutlined,
 	ViewListOutlined,
 	WorkHistoryOutlined,
 } from "@mui/icons-material";
 import * as React from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { usePathname } from "next/navigation";
 import MenuGroup from "@/components/MenuGroup";
 import PermissionCheck from "./PermissionCheck";
+import { usePathname } from "next/navigation";
 
 // @ts-ignore
 function createMenu(
@@ -46,24 +53,16 @@ function createMenu(
 
 export default function DrawerMenu() {
 	const path = usePathname();
-
 	const menu = [
-		createMenu("Dashboard", AppsOutlined, "/app", "app.view"),
-
+		createMenu("Dashboard", AppsOutlined, "/app", "user.view"),
 		createMenu(
 			"Create Package",
 			NoteAddOutlined,
 			"/app/create-package",
-			"package.create"
+			"user.view"
 		),
-		createMenu(
-			"Packages",
-			Inventory2Outlined,
-			"/app/packages",
-			"packages.view"
-		),
-
-		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch.view", [
+		createMenu("Packages", Inventory2Outlined, "/app/packages", "package.view"),
+		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch", [
 			createMenu(
 				"List Branches",
 				DomainOutlined,
@@ -77,60 +76,80 @@ export default function DrawerMenu() {
 				"branch.create"
 			),
 		]),
-
+		createMenu("Service", FactCheckOutlined, "/app/Services", "services", [
+			createMenu(
+				"Service Type",
+				TypeSpecimenOutlined,
+				"/app/ServiceType",
+				"servicetype.view"
+			),
+			createMenu(
+				"Services Manager",
+				LanOutlined,
+				"/app/Services",
+				"services.view"
+			),
+		]),
 		createMenu(
-			"User Management",
-			GroupOutlined,
-			"/app/admin/users",
-			"user.view"
+			"Locations",
+			LocationOnOutlined,
+			"/app/Locations",
+			"locations.view"
 		),
-
-		createMenu("Employee Management", BadgeOutlined, "/app/admin", "emp.view", [
+		createMenu(
+			"Check Fee",
+			PaidOutlined,
+			"/app/Feecustom/checkfee",
+			"checkFee.view"
+		),
+		createMenu("Fee Custom", PaidOutlined, "/app/Feecustom", "feecustom", [
+			createMenu(
+				"List Fee",
+				FormatListBulletedOutlined,
+				"/app/Feecustom",
+				"feecustom.view"
+			),
+			createMenu(
+				"Manager Fee",
+				LocalAtmOutlined,
+				"/app/Feecustom/Manager",
+				"feecustom.create"
+			),
+		]),
+		createMenu("User Management", GroupOutlined, "/app/admin/users", "user"),
+		createMenu("Employee Management", BadgeOutlined, "/app/admin", "admin", [
 			createMenu(
 				"List Employees",
 				GroupOutlined,
 				"/app/admin/employees",
-				"emp.view"
+				"admin.employee"
 			),
 			createMenu(
 				"Updated Requests",
 				DriveFileRenameOutlineOutlined,
 				"/app/admin/requests",
-				"emp.view"
+				"admin.request"
 			),
 			createMenu(
 				"Role Management",
 				ManageAccountsOutlined,
 				"/app/admin/roles",
-				"roles.view"
+				"admin.role"
 			),
 		]),
-
-		createMenu("Profile", AccountBoxOutlined, "/app/employee", "profile.view"),
-
-		createMenu("Profile", AccountBoxOutlined, "/app/user", "profile.view"),
-
+		createMenu(
+			"Packages",
+			Inventory2Outlined,
+			"/app/user/packages",
+			"packages.view"
+		),
+		createMenu("Profile", AccountBoxOutlined, "/app/user", "user.view"),
 		createMenu(
 			"Change Password",
 			PasswordOutlined,
 			"/app/user/change-password",
 			"password.change"
 		),
-
-		// createMenu(
-		// 	"Packages",
-		// 	Inventory2Outlined,
-		// 	"/app/user/packages",
-		// 	"package.view"
-		// ),
-
-		createMenu(
-			"Create Package",
-			NoteAddOutlined,
-			"/app/user/create-package",
-			"package.create"
-		),
-
 		createMenu(
 			"Addresses",
 			BusinessOutlined,

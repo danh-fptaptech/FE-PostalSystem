@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -15,6 +17,15 @@ export default function AvatarMenu() {
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleSignOut = () => {
+		fetch("/api/Users/revoke-token", {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${session?.user.token}`,
+			},
+		}).then(() => {});
 	};
 
 	if (status === "authenticated") {

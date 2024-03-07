@@ -13,6 +13,7 @@ import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {toast} from "sonner";
 import CustomDialogContent from "@/components/CustomDialogContent";
+import VolumetricWeightContent from "@/components/VolumetricWeightContent";
 
 function FormGoodsInfo() {
 
@@ -36,32 +37,6 @@ function FormGoodsInfo() {
 
     const [openDialog, setOpenDialog] = useState(false);
 
-    const [rateConvert, setRateConvert] = useState(5);
-    const [limitSize, setLimitSize] = useState(50);
-    const [limitWeight, setLimitWeight] = useState(6);
-
-    const contentDialog = (
-        <Box>
-            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
-                The size of the package is calculated based on the length, width, and height of the package.
-                Volumetric Weight is a calculation that reflects the density of a package. A less dense item generally.
-                The calculation formula is as follows:
-            </Typography>
-            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
-                The calculation formula is as follows:
-            </Typography>
-            <Typography variant="body1" sx={{fontSize: '15px', textAlign: 'center', fontWeight: 550, py:2}}>
-                (Length x Width x Height) / {rateConvert * 1000} = Volumetric Weight (kg)
-            </Typography>
-            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
-                If any element of size (weight,width,length) is greater than {limitSize}cm or Volumetric Weight is greater than {limitWeight}KG.
-            </Typography>
-            <Typography variant="body1" sx={{fontSize: '14px', textAlign: 'left', py:1}}>
-                The results are compared with the actual weight of the package to determine which weight is greater.
-                Volumetric weight or actual weight. The larger weight is used to calculate shipping costs.
-            </Typography>
-        </Box>
-    );
 
     return (
         <Card sx={{
@@ -288,7 +263,20 @@ function FormGoodsInfo() {
                 {/*Add Item*/}
                 <Box sx={{my: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
                     <Typography
-                        /*onClick={async () => {
+                        onClick={async () => {
+                            if (formData.list_items.length >= 5) {
+                                toast.error('You can only add up to 5 items');
+                                return;
+                            }
+                            let checkName = await trigger(`itemName_${formData.list_items.length - 1}`);
+                            let checkQuantity = await trigger(`itemQuantity_${formData.list_items.length - 1}`);
+                            let checkWeight = await trigger(`itemWeight_${formData.list_items.length - 1}`);
+                            if (checkName && checkQuantity && checkWeight) {
+                                createItem();
+                            }
+                        }}>
+                        {/*
+                        onClick={async () => {
                             let errorCounter = 0;
                             for (let i = 0; i < formData.list_items.length; i++) {
                                 await trigger(`itemName_${i}`).then((res:any) => {
@@ -315,34 +303,22 @@ function FormGoodsInfo() {
                             if (errorCounter === 0) {
                                 createItem()
                             }
-                        }}*/
-                        /*onClick={async () => {
-                            const results = [];
-                            for (let i = 0; i < formData.list_items.length; i++) {
-                                const itemName = await trigger(`itemName_${i}`);
-                                const itemQuantity = await trigger(`itemQuantity_${i}`);
-                                const itemWeight = await trigger(`itemWeight_${i}`);
-                                const itemValue = await trigger(`itemValue_${i}`);
-                                results.push(itemName, itemQuantity, itemWeight, itemValue);
-                            }
-                            const hasErrors = results.some(i => i === false);
-                            if (!hasErrors) {
-                                createItem(); // Pass all results at once
-                            }
-                        }}*/
+                        }}
                         onClick={async () => {
-                            if (formData.list_items.length >= 5) {
-                                toast.error('You can only add up to 5 items');
-                                return;
-                            }
-                            let checkName = await trigger(`itemName_${formData.list_items.length - 1}`);
-                            let checkQuantity = await trigger(`itemQuantity_${formData.list_items.length - 1}`);
-                            let checkWeight = await trigger(`itemWeight_${formData.list_items.length - 1}`);
-                            let checkValue = await trigger(`itemValue_${formData.list_items.length - 1}`);
-                            if (checkName && checkQuantity && checkWeight && checkValue) {
-                                createItem();
-                            }
-                        }}>
+                                const results = [];
+                                for (let i = 0; i < formData.list_items.length; i++) {
+                                    const itemName = await trigger(`itemName_${i}`);
+                                    const itemQuantity = await trigger(`itemQuantity_${i}`);
+                                    const itemWeight = await trigger(`itemWeight_${i}`);
+                                    const itemValue = await trigger(`itemValue_${i}`);
+                                    results.push(itemName, itemQuantity, itemWeight, itemValue);
+                                }
+                                const hasErrors = results.some(i => i === false);
+                                if (!hasErrors) {
+                                    createItem(); // Pass all results at once
+                                }
+                            }}
+                        */}
                         <Button sx={{
                             border: 1,
                             py: 1,
@@ -366,7 +342,7 @@ function FormGoodsInfo() {
                                             fontSize: '16px'
                                         }}
                             >
-                                Total Weight:
+                                Calculate Weight:
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -386,7 +362,7 @@ function FormGoodsInfo() {
                                         fontSize: '16px'
                                     }}
                         >
-                            Total value:
+                            Calculate value:
                         </Typography>
                     </Grid>
                         <Grid item xs={6}>
@@ -432,8 +408,8 @@ function FormGoodsInfo() {
                                 type="text"
                                 {...register("width", {
                                     max: {
-                                        value: 500,
-                                        message: "Width must be less than 500 cm"
+                                        value: 200,
+                                        message: "Width must be less than 200 cm"
                                     },
                                     min: {
                                         value: 1,
@@ -461,8 +437,8 @@ function FormGoodsInfo() {
                                 type="text"
                                 {...register("height", {
                                     max: {
-                                        value: 500,
-                                        message: "Height must be less than 500 cm"
+                                        value: 200,
+                                        message: "Height must be less than 200 cm"
                                     },
                                     min: {
                                         value: 1,
@@ -484,35 +460,33 @@ function FormGoodsInfo() {
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <Tooltip title="Item value">
-                                <TextField
-                                    margin="dense"
-                                    label="Length"
-                                    type="text"
-                                    {...register("length", {
-                                        max: {
-                                            value: 500,
-                                            message: "Length item must be less than 500 cm"
-                                        },
-                                        min: {
-                                            value: 1,
-                                            message: "Length item must be more than 1 cm"
-                                        }
-                                    })}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">cm</InputAdornment>,
-                                    }}
-                                    onChange={(e) => {
-                                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                                        handleChangeSize(e)
-                                    }}
-                                    error={!!(errors.length)}
-                                    helperText={errors.length?.message}
-                                    size={"small"}
-                                    fullWidth={true}
-                                    autoComplete={"off"}
-                                />
-                            </Tooltip>
+                            <TextField
+                                margin="dense"
+                                label="Length"
+                                type="text"
+                                {...register("length", {
+                                    max: {
+                                        value: 200,
+                                        message: "Length item must be less than 200 cm"
+                                    },
+                                    min: {
+                                        value: 1,
+                                        message: "Length item must be more than 1 cm"
+                                    }
+                                })}
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+                                }}
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                                    handleChangeSize(e)
+                                }}
+                                error={!!(errors.length)}
+                                helperText={errors.length?.message}
+                                size={"small"}
+                                fullWidth={true}
+                                autoComplete={"off"}
+                            />
                         </Grid>
                     </Grid>
                     {Number(formData.size_convert) > 0 && (
@@ -540,7 +514,8 @@ function FormGoodsInfo() {
                         </Box>)}
                 </Box>
             </Box>
-            <CustomDialogContent content={contentDialog} title={"Volumetric Weight"} setIsOpen={setOpenDialog}
+            <CustomDialogContent content={<VolumetricWeightContent/>} title={"Volumetric Weight"}
+                                 setIsOpen={setOpenDialog}
                                  isOpen={openDialog}/>
         </Card>
     )

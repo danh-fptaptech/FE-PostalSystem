@@ -25,6 +25,7 @@ const BoxInputInfo = (props: any) => {
     const fetchAddress = async () => {
         const res = await fetch(`/api/user/address/getlist${typeBox}`);
         const data = await res.json();
+        console.log("Get list address")
         return data.data;
     }
 
