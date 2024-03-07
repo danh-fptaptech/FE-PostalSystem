@@ -7,7 +7,6 @@ import React from "react";
 import {
 	ApiResponse,
 	Employee,
-	Location,
 	Province,
 	UpdateInfoRequest,
 } from "@/types/types";
@@ -19,14 +18,12 @@ import {
 	DialogTitle,
 	DialogContent,
 	Button,
-	TextField,
 	Avatar,
 	InputLabel,
 	Typography,
 	Box,
 } from "@mui/material";
 import Loading from "@/components/Loading";
-import { register } from "module";
 
 export default function EmployeeInfoPage() {
 	const [employee, setEmployee] = React.useState<Employee>();

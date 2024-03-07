@@ -14,16 +14,15 @@ export default function LoginPage() {
 	};
 
 	return (
-		<>
+		<div className="my-35">
 			<Tabs
 				value={value}
 				onChange={handleChange}
-				centered
-			>
+				centered>
 				<Tab label="Employee" />
 			</Tabs>
 
 			{value === 0 && <EmployeeLoginForm />}
-		</>
+		</div>
 	);
 }

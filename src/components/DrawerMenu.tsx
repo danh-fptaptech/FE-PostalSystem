@@ -54,13 +54,9 @@ function createMenu(
 export default function DrawerMenu() {
 	const path = usePathname();
 	const menu = [
-		createMenu("Dashboard", AppsOutlined, "/app", "user.view"),
-		createMenu(
-			"Create Package",
-			NoteAddOutlined,
-			"/app/create-package",
-			"user.view"
-		),
+		createMenu("Dashboard", AppsOutlined, "/app", "app.view"),
+		createMenu("Profile", AccountBoxOutlined, "/app/employee", "profile.view"),
+		createMenu("Create Package", NoteAddOutlined, "/app/create-package", "package.create"),
 		createMenu("Packages", Inventory2Outlined, "/app/packages", "package.view"),
 		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch", [
 			createMenu(
@@ -76,7 +72,7 @@ export default function DrawerMenu() {
 				"branch.create"
 			),
 		]),
-		createMenu("Service", FactCheckOutlined, "/app/Services", "services", [
+		createMenu("Service", FactCheckOutlined, "/app/Services", "service.view", [
 			createMenu(
 				"Service Type",
 				TypeSpecimenOutlined,
@@ -87,7 +83,7 @@ export default function DrawerMenu() {
 				"Services Manager",
 				LanOutlined,
 				"/app/Services",
-				"services.view"
+				"service.view"
 			),
 		]),
 		createMenu(
@@ -107,43 +103,57 @@ export default function DrawerMenu() {
 				"List Fee",
 				FormatListBulletedOutlined,
 				"/app/Feecustom",
-				"feecustom.view"
+				"fee.view"
 			),
 			createMenu(
 				"Manager Fee",
 				LocalAtmOutlined,
 				"/app/Feecustom/Manager",
-				"feecustom.create"
+				"fee.create"
 			),
 		]),
-		createMenu("User Management", GroupOutlined, "/app/admin/users", "user"),
-		createMenu("Employee Management", BadgeOutlined, "/app/admin", "admin", [
+
+		// Admin
+		createMenu("Branches", HomeWorkOutlined, "/app/branches", "emp.view", [
 			createMenu(
-				"List Employees",
-				GroupOutlined,
-				"/app/admin/employees",
-				"admin.employee"
+				"List Branches",
+				DomainOutlined,
+				"/app/branches",
+				"branch.view"
 			),
 			createMenu(
-				"Updated Requests",
-				DriveFileRenameOutlineOutlined,
-				"/app/admin/requests",
-				"admin.request"
-			),
-			createMenu(
-				"Role Management",
-				ManageAccountsOutlined,
-				"/app/admin/roles",
-				"admin.role"
+				"Create Branch",
+				DomainAddOutlined,
+				"/app/branches/create",
+				"branch.create"
 			),
 		]),
+
 		createMenu(
-			"Packages",
-			Inventory2Outlined,
-			"/app/user/packages",
-			"packages.view"
+			"User Management",
+			GroupOutlined,
+			"/app/admin/users",
+			"emp.view"
 		),
-		createMenu("Profile", AccountBoxOutlined, "/app/user", "user.view"),
+		createMenu("Employee Management", BadgeOutlined, "/app/admin/employees", "emp.view"),
+		createMenu(
+			"Updated Requests",
+			DriveFileRenameOutlineOutlined,
+			"/app/admin/requests",
+			"request.view"
+		),
+		createMenu(
+			"Role Management",
+			ManageAccountsOutlined,
+			"/app/admin/roles",
+			"role.view"
+		),
+		// Admin
+
+
+
+		createMenu("HistoryLogs", WorkHistoryOutlined, "/app/historylogs", ""),
+
 		createMenu(
 			"Change Password",
 			PasswordOutlined,

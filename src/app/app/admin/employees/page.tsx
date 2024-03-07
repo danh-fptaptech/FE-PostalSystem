@@ -13,6 +13,8 @@ import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
+	Grid,
+	Paper,
 	Switch,
 	Table,
 	TableBody,
@@ -21,6 +23,7 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
+	TextField,
 	Tooltip,
 } from "@mui/material";
 
@@ -68,7 +71,6 @@ export default function EmployeeManagement() {
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 	const { data: session, status } = useSession();
-	const [file, setFile] = React.useState(null);
 
 	const {
 		register,
@@ -120,7 +122,7 @@ export default function EmployeeManagement() {
 			}
 
 			if (branchRes.ok) {
-				setBranches(branchRes.data);
+				setEmployees(branchRes.data);
 			}
 
 			if (roleRes.ok) {
@@ -305,11 +307,6 @@ export default function EmployeeManagement() {
 											className="text-white text-sm">
 											Status
 										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Action
-										</TableCell>
 									</TableRow>
 								</TableHead>
 
@@ -364,21 +361,6 @@ export default function EmployeeManagement() {
 														onChange={() => handleChangeStatus(employee.id)}
 													/>
 												</TableCell>
-												<TableCell align="center">
-													<Tooltip title="Edit">
-														<Button
-															type="button"
-															endIcon={
-																<DriveFileRenameOutline fontSize="medium" />
-															}
-															variant="text"
-															color="success"
-															onClick={() => {
-																setEmployee(employee);
-																setOpenUpdateForm(true);
-															}}></Button>
-													</Tooltip>
-												</TableCell>
 											</TableRow>
 										))}
 								</TableBody>
@@ -406,139 +388,155 @@ export default function EmployeeManagement() {
 					<Loading />
 				) : (
 					<>
-						<Box className="mb-3 flex justify-between items-center">
-							<PermissionCheck permission="emp.create">
-								<Button
-									color="secondary"
-									variant="contained"
-									className="rounded-md"
-									size="small"
-									onClick={() => setOpenAddForm(true)}>
-									+ Add
-								</Button>
-							</PermissionCheck>
-							{/* Handle Search */}
-							<form
-								onSubmit={handleSearch}
-								method="post"
-								className="flex justify-end items-center py-4 ">
-								<input
-									type="text"
-									name="search"
-									id="searchInput"
-									className="mr-2 px-2 text-[14px] rounded-md max-w-[400px] h-[30px] cursor-pointer"
-									placeholder="Enter name to search"
-								/>
-								<Button
-									startIcon={<SearchOutlined />}
-									color="success"
-									variant="contained"
-									size="small"
-									className="rounded-md">
-									Search
-								</Button>
-							</form>
-						</Box>
+						<Paper
+							elevation={6}
+							sx={{ borderRadius: "10px", boxSizing: "border-box" }}>
+							<Grid container>
+								<Grid
+									item
+									xs={12}
+									sm={6}
+									className="flex justify-between items-center p-3">
+									<Button
+										variant="contained"
+										color="primary"
+										onClick={() => setOpenAddForm(true)}>
+										+ Add
+									</Button>
+								</Grid>
+								<Grid
+									item
+									xs={12}
+									sm={6}>
+									<form
+										onSubmit={handleSearch}
+										method="post"
+										className="flex justify-end items-center my-3 relative">
+										<input
+											type="text"
+											name="search"
+											id="searchInput"
+											className="mr-3 px-2 text-[14px] rounded-md min-w-[300px] min-h-[40px] cursor-pointer"
+											placeholder="Enter name to search"
+										/>
+										<div className="absolute inset-y-0 right-0 flex items-center">
+											<Button
+												color="success"
+												variant="text"
+												size="small"
+												className="rounded-full">
+												<SearchOutlined fontSize="small" />
+											</Button>
+										</div>
+									</form>
+								</Grid>
+							</Grid>
+						</Paper>
 
-						<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
-							<Table
-								sx={{ minWidth: 650 }}
-								size="small"
-								aria-label="a dense table">
-								<TableHead>
-									<TableRow>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											#
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Fullname
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Email
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Phone
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Branch
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Role
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Status
-										</TableCell>
-										<TableCell
-											align="center"
-											className="text-white text-sm">
-											Action
-										</TableCell>
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{employees.length == null && (
+						<Paper
+							elevation={6}
+							sx={{ my: 3, borderRadius: "10px", boxSizing: "border-box" }}>
+							<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
+								<Table
+									className="mt-3"
+									sx={{ minWidth: 650 }}
+									size="small">
+									<TableHead>
 										<TableRow>
 											<TableCell
-												colSpan={7}
 												align="center"
-												className="text-sm">
-												No Data
+												className="text-white text-sm">
+												#
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Fullname
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Email
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Phone
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Branch
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Role
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Status
+											</TableCell>
+											<TableCell
+												align="center"
+												className="text-white text-sm">
+												Action
 											</TableCell>
 										</TableRow>
-									)}
-									{employees
-										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-										.map(employee => (
-											<TableRow
-												key={employee.id}
-												sx={{
-													"&:last-child td, &:last-child th": { border: 0 },
-												}}>
-												<TableCell align="center">
-													{employee.employeeCode}
+									</TableHead>
+
+									<TableBody>
+										{employees.length == null && (
+											<TableRow>
+												<TableCell
+													colSpan={7}
+													align="center"
+													className="text-sm">
+													No Data
 												</TableCell>
-												<TableCell align="center">
-													{employee.fullname}
-												</TableCell>
-												<TableCell align="center">{employee.email}</TableCell>
-												<TableCell align="center">
-													{employee.phoneNumber}
-												</TableCell>
-												<TableCell align="center">
-													{employee.branchName}
-												</TableCell>
-												<TableCell align="center">
-													{employee.roleName}
-												</TableCell>
-												<TableCell align="center">
-													<Switch
-														size="small"
-														color="success"
-														className="cursor-pointer"
-														checked={employee.status == 1 ? true : false}
-														disabled={
-															employee.roleName === "Admin" ? true : false
-														}
-														onChange={() => handleChangeStatus(employee.id)}
-													/>
-												</TableCell>
-												<TableCell align="center">
-													<PermissionCheck permission="emp.update">
+											</TableRow>
+										)}
+										{employees
+											.slice(
+												page * rowsPerPage,
+												page * rowsPerPage + rowsPerPage
+											)
+											.map(employee => (
+												<TableRow
+													key={employee.id}
+													sx={{
+														"&:last-child td, &:last-child th": { border: 0 },
+													}}>
+													<TableCell align="center">
+														{employee.employeeCode}
+													</TableCell>
+													<TableCell align="center">
+														{employee.fullname}
+													</TableCell>
+													<TableCell align="center">{employee.email}</TableCell>
+													<TableCell align="center">
+														{employee.phoneNumber}
+													</TableCell>
+													<TableCell align="center">
+														{employee.branchName}
+													</TableCell>
+													<TableCell align="center">
+														{employee.roleName}
+													</TableCell>
+													<TableCell align="center">
+														<Switch
+															size="small"
+															color="success"
+															className="cursor-pointer"
+															checked={employee.status == 1 ? true : false}
+															disabled={
+																employee.roleName === "Admin" ? true : false
+															}
+															onChange={() => handleChangeStatus(employee.id)}
+														/>
+													</TableCell>
+													<TableCell align="center">
 														<Tooltip title="Edit">
 															<Button
 																type="button"
@@ -552,21 +550,21 @@ export default function EmployeeManagement() {
 																	setOpenUpdateForm(true);
 																}}></Button>
 														</Tooltip>
-													</PermissionCheck>
-												</TableCell>
-											</TableRow>
-										))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							component="div"
-							count={employees.length || 0}
-							page={page}
-							onPageChange={handleChangePage}
-							rowsPerPage={rowsPerPage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
+													</TableCell>
+												</TableRow>
+											))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+							<TablePagination
+								component="div"
+								count={employees.length || 0}
+								page={page}
+								onPageChange={handleChangePage}
+								rowsPerPage={rowsPerPage}
+								onRowsPerPageChange={handleChangeRowsPerPage}
+							/>
+						</Paper>
 
 						{/* Add New Employee */}
 						<Dialog
@@ -872,6 +870,8 @@ export default function EmployeeManagement() {
 												<input
 													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 													defaultValue={employee.branchName}
+													readOnly
+													disabled
 													id="branch"
 												/>
 											</div>
@@ -881,6 +881,8 @@ export default function EmployeeManagement() {
 												<input
 													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 													defaultValue={employee.roleName}
+													readOnly
+													disabled
 													id="role"
 												/>
 											</div>
@@ -892,7 +894,6 @@ export default function EmployeeManagement() {
 												<select
 													{...updatedRegister("branchId")}
 													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-													defaultValue={employee.branchName}
 													id="branch">
 													{branches.map(branch => (
 														<option
@@ -909,7 +910,6 @@ export default function EmployeeManagement() {
 												<select
 													{...updatedRegister("roleId")}
 													className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-													defaultValue={employee.roleName}
 													id="role">
 													{roles.map(role => (
 														<option

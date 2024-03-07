@@ -7,6 +7,8 @@ import {
 	Avatar,
 	Box,
 	Button,
+	Grid,
+	Paper,
 	Switch,
 	Table,
 	TableBody,
@@ -81,26 +83,6 @@ export default function UserManagement() {
 		});
 	}, []);
 
-	// React.useEffect(() => {
-	// 	const provinceId = provinces.find(p => p.locationName === province)?.id;
-
-	// 	if (!provinceId) {
-	// 		setDistricts([]);
-	// 	} else {
-	// 		getChildrenLocationsByParentId(provinceId).then(res => {
-	// 			if (res.ok) {
-	// 				if (res.data.districs) {
-	// 					setDistricts(res.data.districs);
-	// 				} else {
-	// 					setDistricts([]);
-	// 				}
-	// 			} else {
-	// 				setDistricts([]);
-	// 			}
-	// 		});
-	// 	}
-	// }, [province, provinces]);
-
 	// Handle Search
 	function handleSearch(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -131,128 +113,151 @@ export default function UserManagement() {
 			{loading ? (
 				<Loading />
 			) : (
-				<div className="mt-4">
-					<Box className="mb-3">
-						<form
-							onSubmit={handleSearch}
-							method="post"
-							className="flex justify-end items-center py-4 ">
-							<input
-								type="text"
-								name="search"
-								id="searchInput"
-								className="mr-2 px-2 text-[14px] rounded-md max-w-[400px] h-[30px] cursor-pointer"
-								placeholder="Enter name to search"
-							/>
-							<Button
-								startIcon={<SearchOutlined />}
-								color="success"
-								variant="contained"
+				<>
+					<Paper
+						elevation={6}
+						sx={{ borderRadius: "10px", boxSizing: "border-box" }}>
+						<Grid container>
+							<Grid
+								item
+								xs={12}
+								sm={6}
+								className="flex justify-between items-center p-3"></Grid>
+							<Grid
+								item
+								xs={12}
+								sm={6}>
+								<form
+									onSubmit={handleSearch}
+									method="post"
+									className="flex justify-end items-center my-3 relative">
+									<input
+										type="text"
+										name="search"
+										id="searchInput"
+										className="mr-3 px-2 text-[14px] rounded-md min-w-[300px] min-h-[40px] cursor-pointer"
+										placeholder="Enter name to search"
+									/>
+									<div className="absolute inset-y-0 right-0 flex items-center">
+										<Button
+											color="success"
+											variant="text"
+											size="small"
+											className="rounded-full">
+											<SearchOutlined fontSize="small" />
+										</Button>
+									</div>
+								</form>
+							</Grid>
+						</Grid>
+					</Paper>
+
+					<Paper
+						elevation={6}
+						sx={{ my: 3, borderRadius: "10px", boxSizing: "border-box" }}>
+						<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
+							<Table
+								className="mt-3"
+								sx={{ minWidth: 650 }}
 								size="small"
-								className="rounded-md">
-								Search
-							</Button>
-						</form>
-					</Box>
-					<TableContainer sx={{ width: "100%", overflow: "hidden" }}>
-						<Table
-							sx={{ minWidth: 650 }}
-							size="small"
-							aria-label="a dense table">
-							<TableHead>
-								<TableRow>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										#
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Fullname
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Email
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Phone Number
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Avatar
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Status
-									</TableCell>
-									<TableCell
-										align="center"
-										className="text-white text-sm">
-										Create At
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{users.length === 0 && (
+								aria-label="a dense table">
+								<TableHead>
 									<TableRow>
 										<TableCell
-											colSpan={7}
 											align="center"
-											className="text-sm">
-											No data ...
+											className="text-white text-sm">
+											#
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Fullname
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Email
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Phone Number
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Avatar
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Status
+										</TableCell>
+										<TableCell
+											align="center"
+											className="text-white text-sm">
+											Create At
 										</TableCell>
 									</TableRow>
-								)}
-								{users
-									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-									.map(user => {
-										return (
-											<TableRow
-												key={user.id}
-												sx={{
-													"&:last-child td, &:last-child th": { border: 0 },
-												}}>
-												<TableCell align="center">{user.id}</TableCell>
-												<TableCell align="center">{user.fullname}</TableCell>
-												<TableCell align="center">{user.email}</TableCell>
-												<TableCell align="center">{user.phoneNumber}</TableCell>
-												<TableCell align="center">
-													<Avatar
-														src={user.avatar}
-														alt={user.fullname}
-													/>
-												</TableCell>
+								</TableHead>
+								<TableBody>
+									{users.length === 0 && (
+										<TableRow>
+											<TableCell
+												colSpan={7}
+												align="center"
+												className="text-sm">
+												No data ...
+											</TableCell>
+										</TableRow>
+									)}
+									{users
+										.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+										.map(user => {
+											return (
+												<TableRow
+													key={user.id}
+													sx={{
+														"&:last-child td, &:last-child th": { border: 0 },
+													}}>
+													<TableCell align="center">{user.id}</TableCell>
+													<TableCell align="center">{user.fullname}</TableCell>
+													<TableCell align="center">{user.email}</TableCell>
+													<TableCell align="center">
+														{user.phoneNumber}
+													</TableCell>
+													<TableCell align="center">
+														<Avatar
+															src={user.avatar}
+															alt={user.fullname}
+														/>
+													</TableCell>
 
-												<TableCell align="center">
-													<Switch
-														size="small"
-														color="success"
-														className="cursor-pointer"
-														checked={user.status == 1 ? true : false}
-													/>
-												</TableCell>
-												<TableCell align="center">{user.createAt}</TableCell>
-											</TableRow>
-										);
-									})}
-							</TableBody>
-						</Table>
-						<TablePagination
-							component="div"
-							count={users.length || 0}
-							page={page}
-							onPageChange={handleChangePage}
-							rowsPerPage={rowsPerPage}
-							onRowsPerPageChange={handleChangeRowsPerPage}
-						/>
-					</TableContainer>
-				</div>
+													<TableCell align="center">
+														<Switch
+															size="small"
+															color="success"
+															className="cursor-pointer"
+															checked={user.status == 1 ? true : false}
+														/>
+													</TableCell>
+													<TableCell align="center">{user.createAt}</TableCell>
+												</TableRow>
+											);
+										})}
+								</TableBody>
+							</Table>
+							<TablePagination
+								component="div"
+								count={users.length || 0}
+								page={page}
+								onPageChange={handleChangePage}
+								rowsPerPage={rowsPerPage}
+								onRowsPerPageChange={handleChangeRowsPerPage}
+							/>
+						</TableContainer>
+					</Paper>
+				</>
 			)}
 		</>
 	);

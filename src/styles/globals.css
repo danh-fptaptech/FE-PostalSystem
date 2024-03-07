@@ -83,11 +83,20 @@
 .my-4 {
 	margin: 1rem 0;
 }
+.my-auto {
+	margin: auto 0;
+}
+.my-35 {
+	margin: 8.75rem 0;
+}
 .mr-1 {
 	margin-right: 0.25rem;
 }
 .mr-2 {
 	margin-right: 0.5rem /* 8px */;
+}
+.mr-3 {
+	margin-right: 0.75rem /* 8px */;
 }
 .ml-3 {
 	margin-left: 0.75rem /* 12px */;
@@ -251,6 +260,9 @@
 .min-w-\[300px\] {
 	min-width: 300px;
 }
+.min-w-\[600px\] {
+	min-width: 600px;
+}
 
 /* Height */
 .h-16 {
@@ -264,6 +276,9 @@
 }
 .min-h-\[200px\] {
 	min-height: 200px;
+}
+.min-h-\[40px\] {
+	min-height: 40px;
 }
 .min-h-\[50px\] {
 	min-height: 50px;

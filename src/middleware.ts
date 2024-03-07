@@ -34,8 +34,6 @@ export default withAuth(
 
 			if (!hasPermission) {
 				return NextResponse.redirect(new URL("/access-denied", req.url));
-			} else {
-				console.log(hasPermission);
 			}
 
 			return NextResponse.next();
@@ -81,49 +79,76 @@ export const config = {
 const paths = [
 	{
 		path: "/app",
-		permission: ["user.access", "user.all", "home.access", "app.view"],
+		permission: ["app.view"],
 	},
 	{
-		path: "/register",
-		permission: ["user.access", "user.all", "home.access"],
-	},
-
-	{
-		path: "/app/packages",
-		permission: ["user.access", "app.view"],
+		path: "/app/user",
+		permission: ["user.view"],
 	},
 	{
 		path: "/app/employee",
-		permission: ["user.access"],
+		permission: ["profile.view"],
 	},
 	{
-		path: "/app/historylogs",
-		permission: ["user.access"],
-	},
-
-	//admin
-	{
-		path: "/app/branches",
-		permission: ["app.view"],
+		path: "/app/user/change-password",
+		permission: ["password.change"],
 	},
 	{
-		path: "/app/admin/users",
-		permission: ["app.view"],
+		path: "/app/packages",
+		permission: ["package.view", "emp.view"],
+	},
+	{
+		path: "/app/user/packages",
+		permission: ["package.view"],
+	},
+	{
+		path: "/app/user/create-package",
+		permission: ["package.create"],
+	},
+	{
+		path: "/app/user/add-address",
+		permission: ["address.create"],
+	},
+	{
+		path: "/app/user/addresses/receiver",
+		permission: ["addresses.view"],
+	},
+	{
+		path: "/app/user/addresses/sender",
+		permission: ["addresses.view"],
+	},
+	{
+		path: "/app/user/addresses",
+		permission: ["addresses.view"],
 	},
 	{
 		path: "/app/admin/employees",
-		permission: ["app.view"],
+		permission: ["emp.view"],
 	},
 	{
 		path: "/app/admin/roles",
-		permission: ["app.view"],
+		permission: ["role.view"],
 	},
 	{
 		path: "/app/admin/requests",
-		permission: ["app.view"],
+		permission: ["request.view"],
+	},
+
+	{
+		path: "/app/admin/users",
+		permission: ["user.view"],
+	},
+
+	{
+		path: "/app/historylogs",
+		permission: ["emp.view"],
 	},
 	{
-		path: "/app/services",
-		permission: ["user.access", "user.all", "home.access"],
+		path: "/app/branches",
+		permission: ["branches.view", "emp.view"],
+	},
+	{
+		path: "/app/create-package",
+		permission: ["Admin", "user.view"],
 	},
 ];

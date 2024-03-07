@@ -1,5 +1,9 @@
 import UserLoginForm from "./UserLoginForm";
 
 export default function UserLoginPage() {
-	return <UserLoginForm />;
+	return (
+		<div className="my-35">
+			<UserLoginForm />
+		</div>
+	);
 }

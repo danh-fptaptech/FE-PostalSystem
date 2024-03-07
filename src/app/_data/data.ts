@@ -65,7 +65,9 @@ export const fetchBranches = async () => {
 	const response = await fetch("/api/branches", {
 		method: "GET",
 	});
-	return response.json() as Promise<ApiResponse>;
+	const data = await response.json();
+
+	return data as Promise<ApiResponse>;
 };
 
 export const fetchLocations = async () => {

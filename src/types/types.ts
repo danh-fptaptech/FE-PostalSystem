@@ -155,7 +155,9 @@ export interface CreatePermissionRequest {
 	permissionNames: string[];
 }
 export interface CreateRoleRequest {
+	id: number;
 	name: string;
+	roleHasPermissions: string[];
 	status: 1;
 }
 export interface CreatePermission {

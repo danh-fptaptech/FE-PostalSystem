@@ -75,7 +75,7 @@ const EmployeeLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				router.push("/app/employee");
+				router.push("/app");
 			} else {
 				setError("Invalid email or password");
 			}
@@ -86,93 +86,80 @@ const EmployeeLoginForm = () => {
 	};
 
 	return (
-		<Box
-			component="form"
-			onSubmit={handleSubmit(onSubmit)}
-			sx={{
-				maxWidth: "500px",
-				margin: "auto",
-				padding: "20px",
-				borderRadius: "8px",
-				boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-				backgroundColor: "white",
-			}}
-		>
-			{error && (
-				<Alert severity="error">
-					<AlertTitle>Error</AlertTitle>
-					{error}
-				</Alert>
-			)}
-			<Typography
-				variant="h5"
-				component="div"
-				sx={{ mb: 2 }}
-			>
-				Login Your Account
-			</Typography>
-			<TextField
-				fullWidth
-				label="Email"
-				{...register("userId", {
-					setValueAs: v => (v === "" ? undefined : v),
-				})}
-				error={!!errors.userId}
-				helperText={errors.userId?.message}
-				margin="normal"
-			/>
-			<FormControl
-				fullWidth
-				variant="outlined"
-				margin="normal"
-				error={!!errors.password}
-			>
-				<InputLabel htmlFor="password">Password</InputLabel>
-				<OutlinedInput
-					label="Password"
-					id="password"
-					autoComplete="current-password"
-					type={showPassword ? "text" : "password"}
-					{...register("password", {
+		<div>
+			<Box
+				component="form"
+				onSubmit={handleSubmit(onSubmit)}
+				sx={{
+					maxWidth: "500px",
+					margin: "auto",
+					padding: "20px",
+					borderRadius: "8px",
+					boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+					backgroundColor: "white",
+				}}>
+				{error && (
+					<Alert severity="error">
+						<AlertTitle>Error</AlertTitle>
+						{error}
+					</Alert>
+				)}
+				<Typography
+					variant="h5"
+					component="div"
+					sx={{ mb: 2 }}>
+					Login Your Account
+				</Typography>
+				<TextField
+					fullWidth
+					label="Email"
+					{...register("userId", {
 						setValueAs: v => (v === "" ? undefined : v),
 					})}
-					endAdornment={
-						<InputAdornment position="end">
-							<IconButton
-								aria-label="toggle password visibility"
-								onClick={handleClickShowPassword}
-								onMouseDown={handleMouseEvents}
-								onMouseUp={handleMouseEvents}
-								edge="end"
-							>
-								{showPassword ? <VisibilityOff /> : <Visibility />}
-							</IconButton>
-						</InputAdornment>
-					}
+					error={!!errors.userId}
+					helperText={errors.userId?.message}
+					margin="normal"
 				/>
-				<FormHelperText>{errors.password?.message}</FormHelperText>
-			</FormControl>
+				<FormControl
+					fullWidth
+					variant="outlined"
+					margin="normal"
+					error={!!errors.password}>
+					<InputLabel htmlFor="password">Password</InputLabel>
+					<OutlinedInput
+						label="Password"
+						id="password"
+						autoComplete="current-password"
+						type={showPassword ? "text" : "password"}
+						{...register("password", {
+							setValueAs: v => (v === "" ? undefined : v),
+						})}
+						endAdornment={
+							<InputAdornment position="end">
+								<IconButton
+									aria-label="toggle password visibility"
+									onClick={handleClickShowPassword}
+									onMouseDown={handleMouseEvents}
+									onMouseUp={handleMouseEvents}
+									edge="end">
+									{showPassword ? <VisibilityOff /> : <Visibility />}
+								</IconButton>
+							</InputAdornment>
+						}
+					/>
+					<FormHelperText>{errors.password?.message}</FormHelperText>
+				</FormControl>
 
-			<Button
-				type="submit"
-				variant="contained"
-				color="error"
-				fullWidth
-				sx={{ mt: 2 }}
-			>
-				Login
-			</Button>
-			<Box sx={{ mt: 2, textAlign: "center" }}>
-				<Link
-					component={LinkBehaviour}
-					href="/forgot-password"
-					variant="body2"
-					className="text-decoration-none hover:font-semibold"
-				>
-					Forgot Password?
-				</Link>
+				<Button
+					type="submit"
+					variant="contained"
+					color="error"
+					fullWidth
+					sx={{ mt: 2 }}>
+					Login
+				</Button>
 			</Box>
-		</Box>
+		</div>
 	);
 };
 

@@ -9,6 +9,8 @@ import List from "@mui/material/List";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import MenuContext from "@/contexts/MenuContext";
+import { Simulate } from "react-dom/test-utils";
+import select = Simulate.select;
 
 export default function MenuGroup(props: { item: any }) {
 	const { handleDrawerClose } = useContext(MenuContext);
@@ -27,7 +29,7 @@ export default function MenuGroup(props: { item: any }) {
 				}
 			});
 		}
-	}, [open]);
+	}, [item.children, open, path]);
 	return !item.children ? (
 		<ListItemButton
 			selected={path === item.path}

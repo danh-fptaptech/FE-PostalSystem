@@ -15,7 +15,7 @@ export default function LoginPage() {
 	};
 
 	return (
-		<>
+		<div className="my-35">
 			<Tabs
 				value={value}
 				onChange={handleChange}
@@ -24,6 +24,6 @@ export default function LoginPage() {
 			</Tabs>
 
 			{value === 0 && <AdminLoginForm />}
-		</>
+		</div>
 	);
 }
