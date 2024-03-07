@@ -4,17 +4,16 @@ export async function GET(req: Request,{ params }: { params: { serviceTypeId : n
     const url = `${process.env.NEXT_PUBLIC_API_URL}/ValidateServiceWeight/${serviceTypeId}/${weightFrom}/${weightTo}/${serviceId}`;
 
     const res = await fetch(url,{cache: "no-store"});
-    const text = await res.text();
-
+    const data = await res.json();
     if(res.status===200){
         return NextResponse.json({ 
             check: true,
-            mess: text,
+            data: data,
         });
     }else{
         return NextResponse.json({ 
             check: false,
-            mess: text,
+            data: data,
         });
     }
 }

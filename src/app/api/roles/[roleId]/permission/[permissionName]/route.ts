@@ -31,7 +31,8 @@ export async function DELETE(
 		return NextResponse.json({
 			ok: false,
 			status: "server error",
-			message: "Failed to delete permissions.",
+			message:
+				"Failed to delete ! The permission is one of system permissions.",
 		});
 	} catch (error) {
 		return NextResponse.json({

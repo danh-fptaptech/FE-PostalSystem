@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Users/All`, {
+		// header must have access token
+		headers: req.headers,
+		method: req.method,
+		credentials: req.credentials,
+	});
 	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Users/All`, {
-			// header must have access token
-			headers: {
-				...req.headers,
-			},
-			method: req.method,
-		});
-
 		const data = await res.json();
 
 		if (res.ok) {
@@ -45,7 +43,15 @@ export async function GET(req: NextRequest) {
 			message: "Error to get user",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in get users with all", error);
+		console.log("Unhandled client-side error in get users with all");
+
+		if (res.status === 401) {
+			return NextResponse.json({
+				ok: false,
+				status: "Unauthorized",
+				message: "Error to get users with all",
+			});
+		}
 
 		return NextResponse.json({
 			ok: false,

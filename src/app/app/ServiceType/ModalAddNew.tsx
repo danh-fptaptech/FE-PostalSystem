@@ -6,10 +6,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { FormControlLabel, InputLabel, MenuItem, FormControl, FormGroup, Switch, Grid, Alert } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { DataServiceType, DataTypeService } from '@/helper/interface';
+import { FormControlLabel, FormGroup, Switch, Grid, Alert } from '@mui/material';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -30,32 +29,21 @@ export default function ModalAddNew({
     setOpen: any,
     editItemId: Number | null,
     setEditItemId: any,
-    data: DataServiceType[],
-    setData: any
 }) {
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const handleOpen = () => {
         setOpen(true)
         setEditItemId(null);
     };
     const handleClose = () => setOpen(false);
 
-    const [editService, SetEditService] = React.useState<DataServiceType | null>(null);
+    const [editItem, SetEditItem] = React.useState<any>(null);
 
-    const [serviceTypeId, setServiceTypeId] = React.useState<number | null>(null);
-    const [weighFrom, setWeighFrom] = React.useState(0);
-    const [weighTo, setWeighTo] = React.useState(0);
+    const [serviceName, setServiceName] = React.useState('');
+    const [serviceDescription, setServiceDescription] = React.useState('');
     const [status, setStatus] = React.useState(1);
 
-    const [errors, setErrors] = React.useState<string[]>([]);
     const [serviceTypes, setServiceTypes] = React.useState([]);
-    const [serviceTypeSelect, SetServiceTypeSelect] = React.useState<number | null>(null);
-
-    const handleSelectChange = (event: SelectChangeEvent) => {
-        const { name, value } = event.target;
-        if(name == 'serviceType'){
-            SetServiceTypeSelect(+value);
-        }
-    };
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -67,52 +55,27 @@ export default function ModalAddNew({
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'weighFrom') {
-            setWeighFrom(Number(value));
+        if (name === 'serviceName') {
+            setServiceName(value);
         }
-        if (name === 'weighTo') {
-            if (+value > 0) {
-                setWeighTo(Number(value));
-            } else {
-                setWeighTo(999999999);
-            }
+        if (name === 'serviceDescription') {
+            setServiceDescription(value);
         }
     }
 
-    const handelSubmit = async () => {
+    const onSubmit  = async () => {
         if (editItemId != null) {
             try {
                 const requestBody = {
                     id: editItemId,
-                    serviceTypeId: serviceTypeSelect,
-                    weighFrom: weighFrom,
-                    weighTo: weighTo,
+                    serviceName: serviceName,
+                    serviceDescription: serviceDescription,
                     status: status
                 };
 
                 console.log("updateR: ", requestBody);
 
-                if (weighTo === 0) {
-                    requestBody.weighTo = 999999999;
-                }
-
-                let checkValidate = validateService(requestBody.serviceTypeId, weighFrom, requestBody.weighTo, status);
-
-                if (checkValidate.length > 0) {
-                    setErrors(checkValidate);
-                    return;
-                }
-
-                if(requestBody.serviceTypeId != null){
-                    const res = await validateWeight(requestBody.serviceTypeId, requestBody.weighFrom, requestBody.weighTo,+editItemId);
-                    if(res.check == false) {
-                        setErrors(['Weight range already exists']);
-                        return;
-                    }
-                    setErrors([]);
-                }
-
-                const response = await fetch(`/api/services`, {
+                const response = await fetch(`/api/ServiceType`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -120,24 +83,15 @@ export default function ModalAddNew({
                     body: JSON.stringify(requestBody)
                 });
 
-                console.log('updated service:', response);
+                console.log('updated ServiceType:', response);
 
                 if (response.ok) {
                     setOpen(false);
-                    SetEditService(null);
-                    setErrors([]);
                     setEditItemId(null);
-                    console.log('Update Service successfully!');
+                    SetEditItem(null);
+                    console.log('Update ServiceType successfully!');
                 } else {
-                    if (response.status === 400) {
-                        const error = await response.text();
-                        if (error == 'Postal code already exists') {
-                            setErrors([...errors, 'Postal code already exists']);
-                        }
-                        console.error('Bad Request Error:', error);
-                    } else {
-                        console.error('Create Service Error', response.status);
-                    }
+                    console.error('Create ServiceType Error', response.status);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -145,34 +99,14 @@ export default function ModalAddNew({
         } else {
             try {
                 const requestBody = {
-                    serviceTypeId: serviceTypeSelect,
-                    weighFrom: weighFrom,
-                    weighTo: weighTo,
+                    serviceName: serviceName,
+                    serviceDescription: serviceDescription,
                     status: status
                 };
 
                 console.log("CreateR: ", requestBody);
 
-                if (weighTo === 0) {
-                    requestBody.weighTo = 999999999;
-                }
-
-                let checkValidate = validateService(requestBody.serviceTypeId, weighFrom, requestBody.weighTo, status);
-                
-                if (checkValidate.length > 0) {
-                    setErrors(checkValidate);
-                    return;
-                }
-
-                if(requestBody.serviceTypeId != null){
-                    const res = await validateWeight(requestBody.serviceTypeId, requestBody.weighFrom, requestBody.weighTo,0);
-                    if(res.check == false) {
-                        setErrors(['Weight range already exists']);
-                        return;
-                    }
-                    setErrors([]);
-                }
-                const response = await fetch(`/api/services`, {
+                const response = await fetch(`/api/ServiceType`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -181,83 +115,57 @@ export default function ModalAddNew({
                 });
 
                 if (response.ok) {
-                    setOpen(false);
-                    SetEditService(null);
-                    setErrors([]);
                     setEditItemId(null);
-                    console.log('Create a new Service successfully!');
+                    setOpen(false);
+                    console.log('Create a new ServiceType successfully!');
                 } else {
-                    if (response.status === 400) {
-                        const error = await response.text();
-                        if (error == 'Postal code already exists') {
-                            setErrors([...errors, 'Postal code already exists']);
-                        }
-                        console.error('Bad Request Error:', error);
-                    } else {
-                        console.error('Create Service Error', response.status);
-                    }
+                    console.error('Create ServiceType Error', response.status);
                 }
             } catch (error) {
                 console.error('Error', error);
             }
         }
     }
-    const validateWeight = async (serviceTypeId:number, weightFrom:number, weightTo :number, serviceId:number) =>{
-        const res = await fetch(`/api/services/ValidateServiceWeight/${serviceTypeId}/${weightFrom}/${weightTo}/${serviceId}`);
-        const resJson = await res.json();
-        return resJson;
-    }
 
     const getService = async () => {
-        const res = await fetch(`/api/services/getService/${editItemId}`);
+        const res = await fetch(`/api/ServiceType/getServiceType/${editItemId}`);
         const resJson = await res.json();
         const data = resJson.data;
-        SetEditService(data);
+        SetEditItem(data);
         setEditItemId(data.id);
-        setWeighFrom(data.weighFrom);
-        setWeighTo(data.weighTo);
+        setServiceName(data.serviceName);
+        setServiceDescription(data.serviceDescription);
         setStatus(data.status);
-        SetServiceTypeSelect(data.serviceTypeId);
     }
     useEffect(() => {
         if (editItemId !== null) {
             getService();
         } else {
-            setServiceTypeId(null);
-            setWeighFrom(0);
-            setWeighTo(0);
+            setServiceName('');
+            setServiceDescription('');
             setStatus(1);
-            SetServiceTypeSelect(null);
         }
     }, [editItemId])
 
     useEffect(() => {
         if (editItemId !== null) {
             getService();
-        } else {
-            setServiceTypeId(null);
-            setWeighFrom(0);
-            setWeighTo(0);
-            setStatus(1);
-            SetServiceTypeSelect(null);
         }
         fetchServiceType();
-        console.log("listTYPe",serviceTypes);
     }, [])
 
     const fetchServiceType = async () => {
-        const res = await fetch(`/api/TypeService`);
+        const res = await fetch(`/api/ServiceType`);
         const resJson = await res.json();
         const data = await resJson.data;
         setServiceTypes(data);
-        console.log("resJson",data);
     }
     return (
         <div>
             <Button
                 variant="contained"
                 onClick={handleOpen}
-            > Add Service</Button>
+            > Add Service Type</Button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -274,61 +182,38 @@ export default function ModalAddNew({
                 <Fade in={open}>
                     <Box sx={style}>
                         <Typography id="transition-modal-title" variant="h6" component="h2" style={{ textAlign: 'center' }}>
-                            Add Service
+                            Add Service Type
                         </Typography>
                         <hr style={{ margin: '20px 50px' }} />
-                        <Box>
-                            {errors && errors.length > 0 && (
+                    
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <div className="error-message">
-                                        {errors.map((msg, i) => (
-                                            <Alert severity="success" color="warning" key={i}>
-                                                {msg}
-                                            </Alert>
-                                        ))}
-                                    </div>
+                                    <TextField
+                                        fullWidth
+                                        label="Service Name"
+                                        variant="standard"
+                                        {...register('serviceName', { required: 'Service Name is required' })}
+                                        error={!!errors.serviceName}
+                                        helperText={errors.serviceName?.message as string}
+                                        onChange={handleChangeInput}
+                                        value={serviceName}
+                                    />
                                 </Grid>
-                            )}
-                        </Box>
-                        <Grid sx={{marginBottom:'10px', marginTop:'10px'}}>
-                            <Select
-                                label="Tỉnh/Thành phố (người nhận)"
-                                value={serviceTypeSelect !== null ? serviceTypeSelect.toString() : ""}
-                                displayEmpty 
-                                name="serviceType"
-                                onChange={handleSelectChange}
-                                fullWidth
-                            >
-                                <MenuItem value="" disabled>Choice Type Service</MenuItem>
-                                {serviceTypes && serviceTypes.length > 0 && serviceTypes.map((item:any, index:number) => {
-                                    return (
-                                        <MenuItem key={index} value={item.id}>{item.serviceName}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="weighFrom"
-                                    variant="standard"
-                                    name='weighFrom'
-                                    value={weighFrom ? weighFrom : 0}
-                                    onChange={handleChangeInput}
-                                />
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="Service Description"
+                                        variant="standard"
+                                        {...register('serviceDescription', { required: 'Service Description is required' })}
+                                        error={!!errors.serviceDescription}
+                                        helperText={errors.serviceDescription?.message as string}
+                                        onChange={handleChangeInput}
+                                        value={serviceDescription}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    label="weighTo"
-                                    variant="standard"
-                                    name='weighTo'
-                                    value={weighTo ? weighTo : 0}
-                                    onChange={handleChangeInput}
-                                />
-                            </Grid>
-                        </Grid>
+                        
                         <FormGroup style={{ marginTop: '20px' }}>
                             <FormControlLabel
                                 required
@@ -343,24 +228,12 @@ export default function ModalAddNew({
                                 label={status === 1 ? 'Active' : 'Inactive'}
                             />
                         </FormGroup>
-                        <Button variant="contained" onClick={handelSubmit}>Submit</Button>
+                        
+                        <Button variant="contained" type="submit">Submit</Button>
+                        </form>
                     </Box>
                 </Fade>
             </Modal>
         </div >
     );
-}
-
-function validateService(serviceTypeId: number | null, weighFrom: number, weighTo: number, status: number) {
-    let errorList = [];
-    if (serviceTypeId == null) {
-        errorList.push("Please choices Service Type");
-    }
-    if (weighFrom < 0) {
-        errorList.push("Please Enter one weigh From");
-    }
-    if (weighTo <= weighFrom) {
-        errorList.push("Weigh To must be greater than weigh From");
-    }
-    return errorList;
 }

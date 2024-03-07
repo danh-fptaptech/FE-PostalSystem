@@ -22,6 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { toast } from "sonner";
 
 const schema = z.object({
 	userId: z
@@ -66,22 +67,23 @@ const UserLoginForm = () => {
 
 	const onSubmit = async (data: Schema) => {
 		try {
-			const res = await signIn("credentials", {
-				redirect: false,
-				username: data.userId,
-				password: data.password,
-				role: "User",
-				//			callbackUrl,
-			});
-
-			if (!res?.error) {
-				//router.push(callbackUrl);
-				router.push("/app/dashboard");
-			} else {
-				setError("Invalid email or password");
-			}
+			toast.promise(
+				signIn("credentials", {
+					redirect: false,
+					username: data.userId,
+					password: data.password,
+				}),
+				{
+					success(data) {
+						router.push("/app");
+						return "Logged in successfully";
+					},
+					loading: "Logging in...",
+					error: "Invalid email or password",
+				}
+			);
 		} catch (error) {
-			setError("An unexpected error happened");
+			console.log("An unexpected error happened");
 		}
 	};
 
@@ -96,7 +98,8 @@ const UserLoginForm = () => {
 				borderRadius: "8px",
 				boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
 				backgroundColor: "white",
-			}}>
+			}}
+		>
 			{error && (
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -106,7 +109,8 @@ const UserLoginForm = () => {
 			<Typography
 				variant="h5"
 				component="div"
-				sx={{ mb: 2 }}>
+				sx={{ mb: 2 }}
+			>
 				Login Your Account
 			</Typography>
 			<TextField
@@ -123,7 +127,8 @@ const UserLoginForm = () => {
 				fullWidth
 				variant="outlined"
 				margin="normal"
-				error={!!errors.password}>
+				error={!!errors.password}
+			>
 				<InputLabel htmlFor="password">Password</InputLabel>
 				<OutlinedInput
 					label="Password"
@@ -140,7 +145,8 @@ const UserLoginForm = () => {
 								onClick={handleClickShowPassword}
 								onMouseDown={handleMouseEvents}
 								onMouseUp={handleMouseEvents}
-								edge="end">
+								edge="end"
+							>
 								{showPassword ? <VisibilityOff /> : <Visibility />}
 							</IconButton>
 						</InputAdornment>
@@ -154,21 +160,24 @@ const UserLoginForm = () => {
 				variant="contained"
 				color="error"
 				fullWidth
-				sx={{ mt: 2 }}>
+				sx={{ mt: 2 }}
+			>
 				Login
 			</Button>
 			<Box sx={{ mt: 2, textAlign: "center" }}>
 				<Link
 					component={LinkBehaviour}
 					href="/forgot-password"
-					variant="body2">
+					variant="body2"
+				>
 					Forgot Password?
 				</Link>
 				<Box mt={1}>
 					<Link
 						component={LinkBehaviour}
 						href="/register"
-						variant="body2">
+						variant="body2"
+					>
 						Don&apos;t have an account? Sign Up
 					</Link>
 				</Box>

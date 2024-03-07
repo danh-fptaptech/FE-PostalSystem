@@ -1,17 +1,12 @@
-'use client';
-import * as React from "react";
-import {useSiteSetting} from "@/contexts/SiteContext";
-
+import React from "react";
 
 const App = () => {
-    // @ts-ignore
-    const {siteSetting} = useSiteSetting();
-  return (
-    <div>
-      <h1>In App</h1>
-        <p>{siteSetting?.site_name}</p>
-    </div>
-  );
+    return (
+        <div>
+            <h1>In App</h1>
+            <p>This is a page.</p>
+        </div>
+    );
 };
 
 export default App;

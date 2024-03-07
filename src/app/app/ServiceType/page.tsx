@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { Grid, TablePagination, Chip, Alert, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Grid, TablePagination, Chip, Alert, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Paper } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -35,7 +35,6 @@ export default function Page({
         try {
             const response = await fetch("/api/ServiceType");
             const responseData = await response.json();
-            console.log("abc",responseData.data);
             if (Array.isArray(responseData.data)) {
                 setData(responseData.data);
             } else {
@@ -56,7 +55,7 @@ export default function Page({
         fetchServiceTypes();
     }, [openModalNew])
 
-    const handleEdit = (rowData:any) => {
+    const handleEdit = (rowData: any) => {
         setEditItemId(rowData.id);
         setOpenModalNew(true);
     };
@@ -73,7 +72,7 @@ export default function Page({
     const handleSearch = (query: string) => {
         if (query.length > 0) {
             const dataFilter = data.filter(
-                (item:any) =>
+                (item: any) =>
                     item.serviceType.serviceName.toLowerCase().includes(query.toLowerCase()) ||
                     item.serviceType.serviceDescription.toLowerCase().includes(query.toLowerCase())
             );
@@ -99,17 +98,17 @@ export default function Page({
     }
     const fetchStatus = async () => {
         try {
-            const response = await fetch(`/api/services/changeStatus/${changeStatusId}`);
+            const response = await fetch(`/api/ServiceType/changeStatus/${changeStatusId}`);
             console.log('response:', response);
             if (response.ok) {
                 if (Array.isArray(data)) {
-                    const updatedListService = data.map((item: DataServiceType) => {
+                    const updatedListServiceType = data.map((item: any) => {
                         if (item.id === changeStatusId) {
                             item.status = item.status === 1 ? 0 : 1;
                         }
                         return item;
                     });
-                    setData(updatedListService);
+                    setData(updatedListServiceType);
                 } else {
                     console.error("Data is not an array:", data);
                 }
@@ -150,12 +149,12 @@ export default function Page({
         );
     }
 
-    const renderRow = (row: DataServiceType) => {
+    const renderRow = (row: any) => {
         return (
             <TableRow key={row.id} >
                 <TableCell>{row.id}</TableCell>
-                <TableCell>{row.serviceType.serviceName}</TableCell>
-                <TableCell>{row.serviceType.serviceDescription}</TableCell>
+                <TableCell>{row.serviceName}</TableCell>
+                <TableCell>{row.serviceDescription}</TableCell>
                 <TableCell>
                     <span>
                         <Chip onClick={() => handleChangeStatus(row.id)} label={row.status === 1 ? 'Active' : 'Inactive'} color={row.status === 1 ? 'success' : 'error'} />
@@ -172,66 +171,56 @@ export default function Page({
 
     return (
         <div className="App">
-            <ChangeStatus />
+            <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px" }}>
+                <ChangeStatus />
 
-            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Services Managerment</h1>
-            <hr />
-            <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} data={data} setData={setData} />
+                <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Service Types Managerment</h1>
+                <hr />
+                <ModalAddNew open={openModalNew} setOpen={setOpenModalNew} editItemId={editItemId} setEditItemId={setEditItemId} />
 
-            <Grid container spacing={1} sx={{ marginTop: '5px' }} >
-                {isError && (
-                    <Grid item xs={12} >
-                        <div className="error-message">
-                            {errorMessages.map((msg, i) => (
-                                <Alert severity="success" color="warning" key={i}>
-                                    {msg}
-                                </Alert>
-                            ))}
-                        </div>
+                <Grid container spacing={1} sx={{ marginTop: '5px' }} >
+                    {isError && (
+                        <Grid item xs={12} >
+                            <div className="error-message">
+                                {errorMessages.map((msg, i) => (
+                                    <Alert severity="success" color="warning" key={i}>
+                                        {msg}
+                                    </Alert>
+                                ))}
+                            </div>
+                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow sx={{ bgcolor: 'primary.main' }}>
+                                        <TableCell>ID</TableCell>
+                                        <TableCell>Service Name</TableCell>
+                                        <TableCell>Service Description</TableCell>
+                                        <TableCell>Status</TableCell>
+                                        <TableCell>Acction</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data
+                                        .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                                        .map((row: any) => renderRow(row) || null)}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={data.length}
+                            rowsPerPage={rowsPerPage}
+                            page={currentPage}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                     </Grid>
-                )}
-                <Grid item xs={12}>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow sx={{ bgcolor: 'primary.main' }}>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Service Name</TableCell>
-                                    <TableCell>Service Description</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Acction</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {data
-                                    .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
-                                    .map((row:any) => renderRow(row) || null)}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={data.length}
-                        rowsPerPage={rowsPerPage}
-                        page={currentPage}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 </Grid>
-            </Grid>
+            </Paper>
         </div>
     );
-}
-
-
-export function formatDate(dateTimeString: string) {
-    const date = new Date(dateTimeString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes} ${year}-${month}-${day}`;
 }

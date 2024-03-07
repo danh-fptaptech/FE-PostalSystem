@@ -4,9 +4,7 @@ export async function GET(req: NextRequest) {
 	try {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Users`, {
 			// header must have access token
-			headers: {
-				...req.headers,
-			},
+			headers: req.headers,
 			method: req.method,
 		});
 

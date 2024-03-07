@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ApiResponse } from "@/types";
+import { ApiResponse } from "@/types/types";
 import Box from "@mui/material/Box";
 import LinkBehaviour from "../../../components/LinkBehaviour";
 import Button from "@mui/material/Button";
@@ -23,6 +23,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
+import { toast } from "sonner";
 
 const schema = z.object({
 	fullname: z
@@ -79,28 +80,26 @@ const RegisterForm = () => {
 	};
 
 	const onSubmit = async (formData: Schema) => {
-		try {
-			const res = await fetch("/api/register", {
-				method: "POST",
-				body: JSON.stringify(formData),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+		const loadingId = toast.loading("Registering...");
 
-			const data = (await res.json()) as ApiResponse;
+		const res = await fetch("/api/users/register", {
+			method: "POST",
+			body: JSON.stringify(formData),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 
-			if (data.ok) {
-				// Encode the callbackUrl before appending it to the URL string
-				const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+		const data = (await res.json()) as ApiResponse;
 
-				router.push(`/verify-email?callbackUrl=${encodedCallbackUrl}`);
-			} else {
-				setError(data.message);
-			}
-		} catch (error: any) {
-			setError(error);
+		if (data.ok) {
+			// Encode the callbackUrl before appending it to the URL string
+			const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+			router.push(`/verify-email?callbackUrl=${encodedCallbackUrl}`);
+		} else {
+			toast.error(data.message);
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (

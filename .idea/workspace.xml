@@ -5,13 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/hooks/useS3.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/access-denied/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(auth)/login/UserLoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_data/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_data/method.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_data/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_data/data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/packages/add/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/packages/zxczxc/route.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/packages/create/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/employees/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/requests/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/users/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/UploadImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UploadImage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useS3.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/DataCreatePackage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/DataCreatePackage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/employee/[employeeCode]/EmployeeInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/add-address/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/add-address/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/addresses/receiver/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/addresses/receiver/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/addresses/sender/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/addresses/sender/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/user/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/user/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NewsHomepage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NewsHomepage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contexts/UserContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/UserContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,11 +56,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/app/api/users/refresh-token/route.ts" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/app/app/branches/page.tsx" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/app/app/create-package/page.tsx" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
@@ -55,23 +80,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merge-3.3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;G:/eProject/tars-delivery-fe/src/app/api/packages/create&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ImportCost&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merge-6.3",
+    "last_opened_file_path": "G:/eProject/tars-delivery-fe/src/app/access-denied",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ImportCost",
+    "ts.external.directory.path": "G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactBuddySettings">
     <option name="extensionsIgnore" value="true" />
   </component>
@@ -86,11 +111,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\eProject\tars-delivery-fe\src\app\access-denied" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\packages\create" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\aws-s3" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlocationsbyid" />
       <recent name="G:\eProject\tars-delivery-fe\src\app\api\locations\getlistprovince" />
-      <recent name="G:\eProject\tars-delivery-fe\src\app\api\user\address\getlistsender" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="G:\eProject\tars-delivery-fe\src\hooks" />
@@ -129,7 +154,8 @@
       <workItem from="1709405829203" duration="1042000" />
       <workItem from="1709610727147" duration="8546000" />
       <workItem from="1709626287567" duration="4285000" />
-      <workItem from="1709636591577" duration="3603000" />
+      <workItem from="1709636591577" duration="4499000" />
+      <workItem from="1709649976146" duration="28032000" />
     </task>
     <servers />
   </component>

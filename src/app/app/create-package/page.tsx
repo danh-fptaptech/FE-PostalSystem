@@ -1,5 +1,5 @@
 'use client'
-import {Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
+import {Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
 import React, {useEffect, useMemo, useState} from 'react'
 import BoxInputInfo from "@/components/BoxInputInfo";
 import {useForm} from "react-hook-form";
@@ -14,6 +14,10 @@ import {useSiteSetting} from "@/contexts/SiteContext";
 import {useSession} from "next-auth/react";
 import Image from "next/image";
 import useS3 from "@/hooks/useS3";
+import {useRouter} from "next/navigation";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 
 // @ts-ignore
 const CreatePackage = () => {
@@ -25,12 +29,14 @@ const CreatePackage = () => {
         control,
         resetField,
         trigger,
-        reset
     } = useForm({mode: "onBlur",});
+
     // Context
     // @ts-ignore
     const {siteSetting} = useSiteSetting();
-    const { handleFileUpload, ButtonUpload, preview} = useS3();
+
+    const {handleFileUpload, ButtonUpload, preview} = useS3();
+    const router = useRouter();
     const {data: session} = useSession();
 
 
@@ -79,14 +85,66 @@ const CreatePackage = () => {
     const [fee, setFee] = useState(0);
     const [packageNote, setPackageNote] = useState("");
     const [timeProcess, setTimeProcess] = useState(0);
-    const [empProcess, setEmpProcess] = useState(true);
+    const [empProcess, setEmpProcess] = useState(false);
+    const [historyNote, setHistoryNote] = useState("");
+    const [nextEmployee, setNextEmployee] = useState(null);
+    const [nowStep, setNowStep] = useState(0);
+    const [listBranch, setListBranch] = useState([]);
+    const [nextBranch, setNextBranch] = useState(null);
+    const [listEmployee, setListEmployee] = useState([]);
+    const [onCreatePackage, setOnCreatePackage] = useState(false);
+
+    const step = {
+        1: "Create Package",
+        2: "Warehouse From",
+        3: "InTransit",
+        4: "WarehouseTo",
+        5: "Shipping",
+        6: "Delivered",
+        7: "Cancelled",
+        8: "Returned",
+        9: "Lost"
+    }
+
+    const fetchListBranch = async () => {
+        const response = await fetch("/api/branches");
+        const data = await response.json();
+        if (data.status === 404) {
+            toast.error(data.message);
+        }
+        if (data.error) {
+            toast.error(data.error);
+            router.push('/app')
+        }
+        return data.branchs;
+    };
+
+    const fetchEmployees = async () => {
+        // @ts-ignore
+        const branchId = [0, 3].includes(nowStep) ? nextBranch?.id : session?.user?.branchId;
+
+        const response = await fetch(`/api/branches/getbyid/${branchId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        return data.data.employees;
+    }
+
 
     const previewUrl = useMemo(() => {
         if (preview) {
             return URL.createObjectURL(preview);
         }
     }, [preview]);
-
+    const stepProcess = useMemo(() => {
+        if ([6, 7, 8, 9].includes(nowStep)) {
+            return nowStep;
+        }
+        return nowStep + 1;
+    }, [nowStep])
     // Function
     const createItem = () => {
         const newItem = {
@@ -143,6 +201,8 @@ const CreatePackage = () => {
             setSelectedService(r[0]);
         });
     };
+
+
     const fetchListService = async () => {
         // @ts-ignore
         let postalCodeSender = formData?.type_sender === "new" ? (formData?.postalCode_sender || "") : (formData?.select_sender?.postalCode || "");
@@ -174,6 +234,18 @@ const CreatePackage = () => {
         window.location.reload(); // This will reload the page
     }
 
+    const employeeProcess = async () => {
+        if (1) {
+            return {
+                employeeCode: session?.user?.employeeCode,
+                step: nowStep,
+                historyNote: historyNote || null,
+                photo: await handleFileUpload(),
+                employeeNext: nextEmployee || null,
+            }
+        }
+    }
+
     const SubmitPackage = async () => {
         const InfoSender = formData.type_sender === "new" ? {
             address: formData.address_sender,
@@ -193,41 +265,32 @@ const CreatePackage = () => {
             province: formData.province_receiver,
             ward: formData.ward_receiver,
         } : formData.select_receiver;
-
-
-        const response = await fetch("/api/packages/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                sender: InfoSender,
-                receiver: InfoReceiver,
-                items: formData.list_items,
-                type: formData.type_package,
-                fee: fee,
-                cod: cod,
-                service: selectedService,
-                packageNote: packageNote,
-                packageSize: formData.package_size,
-                image: await handleFileUpload(),
-                submitBy: session?.user||{
-                    id: 1,
-                    fullName: 'Admin',
-                    employeeCode: 'EMP001',
-                    email: 'admin@localhost',
-                    phoneNumber: '0123456789',
-                    avatar: 'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Admin',
-                    role: {
-                        name: 'Admin',
-                        permissions: ['admin']
-                    }
-                },
-            })
-        });
-        const data = await response.json();
-        console.log("Data service:", data.data);
-        return data.data;
+        try {
+             const response = await fetch("/api/packages/add", {
+                 method: "POST",
+                 headers: {
+                     "Content-Type": "application/json",
+                 },
+                 body: JSON.stringify({
+                     sender: InfoSender,
+                     receiver: InfoReceiver,
+                     items: formData.list_items,
+                     type: formData.type_package,
+                     fee: fee,
+                     cod: cod,
+                     service: selectedService,
+                     packageNote: packageNote,
+                     packageSize: formData.package_size,
+                     employeeProcess: await employeeProcess(),
+                     submitBy: session?.user,
+                 })
+             });
+             const data = await response.json();
+             return data.data;
+        } catch (error) {
+            setOnCreatePackage(false);
+            toast.error("Error to create package");
+        }
     }
 
 
@@ -290,12 +353,28 @@ const CreatePackage = () => {
     useEffect(() => {
         if (session?.user?.employeeCode) {
             setEmpProcess(!!(session?.user?.employeeCode));
-        } else {
-            setEmpProcess(true);
         }
     }, [session]);
+    useEffect(() => {
+        if ([0, 3].includes(nowStep)) {
+            fetchListBranch().then(r => setListBranch(r));
+        } else {
+            fetchEmployees().then(r => setListEmployee(r));
+        }
+    }, [nowStep]);
+    useEffect(() => {
+        if (nextBranch) {
+            fetchEmployees().then(r => setListEmployee(r));
+        }
+    }, [nextBranch]);
 
+    useEffect(() => {
+        if (onCreatePackage) {
+            SubmitPackage()
+        }
+    }, [onCreatePackage]);
 
+    // @ts-ignore
     return (
         <PackageCreateContext.Provider
             value={{
@@ -445,7 +524,7 @@ const CreatePackage = () => {
                                 multiline
                                 rows={4}
                                 onChange={(e) => {
-                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//,+-]/g, '');
+                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//\s,+-]/g, '');
                                     // @ts-ignore
                                     setPackageNote(e.target.value);
                                 }}
@@ -457,7 +536,6 @@ const CreatePackage = () => {
                     </Card>
                 </Grid>
             </Grid>
-
             {/*Employee Process */}
             {empProcess ? (<Grid container spacing={3} columns={12}>
                 <Grid item xs={12}>
@@ -518,9 +596,13 @@ const CreatePackage = () => {
                                         <Grid item xs={12} lg={6}>
                                             <TextField
                                                 margin="dense"
-                                                label="Employee Name"
+                                                label="Employee"
                                                 type="text"
-                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                InputProps={{
+                                                    startAdornment: <PersonOutlineIcon
+                                                        fontSize={"small"}></PersonOutlineIcon>,
+                                                }}
+                                                value={session?.user?.employeeCode}
                                                 disabled
                                                 size={"small"}
                                                 autoComplete={"off"}
@@ -531,9 +613,11 @@ const CreatePackage = () => {
                                         <Grid item xs={12} lg={6}>
                                             <TextField
                                                 margin="dense"
-                                                label="Employee Name"
+                                                label="Next Step Process"
                                                 type="text"
-                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
+                                                value={
+                                                    // @ts-ignore
+                                                    step[Number(stepProcess)]}
                                                 disabled
                                                 size={"small"}
                                                 autoComplete={"off"}
@@ -541,37 +625,78 @@ const CreatePackage = () => {
                                                 sx={{my: 2}}
                                             /></Grid>
                                         <Grid item xs={12} lg={6}>
-                                            <TextField
-                                                margin="dense"
-                                                label="Employee Name"
-                                                type="text"
-                                                value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
-                                                disabled
-                                                size={"small"}
-                                                autoComplete={"off"}
-                                                fullWidth={true}
-                                                sx={{my: 2}}
-                                            /></Grid><Grid item xs={12} lg={6}>
-                                        <TextField
-                                            margin="dense"
-                                            label="Employee Name"
-                                            type="text"
-                                            value={session?.user?.employeeCode ? session?.user?.employeeCode : "EMP001"}
-                                            disabled
-                                            size={"small"}
-                                            autoComplete={"off"}
-                                            fullWidth={true}
-                                            sx={{my: 2}}
-                                        /></Grid>
+                                            {[0, 3].includes(nowStep) ? (
+                                                <Autocomplete
+                                                    disableClearable={true}
+                                                    options={listBranch}
+                                                    getOptionLabel={(option) =>
+                                                        // @ts-ignore
+                                                        option.branchName}
+                                                    onChange={(event, value) => {
+                                                        // @ts-ignore
+                                                        setNextBranch(value);
+                                                    }}
+                                                    renderInput={(params) =>
+                                                        <TextField
+                                                            {...params}
+                                                            label="Next Branch Process"
+                                                            margin="dense"
+                                                            size={"small"}
+                                                            autoComplete={'none'}
+                                                            fullWidth={true}
+                                                            sx={{my: 2}}
+                                                        />
+                                                    }
+                                                />
+                                            ) : (
+                                                <TextField
+                                                    margin="dense"
+                                                    label="Next Branch Process"
+                                                    type="text"
+                                                    value={
+                                                        // @ts-ignore
+                                                        session?.user?.branchName}
+                                                    disabled
+                                                    size={"small"}
+                                                    autoComplete={"off"}
+                                                    fullWidth={true}
+                                                    sx={{my: 2}}
+                                                />
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} lg={6}>
+                                            <Autocomplete
+                                                disableClearable={true}
+                                                options={listEmployee}
+                                                getOptionLabel={(option) =>
+                                                    // @ts-ignore
+                                                    option.employeeCode + " - " + option.fullname}
+                                                onChange={(event, value) => {
+                                                    // @ts-ignore
+                                                    setNextEmployee(value.id);
+                                                }}
+                                                renderInput={(params) =>
+                                                    <TextField
+                                                        {...params}
+                                                        label="Next Employee Process"
+                                                        margin="dense"
+                                                        size={"small"}
+                                                        autoComplete={'none'}
+                                                        fullWidth={true}
+                                                        sx={{my: 2}}
+                                                    />
+                                                }
+                                            />
+                                        </Grid>
                                         <Grid item xs={12}>
                                             <TextField
-                                                label="Package Note"
+                                                label="Employee Note"
                                                 multiline
                                                 rows={4}
                                                 onChange={(e) => {
-                                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//,+-]/g, '');
+                                                    e.target.value = e.target.value.replace(/[^0-9a-zA-Z//\s,+-]/g, '');
                                                     // @ts-ignore
-                                                    setPackageNote(e.target.value);
+                                                    setHistoryNote(e.target.value);
                                                 }}
                                                 fullWidth={true}
                                                 autoComplete={"off"}
@@ -699,7 +824,10 @@ const CreatePackage = () => {
                                     startIcon={<TextSnippetIcon/>}
                                     variant="contained"
                                     color={"success"}
-                                    onClick={SubmitPackage}
+                                    onClick={()=>{
+                                        setOnCreatePackage(true)
+                                    }}
+                                    disabled={onCreatePackage}
                                 >
                                     Submit Package
                                 </Button>
@@ -722,6 +850,12 @@ const CreatePackage = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <Backdrop
+                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                open={onCreatePackage}
+            >
+                <CircularProgress color="inherit"/>
+            </Backdrop>
         </PackageCreateContext.Provider>
     )
 }

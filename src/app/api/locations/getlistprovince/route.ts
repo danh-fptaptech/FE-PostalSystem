@@ -1,52 +1,39 @@
-import { NextResponse } from "next/server";
-export async function GET(req: Request) {
-    try {
-        const data = [
-            {
-                id: 1,
-                locationName: "Hà Nội",
-                postalCode: "100000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-            {
-                id: 2,
-                locationName: "Hồ Chí Minh",
-                postalCode: "700000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-            {
-                id: 3,
-                locationName: "Đà Nẵng",
-                postalCode: "550000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-            {
-                id: 4,
-                locationName: "Hải Phòng",
-                postalCode: "180000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-            {
-                id: 5,
-                locationName: "Cần Thơ",
-                postalCode: "900000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-            {
-                id: 6,
-                locationName: "An Giang",
-                postalCode: "880000",
-                locationLevel: 0,
-                locationOf: 0,
-            },
-        ];
-        return NextResponse.json({ provinces: data });
-    } catch (error) {
-        return NextResponse.json({ error: "api backend error" });
-    }
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req: NextRequest) {
+	try {
+		const res = await fetch(
+			process.env.NEXT_PUBLIC_API_URL +
+				"/Location/GetListLocationByLevel/Province",
+			{
+				method: req.method,
+				headers: req.headers,
+				cache: "no-cache",
+			}
+		);
+
+		const data = await res.json();
+
+		if (res.ok) {
+			return NextResponse.json({
+				ok: true,
+				status: "success",
+				message: "Get locations successfully.",
+				data,
+			});
+		}
+
+		return NextResponse.json({
+			ok: false,
+			status: "error",
+			message: "Failed to get locations !",
+		});
+	} catch (error) {
+		console.log(error);
+		return NextResponse.json({
+			ok: false,
+			status: "Server error",
+			message: "Oops! Error while trying to get locations !",
+		});
+	}
 }

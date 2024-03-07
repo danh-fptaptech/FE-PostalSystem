@@ -25,7 +25,8 @@ export async function DELETE(
 		return NextResponse.json({
 			ok: false,
 			status: "server error",
-			message: "Failed to delete ! Some employees already have this role.",
+			message:
+				"Failed to delete ! The role is one of system roles or some employees already have this role.",
 		});
 	} catch (error) {
 		return NextResponse.json({
