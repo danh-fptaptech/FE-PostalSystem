@@ -16,7 +16,7 @@ function Page({ params }: { params: { blogId: string } }) {
     const fetchData = async () => {
       const response = await fetch(`/api/news/${id}`)
       const data = await response.json()
-      console.log(data)
+      // console.log(data)
       setBlog(data.data)
     }
     fetchData()

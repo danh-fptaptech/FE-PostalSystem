@@ -20,7 +20,7 @@ import {
   PasswordOutlined, TypeSpecimenOutlined,
 } from '@mui/icons-material'
 import * as React from 'react'
-import {OverridableComponent} from '@mui/material/OverridableComponent'
+import { OverridableComponent } from '@mui/material/OverridableComponent'
 import MenuGroup from '@/components/MenuGroup'
 import PermissionCheck from './PermissionCheck'
 
@@ -39,7 +39,7 @@ export default function DrawerMenu() {
   const menu = [
     createMenu('Dashboard', AppsOutlined, '/app', 'user.view'),
     createMenu('Create Package', NoteAddOutlined, '/app/create-package', 'user.view'),
-    createMenu('New Management', NoteAddOutlined, '/app/news-management', 'admin.view'),
+    createMenu('New Management', NoteAddOutlined, '/app/news-management', 'app.view'),
 
     createMenu('Packages', Inventory2Outlined, '/app/packages', 'package.view'),
     createMenu('Branches', HomeWorkOutlined, '/app/branches', 'branch', [
@@ -65,6 +65,7 @@ export default function DrawerMenu() {
     createMenu('Packages', Inventory2Outlined, '/app/user/packages', 'packages.view'),
     createMenu('Profile', AccountBoxOutlined, '/app/user', 'user.view'),
     createMenu('Change Password', PasswordOutlined, '/app/user/change-password', 'password.change'),
+    createMenu('General Settings', PasswordOutlined, '/app/general-settings', 'app.view'),
     createMenu('Addresses', BusinessOutlined, '/app/user/addresses', 'addresses.view', [
       createMenu('Sender', OutboxOutlined, '/app/user/addresses/sender', 'addresses.view'),
       createMenu('Receiver', MoveToInboxOutlined, '/app/user/addresses/receiver', 'addresses.view'),
@@ -86,5 +87,5 @@ export default function DrawerMenu() {
         ))}
       </List>
     </div>
-    )
+  )
 }

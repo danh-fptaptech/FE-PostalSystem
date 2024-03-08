@@ -117,6 +117,10 @@ export interface TrackingDataItem {
   service: Service;
   feeCharge: number;
   timeProcess: number;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+  serviceName: string;
 }
 
 export interface TrackingData {
@@ -182,3 +186,13 @@ export interface BlogItem {
   employee: Employee;
 }
 
+export interface SiteSetting {
+  id: number;
+  settingName: string;
+  settingValue: string;
+  status: number;
+}
+
+export interface SiteContextType {
+  siteSetting: SiteSetting[];
+}

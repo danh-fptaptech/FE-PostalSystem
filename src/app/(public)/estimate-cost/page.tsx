@@ -215,7 +215,7 @@ function Page() {
             <TableBody>
               {trackingData ? trackingData.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell style={{ fontSize: '16px' }}>{row.service.serviceName}</TableCell>
+                  <TableCell style={{ fontSize: '16px' }}>{row.serviceName}</TableCell>
                   <TableCell style={{ fontSize: '16px' }}>{row.feeCharge.toLocaleString()} VND</TableCell>
                   <TableCell style={{ fontSize: '16px' }}>{row.timeProcess} day(s)</TableCell>
                 </TableRow>

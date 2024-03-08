@@ -2,13 +2,14 @@
 import * as React from "react";
 import {toast} from "sonner";
 import {useContext} from "react";
+import { SiteContextType, SiteSetting } from "@/components/interfaces";
 
 //@ts-ignore
-const SiteContext = React.createContext();
+const SiteContext = React.createContext<SiteContextType | undefined>(undefined);
 
 //@ts-ignore
 export const SiteProvider = ({ children }) => {
-    const [siteSetting, setSiteSetting] = React.useState([]);
+    const [siteSetting, setSiteSetting] = React.useState<SiteSetting[]>([]);
 
 
     React.useEffect(() => {
@@ -33,4 +34,10 @@ export const SiteProvider = ({ children }) => {
     );
 };
 
-export const useSiteSetting = () => useContext(SiteContext);
+export const useSiteSetting = (): SiteContextType => {
+    const context = useContext(SiteContext);
+    if (!context) {
+      throw new Error('useSiteSetting must be used within a SiteProvider');
+    }
+    return context;
+  };

@@ -9,21 +9,24 @@ import { toast } from 'sonner'
 
 export default function TrackingShipment() {
   const [trackingCode, setTrackingCode] = useState('')
+  const [phoneFrom, setPhoneFrom] = useState('')
   const router = useRouter()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrackingCode(event.target.value)
   }
-
+  const handlePhoneFromChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneFrom(event.target.value)
+  }
   const handleTraCuuButton = async () => {
     // Check if trackingCode is not empty
-    if (!trackingCode) {
-      toast.error('Please enter a tracking code')
+    if (!trackingCode || !phoneFrom) {
+      toast.error('Please enter a tracking code and phone number')
       return
     }
 
     try {
-      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}`)
+      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}/${phoneFrom}`)
       const data = await response.json()
 
       // Check if the response is successful
@@ -68,7 +71,8 @@ export default function TrackingShipment() {
               <TextField
                 sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }}
                 type="text"
-                placeholder='Nhập số điện thoại'
+                placeholder='Enter your phone number'
+                onChange={handlePhoneFromChange}
               />
               <Button sx={{
                 my:2,

@@ -7,9 +7,16 @@ import * as React from 'react'
 import AppAppBar from '@/components/AppAppBar'
 import Image from 'next/image'
 import banner from '../../../public/1920px-Hong_Kong_Skyline_Panorama_-_Dec_200811.jpg'
+import { useSiteSetting } from '@/contexts/SiteContext'
 
 const Layout = ({ children }: any) => {
   const { data: session, status } = useSession()
+  const { siteSetting } = useSiteSetting()
+  // Find the setting with settingName equal to 'site_name'
+  const siteNameSetting = siteSetting.find(setting => setting.settingName === 'site_name');
+  
+  // If siteNameSetting exists, use its settingValue, otherwise use a default value
+  const siteName = siteNameSetting ? siteNameSetting.settingValue : 'Default Site Name';
   return (
     <>
       <header>
@@ -34,7 +41,7 @@ const Layout = ({ children }: any) => {
 	  </main>
       <footer>
 		  <Container>
-			  <p>&copy {new Date().getFullYear()} Tars Postal</p>
+			  <p>&copy {new Date().getFullYear()} {siteName}</p>
 		  </Container>
 			</footer>
 </>

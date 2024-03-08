@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { PersonAddAlt, Login } from '@mui/icons-material'
 import LinkBehaviour from '@/components/LinkBehaviour'
+import { useSiteSetting } from '@/contexts/SiteContext'
 
 interface AppAppBarProps {
   mode: PaletteMode
@@ -23,6 +24,12 @@ interface AppAppBarProps {
 
 function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   const { data: session, status } = useSession()
+  const { siteSetting } = useSiteSetting()
+  // Find the setting with settingName equal to 'site_name'
+  const siteNameSetting = siteSetting.find(setting => setting.settingName === 'site_name');
+  
+  // If siteNameSetting exists, use its settingValue, otherwise use a default value
+  const siteName = siteNameSetting ? siteNameSetting.settingValue : 'Default Site Name';
   const [open, setOpen] = React.useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -87,7 +94,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
               }}
             >
               <Link href='/' style={{ textDecoration:'none' }}>
-                <Typography sx={{ fontWeight:550, fontSize:24, px:2, color:'#ee0033' }}>Tars Postal</Typography>
+                <Typography sx={{ fontWeight:550, fontSize:24, px:2, color:'#ee0033' }}>{siteName}</Typography>
               </Link>
               {/* <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
