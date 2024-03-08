@@ -2,6 +2,7 @@
 
 import { fetchEmployees, fetchUpdatedRequests } from "@/app/_data/data";
 import {
+	Avatar,
 	Button,
 	Dialog,
 	DialogContent,
@@ -327,7 +328,8 @@ export default function UpdatedRequestManagement() {
 								/>
 							</Tooltip>
 
-							<div className="my-3">
+							<div className="my-3 flex justify-center items-center">
+								<Avatar src={selectedEmployee?.submitedInfo.avatar} className="h-16 w-16" />
 								<DialogTitle className="text-center">
 									Updated Employee Request
 								</DialogTitle>
@@ -342,7 +344,7 @@ export default function UpdatedRequestManagement() {
 										<input
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={selectedEmployee?.submitedInfo.email}
-											readOnly
+											readOnly disabled
 										/>
 									</div>
 
@@ -351,7 +353,7 @@ export default function UpdatedRequestManagement() {
 										<input
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={selectedEmployee?.submitedInfo.phonenumber}
-											readOnly
+											readOnly disabled
 										/>
 									</div>
 
@@ -360,7 +362,7 @@ export default function UpdatedRequestManagement() {
 										<input
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={selectedEmployee?.submitedInfo.postalcode}
-											readOnly
+											readOnly disabled
 										/>
 									</div>
 
@@ -369,7 +371,7 @@ export default function UpdatedRequestManagement() {
 										<textarea
 											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											value={selectedEmployee?.submitedInfo.address}
-											readOnly></textarea>
+											readOnly disabled></textarea>
 									</div>
 
 									<div className="my-3 flex">
@@ -380,7 +382,7 @@ export default function UpdatedRequestManagement() {
 												name="province"
 												id="province"
 												value={selectedEmployee?.submitedInfo.province}
-												readOnly
+												readOnly disabled
 											/>
 										</div>
 
@@ -391,18 +393,9 @@ export default function UpdatedRequestManagement() {
 												name="district"
 												id="district"
 												value={selectedEmployee?.submitedInfo.district}
-												readOnly
+												readOnly disabled
 											/>
 										</div>
-									</div>
-
-									<div className="my-3">
-										<label className="font-semibold">Upload Avatar:</label>
-										<input
-											className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											value={selectedEmployee?.submitedInfo.avatar}
-											readOnly
-										/>
 									</div>
 
 									<div className="flex justify-around mb-2 mt-10">

@@ -136,7 +136,7 @@ const paths = [
 
 	{
 		path: "/app/admin/users",
-		permission: ["user.view"],
+		permission: ["emp.view"],
 	},
 
 	{
@@ -150,5 +150,9 @@ const paths = [
 	{
 		path: "/app/create-package",
 		permission: ["Admin", "user.view"],
+	},
+	{
+		path: "/app/Service",
+		permission: ["service.view", "emp.view"],
 	},
 ];

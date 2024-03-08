@@ -5,6 +5,7 @@ export async function GET(req: Request) {
 		const response = await fetch(`${api}/Branch/all`, {
 			cache: "no-store",
 		});
+
 		let data = null;
 		if (response.ok) {
 			data = await response.json();

@@ -52,8 +52,6 @@ export async function POST(req: Request) {
 			body: JSON.stringify(employee),
 		});
 
-		console.log(employee);
-
 		if (res.ok) {
 			return NextResponse.json({
 				ok: true,

@@ -58,7 +58,7 @@ export default function DrawerMenu() {
 		createMenu("Profile", AccountBoxOutlined, "/app/employee", "profile.view"),
 		createMenu("Create Package", NoteAddOutlined, "/app/create-package", "package.create"),
 		createMenu("Packages", Inventory2Outlined, "/app/packages", "package.view"),
-		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch", [
+		createMenu("Branches", HomeWorkOutlined, "/app/branches", "emp.view", [
 			createMenu(
 				"List Branches",
 				DomainOutlined,
@@ -72,7 +72,7 @@ export default function DrawerMenu() {
 				"branch.create"
 			),
 		]),
-		createMenu("Service", FactCheckOutlined, "/app/Services", "service.view", [
+		createMenu("Service", FactCheckOutlined, "/app/Services", "emp.view", [
 			createMenu(
 				"Service Type",
 				TypeSpecimenOutlined,
@@ -110,22 +110,6 @@ export default function DrawerMenu() {
 				LocalAtmOutlined,
 				"/app/Feecustom/Manager",
 				"fee.create"
-			),
-		]),
-
-		// Admin
-		createMenu("Branches", HomeWorkOutlined, "/app/branches", "emp.view", [
-			createMenu(
-				"List Branches",
-				DomainOutlined,
-				"/app/branches",
-				"branch.view"
-			),
-			createMenu(
-				"Create Branch",
-				DomainAddOutlined,
-				"/app/branches/create",
-				"branch.create"
 			),
 		]),
 

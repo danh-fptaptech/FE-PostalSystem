@@ -54,7 +54,7 @@ import {
 	fetchRolesWithPermission,
 	fetchChangeStatus,
 } from "@/app/_data/data";
-import PermissionCheck from "@/components/PermissionCheck";
+
 
 export default function EmployeeManagement() {
 	const [employees, setEmployees] = React.useState<Employee[]>([]);
@@ -122,7 +122,7 @@ export default function EmployeeManagement() {
 			}
 
 			if (branchRes.ok) {
-				setEmployees(branchRes.data);
+				setBranches(branchRes.data);
 			}
 
 			if (roleRes.ok) {

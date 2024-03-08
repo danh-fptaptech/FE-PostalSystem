@@ -1,5 +1,7 @@
 "use client";
 
+import useS3 from "@/hooks/useS3";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { getChildrenLocationsByParentId, getProvinces } from "@/app/_data/data";
@@ -10,7 +12,7 @@ import {
 	Province,
 	UpdateInfoRequest,
 } from "@/types/types";
-import { toast } from "sonner";
+import Image from "next/image";
 import { CloseOutlined, Send } from "@mui/icons-material";
 import {
 	Dialog,
@@ -22,6 +24,7 @@ import {
 	InputLabel,
 	Typography,
 	Box,
+	Paper,
 } from "@mui/material";
 import Loading from "@/components/Loading";
 
@@ -32,6 +35,14 @@ export default function EmployeeInfoPage() {
 	const [districts, setDistricts] = React.useState<Province[]>([]);
 	const [openDialogUpdatedResquest, setOpenDialogUpdatedResquest] =
 		React.useState(false);
+
+	const { handleFileUpload, ButtonUpload, preview } = useS3();
+
+	const previewUrl = React.useMemo(() => {
+		if (preview) {
+			return URL.createObjectURL(preview);
+		}
+	}, [preview]);
 
 	const { data: session } = useSession();
 	const {
@@ -51,7 +62,7 @@ export default function EmployeeInfoPage() {
 				`/api/employees/${session?.user.employeeCode}/sendUpdatedRequest`,
 				{
 					method: "PUT",
-					body: JSON.stringify(data),
+					body: JSON.stringify({ ...data, avatar: await handleFileUpload() }),
 				}
 			);
 
@@ -119,73 +130,60 @@ export default function EmployeeInfoPage() {
 			{loading ? (
 				<Loading />
 			) : (
-				<Box className="my-4">
-					<Box className="mx-3">
-						<Box className="flex items-center my-3">
-							<Avatar
-								variant="rounded"
-								src={employee?.avatar}
-								alt={employee?.fullname}
-								className="mr-2"
-							/>
-							<Typography className="font-semibold">
-								{employee?.employeeCode}
-							</Typography>
-						</Box>
-
-						<Box className="flex items-center justify-between my-3">
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Full name:</InputLabel>
-								<Typography className="text-sm uppercase">
+				<div className="my-4">
+					<Box className="flex justify-between mx-3">
+						<Box className="flex items-center">
+							<Box>
+								<InputLabel className="p-2 font-semibold">Employee Code:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Full name:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Email:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Phone number:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Address:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Branch:</InputLabel>
+								<InputLabel className="p-2 font-semibold">Role:</InputLabel>
+							</Box>
+							<Box>
+								<Typography className="p-2 font-semibold">
+									{employee?.employeeCode}
+								</Typography>
+								<Typography className="p-2 uppercase">
 									{employee?.fullname}
 								</Typography>
-							</Box>
-
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Email:</InputLabel>
-								<Typography className="text-sm">{employee?.email}</Typography>
-							</Box>
-
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Phone number:</InputLabel>
-								<Typography className="text-sm">
+								<Typography className="p-2">{employee?.email}</Typography>
+								<Typography className="p-2">
 									{employee?.phoneNumber}
 								</Typography>
-							</Box>
-						</Box>
-
-						<Box className="flex justify-between items-center my-3">
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Branch:</InputLabel>
-								<Typography className="text-sm">
+								<Typography className="p-2">
+									{employee?.address}, {employee?.district}, {employee?.province}
+								</Typography>
+								<Typography className="p-2">
 									{employee?.branchName}
 								</Typography>
-							</Box>
 
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Address:</InputLabel>
-								<Typography className="text-sm">
-									{employee?.address}, {employee?.district},{" "}
-									{employee?.province}.
-								</Typography>
-							</Box>
-
-							<Box className="flex items-center">
-								<InputLabel className="mr-2">Role:</InputLabel>
-								<Typography className="text-sm">
+								<Typography className="p-2">
 									{employee?.roleName}
 								</Typography>
 							</Box>
 						</Box>
 
+						<img
+							src={"https://project-sem3.s3.ap-southeast-1.amazonaws.com/" + employee?.avatar}
+							alt={employee?.fullname}
+							style={{ maxHeight: "300px", maxWidth: "300px" }}
+							className="rounded-md"
+						/>
+					</Box>
+
+					<div className="">
 						<Button
-							className="my-3"
+							className="mx-3"
 							variant="contained"
 							color="secondary"
 							onClick={() => setOpenDialogUpdatedResquest(true)}>
 							Update Information
 						</Button>
-					</Box>
+					</div>
+					<br />
 
 					{/* Dialog send updated info */}
 					<Dialog
@@ -257,7 +255,7 @@ export default function EmployeeInfoPage() {
 								<div className="my-3">
 									<label className="font-semibold">Address:</label>
 									<textarea
-										defaultValue={employee?.address}
+										defaultValue={employee?.address + ", " + employee?.district + ", " + employee?.province}
 										{...updatedRegister("address", {
 											required: "Address is required.",
 										})}
@@ -323,13 +321,25 @@ export default function EmployeeInfoPage() {
 									</div>
 								</div>
 
-								<div className="my-3">
-									<label className="font-semibold">Upload New Avatar:</label>
-									<input
-										{...updatedRegister("avatar")}
-										defaultValue={employee?.avatar}
-										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-									/>
+								<div className="flex justify-between items-center my-3">
+									{preview ?
+										<Image src={`${previewUrl}`}
+											width={0}
+											height={0}
+											objectFit='contain'
+											alt={"preview"}
+											title={"preview"}
+											style={{
+												width: 'clamp(100px, 100%, 200px)',
+												height: 'auto',
+												margin: '20px'
+											}}
+										/> :
+										<img {...updatedRegister("avatar")} src={'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=UploadImage'}
+											alt={"preview"} title={"preview"} width={180} height={180} className="rounded-md"
+										/>
+									}
+									<ButtonUpload />
 								</div>
 
 								<Button
@@ -343,7 +353,7 @@ export default function EmployeeInfoPage() {
 							</form>
 						</DialogContent>
 					</Dialog>
-				</Box>
+				</div>
 			)}
 		</>
 	);
