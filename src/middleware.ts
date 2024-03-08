@@ -79,7 +79,7 @@ export const config = {
 const paths = [
     {
         path: "/app",
-        permission: ["Admin","user.view"],
+        permission: ["Admin","package.view"],
     },
     {
         path: "/app/user",
@@ -137,12 +137,12 @@ const paths = [
 
     {
         path: "/app/packages",
-        permission: ["user.access", "Employee", "Branch Manager", "Admin"],
+        permission: ["package.access", "Employee", "Branch Manager", "Admin"],
     },
 
     {
         path: "/app/employee",
-        permission: ["user.access", "Employee", "Branch Manager", "Delivery"],
+        permission: ["package.access", "Employee", "Branch Manager", "Delivery"],
     },
     {
         path: "/app/historylogs",
@@ -152,38 +152,39 @@ const paths = [
             "Branch Manager",
             "Delivery",
             "Warehouse",
+            "package.view",
         ],
     },
     {
         path: '/app/branches',
-        permission: ['branches.view'],
+        permission: ['package.view'],
     },
     {
         path: '/app/create-package',
-        permission: ['Admin','user.view'],
+        permission: ['Admin','package.view'],
     },
     {
         path:'/app/news-management',
-        permission: ['app.view'],
+        permission: ['package.view'],
     },
     {
         path:'/app/news-management/create',
-        permission: ['app.view'],
+        permission: ['package.view'],
     },
     {
         path: '/app/news-management/update/[id]',
-        permission: ['app.view'],
+        permission: ['package.view'],
     },
     {
         path: '/app/news-management/delete',
-        permission: ['app.view']
+        permission: ['package.view']
     },
     {
         path:'/app/general-settings',
-        permission: ['app.view']
+        permission: ['package.view']
     },
     {
         path:'/app/test-label-shipping',
-        permission: ['app.view']
+        permission: ['package.view']
     }
 ];
