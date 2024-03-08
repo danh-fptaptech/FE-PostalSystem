@@ -12,7 +12,6 @@ const FormInfo = (props: any) => {
     const [districts, setDistricts] = useState<{ locationName: string, id: number }[]>([]);
     const [wards, setWards] = useState<{ locationName: string, id: number }[]>([]);
 
-
     const fetchProvinces = async () => {
         const res = await fetch(`/api/locations/getlistprovince`);
         const data = await res.json();
@@ -55,6 +54,7 @@ const FormInfo = (props: any) => {
                     helperText={errors[`phoneNumber_${type}`]?.message}
                     size={"small"}
                     fullWidth={true}
+                    autoComplete={'new-value'}
                 />
                 <TextField
                     margin="dense"
@@ -74,6 +74,7 @@ const FormInfo = (props: any) => {
                     helperText={errors[`fullName_${type}`]?.message}
                     size={"small"}
                     fullWidth={true}
+                    autoComplete={'new-value'}
                 />
                 <TextField
                     margin="dense"
@@ -84,11 +85,15 @@ const FormInfo = (props: any) => {
                     {...register(`address_${type}`, {
                         required: "Address is required",
                     })}
-                    onChange={handleFormChange}
+                    onChange={(e)=>{
+                        e.target.value = e.target.value.replace(/[^0-9a-zA-Z//\s,+-]/g, '');
+                        handleFormChange(e);
+                    }}
                     error={!!(errors[`address_${type}`])}
                     helperText={errors[`address_${type}`]?.message}
                     size={"small"}
                     fullWidth={true}
+                    autoComplete={'new-value'}
                 />
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={4}>
@@ -113,12 +118,10 @@ const FormInfo = (props: any) => {
                                             resetField(`ward_${type}`);
                                         }
                                     }}
-                                    onReset={() => {
-
-                                    }}
                                     renderInput={(params) =>
                                         <TextField
                                             {...params}
+                                            autoComplete={'none'}
                                             label="Province"
                                             margin="dense"
                                             size={"small"}
@@ -162,6 +165,7 @@ const FormInfo = (props: any) => {
                                             size={"small"}
                                             helperText={errors[`district_${type}`]?.message}
                                             error={!!(errors[`district_${type}`])}
+                                            autoComplete={'none'}
                                         />
                                     }
                                 />
@@ -200,6 +204,7 @@ const FormInfo = (props: any) => {
                                             size={"small"}
                                             helperText={errors[`ward_${type}`]?.message}
                                             error={!!(errors[`ward_${type}`])}
+                                            autoComplete={'none'}
                                         />
                                     }
                                 />
