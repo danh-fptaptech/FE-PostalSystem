@@ -72,7 +72,7 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          */
-        '/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|estimate-cost|tracking-shipment|reset-password|register|$).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|estimate-cost|tracking-shipment|reset-password|register|news/*|$).*)',
     ],
 };
 

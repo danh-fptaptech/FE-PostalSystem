@@ -214,17 +214,7 @@ const CreatePackage = () => {
         let totalWeight = !checkSize ? formData.total_weight : (formData.size_convert > formData.total_weight ? formData.size_convert : formData.total_weight);
         // @ts-ignore
         setFinalWeight(totalWeight);
-        const response = await fetch("/api/fee-service", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                postalCodeFrom: postalCodeSender,
-                postalCodeTo: postalCodeReceiver,
-                weight: totalWeight,
-            })
-        });
+        const response = await fetch(`/api/FeeCustom/GetFeeByPostalCodeWeight/${postalCodeSender}/${postalCodeReceiver}/${totalWeight}`);
         const data = await response.json();
         console.log("Data service:", data.data);
         return data.data;
