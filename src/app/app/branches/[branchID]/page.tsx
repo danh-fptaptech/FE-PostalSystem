@@ -7,7 +7,7 @@ import getWardFromAddress from "@/helper/getWardFromAddress";
 import splitAddressAndWard from "@/helper/splitAddressAndWard";
 import {Domain} from "@mui/icons-material";
 
-const BranchDetails = ({ params }: { params: { branchID: string } }) => {
+const BranchDetails = ({ params }: { params: { branchID: string }}) => {
   const [branch, setBranch] = useState({
     branchName: "",
     phoneNumber: "",

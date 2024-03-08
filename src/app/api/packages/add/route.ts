@@ -11,15 +11,16 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (res.ok) {
+			let data = await res.json();
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Success to add package",
+				message: "Add package successfully",
+				data,
 			});
 		}
-
 		console.log("Unhandled server-side error in add package");
-
+		console.log(await res.text());
 		return NextResponse.json({
 			ok: false,
 			status: "error",

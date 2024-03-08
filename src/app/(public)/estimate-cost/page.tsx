@@ -190,7 +190,7 @@ function Page() {
   }
   return (
     <>
-      <Box sx={{ py:1, px:2 }}>
+      <Box sx={{ py: 1, px: 2 }}>
         <Stack>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -202,20 +202,20 @@ function Page() {
       </Box>
 
       {/* Table */}
-      <Box sx={{ my:2 }}>
+      <Box sx={{ my: 2 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 380 }} aria-label="simple table">
             <TableHead>
-              <TableRow sx={{ backgroundColor:'#f0f0f0' }}>
-                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Service Name</TableCell>
-                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Cost</TableCell>
-                <TableCell style={{ fontSize: '16px', fontWeight:550 }} align="center">Estimate Time</TableCell>
+              <TableRow sx={{ backgroundColor: '#f0f0f0' }}>
+                <TableCell style={{ fontSize: '16px', fontWeight: 550 }} align="center">Service Name</TableCell>
+                <TableCell style={{ fontSize: '16px', fontWeight: 550 }} align="center">Cost</TableCell>
+                <TableCell style={{ fontSize: '16px', fontWeight: 550 }} align="center">Estimate Time</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {trackingData ? trackingData.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell style={{ fontSize: '16px' }}>{row.service.serviceName}</TableCell>
+                  <TableCell style={{ fontSize: '16px' }}>{row.serviceName}</TableCell>
                   <TableCell style={{ fontSize: '16px' }}>{row.feeCharge.toLocaleString()} VND</TableCell>
                   <TableCell style={{ fontSize: '16px' }}>{row.timeProcess} day(s)</TableCell>
                 </TableRow>
@@ -226,14 +226,14 @@ function Page() {
       </Box>
 
       {/* Form tra cuu */}
-      <Paper elevation={3} sx={{ my:4 }}>
-        <Grid container sx={{ p:4 }}>
+      <Paper elevation={3} sx={{ my: 4 }}>
+        <Grid container sx={{ p: 4 }}>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Typography sx={{ fontWeight:550 }} variant="h5" component="h5">
+              <Typography sx={{ fontWeight: 550 }} variant="h5" component="h5">
                 Estimate Cost
               </Typography>
-              <Typography sx={{ my:2, fontWeight:'550' }}>From *</Typography>
+              <Typography sx={{ my: 2, fontWeight: '550' }}>From *</Typography>
               <Autocomplete
                 id="city-select-demo"
                 options={locations}
@@ -259,7 +259,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
+              <Typography sx={{ my: 2, fontWeight: '550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-select-demo"
@@ -284,7 +284,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>To *</Typography>
+              <Typography sx={{ my: 2, fontWeight: '550' }}>To *</Typography>
               <Autocomplete
                 id="city-to-select-demo"
                 options={locations}
@@ -310,7 +310,7 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>District *</Typography>
+              <Typography sx={{ my: 2, fontWeight: '550' }}>District *</Typography>
 
               <Autocomplete
                 id="district-to-select-demo"
@@ -335,28 +335,28 @@ function Page() {
                   />
                 )}
               />
-              <Typography sx={{ my:2, fontWeight:'550' }}>Enter total weight *</Typography>
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="number" placeholder='Enter weight in grams'/>
+              <Typography sx={{ my: 2, fontWeight: '550' }}>Enter total weight *</Typography>
+              <TextField sx={{ '& .MuiInputBase-input': { py: 1 }, width: '100%', mt: 1 }} type="number" placeholder='Enter weight in grams' />
 
-              <Typography sx={{ fontWeight:550 }}>
+              <Typography sx={{ fontWeight: 550 }}>
                 <Button sx={{
-                  my:2,
-                  color:'white',
-                  backgroundColor:'red',
-                  borderRadius:1,
-                  '&:hover':{
-                    backgroundColor:'red',
-                    color:'white'
+                  my: 2,
+                  color: 'white',
+                  backgroundColor: 'red',
+                  borderRadius: 1,
+                  '&:hover': {
+                    backgroundColor: 'red',
+                    color: 'white'
                   }
                 }}
-                onClick={handleTraCuuEstimateCost}
+                  onClick={handleTraCuuEstimateCost}
                 >SEARCH</Button>
               </Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Image priority src={trackingSvg} alt="tracking" style={{ display:'block', marginLeft:'auto', marginRight:'auto', maxWidth:'280px' }}/>
+              <Image priority src={trackingSvg} alt="tracking" style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', maxWidth: '280px' }} />
             </Box>
           </Grid>
         </Grid>

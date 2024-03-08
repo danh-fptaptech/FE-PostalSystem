@@ -71,6 +71,8 @@ export default function UpdatedRequestManagement() {
 					});
 
 					//@ts-ignore
+
+					//@ts-ignore
 					acceptEmployee.submitedInfo = extractedInfo;
 
 					return acceptEmployee;
@@ -319,7 +321,8 @@ export default function UpdatedRequestManagement() {
 					{selectedEmployee && (
 						<Dialog
 							open
-							className="max-w-[500px] mx-auto">
+							className="max-w-[500px] mx-auto"
+						>
 							<Tooltip title="Close">
 								<CloseOutlined
 									onClick={() => setSelectedEmployee(null)}
@@ -338,7 +341,8 @@ export default function UpdatedRequestManagement() {
 							<DialogContent>
 								<form
 									onSubmit={e => AcceptRequest(e)}
-									className="text-xs">
+									className="text-xs"
+								>
 									<div className="my-3">
 										<label className="font-semibold">Email:</label>
 										<input
@@ -404,7 +408,8 @@ export default function UpdatedRequestManagement() {
 											color="success"
 											variant="contained"
 											size="small"
-											className="w-full mr-2">
+											className="w-full mr-2"
+										>
 											Accept
 										</Button>
 										<Button
@@ -412,7 +417,8 @@ export default function UpdatedRequestManagement() {
 											variant="contained"
 											size="small"
 											onClick={() => handleRejectRequest()}
-											className="w-full">
+											className="w-full"
+										>
 											Reject
 										</Button>
 									</div>

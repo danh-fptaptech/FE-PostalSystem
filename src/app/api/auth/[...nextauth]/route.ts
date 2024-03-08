@@ -1,5 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { NextRequest } from "next/server";
+import { cookies, headers } from "next/headers";
+import { parse } from "cookie";
 import { NextRequest } from "next/server";
 import { cookies, headers } from "next/headers";
 import { parse } from "cookie";
@@ -8,6 +12,7 @@ interface RouteHandlerContext {
 	params: { nextauth: string[] };
 }
 
+export const authOptions: NextAuthOptions = {
 export const authOptions: NextAuthOptions = {
 	// Configure one or more authentication providers
 	providers: [
@@ -20,6 +25,7 @@ export const authOptions: NextAuthOptions = {
 			},
 			async authorize(credentials, req) {
 				let url = "";
+
 				if (credentials?.role) {
 					url = `${process.env.NEXT_PUBLIC_API_URL}/Auth/Login`;
 				} else {
@@ -74,6 +80,69 @@ export const authOptions: NextAuthOptions = {
 							};
 						}
 
+						const apiCookies = res.headers.getSetCookie();
+
+						if (apiCookies && apiCookies.length > 0) {
+							apiCookies.forEach(cookie => {
+								const parsedCookie = parse(cookie);
+								const [cookieName, cookieValue] =
+									Object.entries(parsedCookie)[0];
+								const httpOnly = cookie.includes("httponly");
+
+								cookies().set({
+									name: cookieName,
+									value: cookieValue,
+									httpOnly: httpOnly,
+									expires: new Date(parsedCookie.expires),
+								});
+							});
+						}
+
+						if (!user.role) {
+							user.role = {
+								name: "User",
+								permissions: [
+									"user.view",
+									"password.change",
+									"packages.view",
+									"package.create",
+									"address.create",
+									"addresses.view",
+								],
+							};
+						}
+
+						const apiCookies = res.headers.getSetCookie();
+
+						if (apiCookies && apiCookies.length > 0) {
+							apiCookies.forEach(cookie => {
+								const parsedCookie = parse(cookie);
+								const [cookieName, cookieValue] =
+									Object.entries(parsedCookie)[0];
+								const httpOnly = cookie.includes("httponly");
+
+								cookies().set({
+									name: cookieName,
+									value: cookieValue,
+									httpOnly: httpOnly,
+									expires: new Date(parsedCookie.expires),
+								});
+							});
+						}
+
+						if (!user.role) {
+							user.role = {
+								name: "User",
+								permissions: [
+									"user.view",
+									"app.view",
+									"package.view",
+									"package.create",
+									"address.create",
+									"addresses.view",
+								],
+							};
+						}
 						return user;
 					}
 					return null;
@@ -89,6 +158,7 @@ export const authOptions: NextAuthOptions = {
 		signIn: "/login",
 	},
 	callbacks: {
+		async jwt({ token, user, trigger, session }) {
 		async jwt({ token, user, trigger, session }) {
 			if (user) {
 				token = { ...user, id: +user.id };

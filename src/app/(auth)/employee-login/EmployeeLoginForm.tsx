@@ -76,6 +76,7 @@ const EmployeeLoginForm = () => {
 
 			if (!employeeRes?.error) {
 				router.push("/app");
+				router.push("/app");
 			} else {
 				setError("Invalid email or password");
 			}

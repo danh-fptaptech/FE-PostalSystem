@@ -1,6 +1,6 @@
 'use client'
 import * as React from 'react';
-import {useContext} from 'react';
+import { useContext } from 'react';
 import {
     Autocomplete,
     Card,
@@ -13,26 +13,33 @@ import {
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import FormInfo from "@/components/FormInfo";
-import {PackageCreateContext} from "@/context/PackageCreateContext";
+import { PackageCreateContext } from "@/context/PackageCreateContext";
 import splitAddressAndWard from "@/helper/splitAddressAndWard";
+import { useSession } from "next-auth/react";
 
 const BoxInputInfo = (props: any) => {
-    const {typeBox, xs} = props;
+    const { data: session, status } = useSession();
+    const { typeBox, xs } = props;
     // @ts-ignore
-    const {register, errors, handleFormChange} = useContext(PackageCreateContext);
+    const { register, errors, handleFormChange } = useContext(PackageCreateContext);
     const [listAddress, setListAddress] = React.useState([]);
     const [chooseAddress, setChooseAddress] = React.useState('true');
     const fetchAddress = async () => {
-        const res = await fetch(`/api/user/address/getlist${typeBox}`);
-        const data = await res.json();
-        console.log("Get list address")
-        return data.data;
+        // @ts-ignore
+        if (session?.user?.role.name === "User") {
+            const res = await fetch(`/api/user/address/getlist${typeBox}`);
+            const data = await res.json();
+            return data.data;
+        }
+        return [];
     }
 
 
     React.useEffect(() => {
-        fetchAddress().then(r => setListAddress(r));
-    }, []);
+        if (status !== "loading") {
+            fetchAddress().then(r => setListAddress(r));
+        }
+    }, [status]);
 
     // @ts-ignore
     return (
@@ -49,15 +56,16 @@ const BoxInputInfo = (props: any) => {
                 borderTopRightRadius: 2
             }}
             >
-                <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                <Typography variant="h6" sx={{ p: 1, display: 'fit-content', color: "#fff" }}>
                     {typeBox === "sender" ? "Sender Information" : "Receiver Information"}
                 </Typography>
             </Box>
             <CardContent>
-                {listAddress.length !== 0 ?
+                {listAddress.length == 0 ?
+                    <FormInfo type={typeBox} /> :
                     <>
                         <RadioGroup
-                            sx={{m: 2}}
+                            sx={{ m: 2 }}
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
                             name="row-radio-buttons-group"
@@ -65,19 +73,19 @@ const BoxInputInfo = (props: any) => {
                             onChange={(e) => { // @ts-ignore
                                 setChooseAddress(e.target.value)
                                 if (e.target.value === 'true') {
-                                    handleFormChange({target: {name: `type_${typeBox}`, value: "new"}});
+                                    handleFormChange({ target: { name: `type_${typeBox}`, value: "new" } });
                                     return;
                                 }
-                                handleFormChange({target: {name: `type_${typeBox}`, value: "select"}});
+                                handleFormChange({ target: { name: `type_${typeBox}`, value: "select" } });
                             }}
                         >
-                            <FormControlLabel value='true' control={<Radio/>}
-                                              label={typeBox === "sender" ? "New Sender" : "New Receiver"}/>
-                            <FormControlLabel value='false' control={<Radio/>}
-                                              label={typeBox === "sender" ? "List Sender Address" : "List Receiver Address"}/>
+                            <FormControlLabel value='true' control={<Radio />}
+                                label={typeBox === "sender" ? "New Sender" : "New Receiver"} />
+                            <FormControlLabel value='false' control={<Radio />}
+                                label={typeBox === "sender" ? "List Sender Address" : "List Receiver Address"} />
                         </RadioGroup>
                         {chooseAddress === 'true' ?
-                            <FormInfo type={typeBox}/>
+                            <FormInfo type={typeBox} />
                             :
                             <>
                                 {/*<TextField
@@ -111,9 +119,15 @@ const BoxInputInfo = (props: any) => {
                                     }}
                                     onChange={(event, value) => {
                                         // @ts-ignore
-                                        const {address, ward} = splitAddressAndWard(value.address);
+                                        const { address, ward } = splitAddressAndWard(value.address);
                                         // @ts-ignore
-                                        handleFormChange({target: {name: `select_${typeBox}`, value: {...value, address: address, ward: ward}}});
+                                        handleFormChange({
+                                            target: {
+                                                name: `select_${typeBox}`,
+                                                // @ts-ignore
+                                                value: { ...value, address: address, ward: ward }
+                                            }
+                                        });
                                     }}
                                     renderInput={(params) => (
                                         <TextField
@@ -132,8 +146,7 @@ const BoxInputInfo = (props: any) => {
                             </>
                         }
                     </>
-                    :
-                    <FormInfo type={typeBox}/>}
+                }
             </CardContent>
         </Card>
     );

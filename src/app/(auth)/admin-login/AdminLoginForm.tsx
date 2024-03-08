@@ -95,7 +95,8 @@ const AdminLoginForm = () => {
 				borderRadius: "8px",
 				boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
 				backgroundColor: "white",
-			}}>
+			}}
+		>
 			{error && (
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -105,7 +106,8 @@ const AdminLoginForm = () => {
 			<Typography
 				variant="h5"
 				component="div"
-				sx={{ mb: 2 }}>
+				sx={{ mb: 2 }}
+			>
 				Login Your Account
 			</Typography>
 			<TextField
@@ -122,7 +124,8 @@ const AdminLoginForm = () => {
 				fullWidth
 				variant="outlined"
 				margin="normal"
-				error={!!errors.password}>
+				error={!!errors.password}
+			>
 				<InputLabel htmlFor="password">Password</InputLabel>
 				<OutlinedInput
 					label="Password"
@@ -139,7 +142,8 @@ const AdminLoginForm = () => {
 								onClick={handleClickShowPassword}
 								onMouseDown={handleMouseEvents}
 								onMouseUp={handleMouseEvents}
-								edge="end">
+								edge="end"
+							>
 								{showPassword ? <VisibilityOff /> : <Visibility />}
 							</IconButton>
 						</InputAdornment>
@@ -153,9 +157,20 @@ const AdminLoginForm = () => {
 				variant="contained"
 				color="error"
 				fullWidth
-				sx={{ mt: 2 }}>
+				sx={{ mt: 2 }}
+			>
 				Login
 			</Button>
+			<Box sx={{ mt: 2, textAlign: "center" }}>
+				<Link
+					component={LinkBehaviour}
+					href="/forgot-password"
+					variant="body2"
+					className="text-decoration-none hover:font-semibold"
+				>
+					Forgot Password?
+				</Link>
+			</Box>
 		</Box>
 	);
 };

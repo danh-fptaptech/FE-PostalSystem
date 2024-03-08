@@ -1,20 +1,20 @@
 'use client'
-import {Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography} from '@mui/material'
-import React, {useEffect, useMemo, useState} from 'react'
+import { Autocomplete, Box, Button, Card, CardContent, Grid, TextField, Tooltip, Typography } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
 import BoxInputInfo from "@/components/BoxInputInfo";
-import {useForm} from "react-hook-form";
-import {PackageCreateContext} from "@/context/PackageCreateContext";
-import {DataCreatePackage} from "@/models/DataCreatePackage";
+import { useForm } from "react-hook-form";
+import { PackageCreateContext } from "@/context/PackageCreateContext";
+import { DataCreatePackage } from "@/models/DataCreatePackage";
 import FormGoodsInfo from "@/components/FormGoodsInfo";
-import {Item} from "@/models/Item";
+import { Item } from "@/models/Item";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import {toast} from "sonner";
-import {useSiteSetting} from "@/contexts/SiteContext";
-import {useSession} from "next-auth/react";
+import { toast } from "sonner";
+import { useSiteSetting } from "@/contexts/SiteContext";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import useS3 from "@/hooks/useS3";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
@@ -25,19 +25,19 @@ const CreatePackage = () => {
     const {
         register,
         handleSubmit,
-        formState: {errors},
+        formState: { errors },
         control,
         resetField,
         trigger,
-    } = useForm({mode: "onBlur",});
+    } = useForm({ mode: "onBlur", });
 
     // Context
     // @ts-ignore
-    const {siteSetting} = useSiteSetting();
+    const { siteSetting } = useSiteSetting();
 
-    const {handleFileUpload, ButtonUpload, preview} = useS3();
+    const { handleFileUpload, ButtonUpload, preview } = useS3();
     const router = useRouter();
-    const {data: session} = useSession();
+    const { data: session } = useSession();
 
 
     // State
@@ -154,15 +154,15 @@ const CreatePackage = () => {
             itemValue: ""
         }
         // @ts-ignore
-        setFormData({...formData, list_items: [...formData.list_items, newItem]});
+        setFormData({ ...formData, list_items: [...formData.list_items, newItem] });
     }
     const removeItem = (index: number) => {
         // @ts-ignore
-        setFormData({...formData, list_items: formData.list_items.filter((_, i) => i !== index)});
+        setFormData({ ...formData, list_items: formData.list_items.filter((_, i) => i !== index) });
     }
     const updateItem = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         // @ts-ignore
-        const newFormData = {...formData};
+        const newFormData = { ...formData };
         let key = (event.target?.name).split("_")[0];
         // @ts-ignore
         newFormData.list_items[index][key] = event.target?.value;
@@ -171,7 +171,7 @@ const CreatePackage = () => {
     }
     const handleChangeSize = (event: React.ChangeEvent<HTMLInputElement>) => {
         // @ts-ignore
-        const newFormData = {...formData};
+        const newFormData = { ...formData };
         // @ts-ignore
         newFormData.package_size[event.target?.name] = event.target?.value;
         // @ts-ignore
@@ -179,10 +179,10 @@ const CreatePackage = () => {
     }
     const handleFormChange = (e: any) => {
         // @ts-ignore
-        setFormData({...formData, [e.target.name]: e.target.value});
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
     const handleMultipleFormChange = (changes: any) => {
-        const newFormData = {...formData};
+        const newFormData = { ...formData };
         for (const change of changes) {
             //@ts-ignore
             newFormData[change.name] = change.value;
@@ -266,27 +266,31 @@ const CreatePackage = () => {
             ward: formData.ward_receiver,
         } : formData.select_receiver;
         try {
-             const response = await fetch("/api/packages/add", {
-                 method: "POST",
-                 headers: {
-                     "Content-Type": "application/json",
-                 },
-                 body: JSON.stringify({
-                     sender: InfoSender,
-                     receiver: InfoReceiver,
-                     items: formData.list_items,
-                     type: formData.type_package,
-                     fee: fee,
-                     cod: cod,
-                     service: selectedService,
-                     packageNote: packageNote,
-                     packageSize: formData.package_size,
-                     employeeProcess: await employeeProcess(),
-                     submitBy: session?.user,
-                 })
-             });
-             const data = await response.json();
-             return data.data;
+            const response = await fetch("/api/packages/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sender: InfoSender,
+                    receiver: InfoReceiver,
+                    items: formData.list_items,
+                    type: formData.type_package,
+                    fee: fee,
+                    cod: cod,
+                    service: selectedService,
+                    packageNote: packageNote,
+                    packageSize: formData.package_size,
+                    employeeProcess: await employeeProcess(),
+                    submitBy: session?.user,
+                })
+            });
+            const res = await response.json();
+            if (res.status) {
+                setOnCreatePackage(false);
+                toast.success(res.message);
+                router.push(`/app/print-label/${res.data.trackingCode}`);
+            }
         } catch (error) {
             setOnCreatePackage(false);
             toast.error("Error to create package");
@@ -307,10 +311,10 @@ const CreatePackage = () => {
         // @ts-ignore
         formData.list_items.forEach((item: Item) => {
             totalWeight += Number(item.itemWeight) * Number(item.itemQuantity);
-            totalValue += Number(item.itemValue);
+            totalValue += Number(item.itemValue) * Number(item.itemQuantity);
         });
         // @ts-ignore
-        setFormData({...formData, total_weight: totalWeight, total_value: totalValue});
+        setFormData({ ...formData, total_weight: totalWeight, total_value: totalValue });
     }, [JSON.stringify(formData?.list_items)]);
 
     useEffect(() => {
@@ -321,19 +325,19 @@ const CreatePackage = () => {
         const totalSize = size?.width * size?.height * size?.length;
         const sizeConvert = totalSize / siteSetting.rateConvert;
         // @ts-ignore
-        setFormData({...formData, size_convert: sizeConvert});
+        setFormData({ ...formData, size_convert: sizeConvert });
     }, [JSON.stringify(formData?.package_size)]);
 
     useEffect(() => {
         console.log("Run effect province sender")
         // @ts-ignore
-        setFormData({...formData, ward_sender: "", district_sender: ""});
+        setFormData({ ...formData, ward_sender: "", district_sender: "" });
     }, [formData?.province_sender]);
 
     useEffect(() => {
         console.log("Run effect district sender")
         // @ts-ignore
-        setFormData({...formData, ward_sender: ""});
+        setFormData({ ...formData, ward_sender: "" });
     }, [formData?.district_sender]);
 
     useEffect(() => {
@@ -356,7 +360,7 @@ const CreatePackage = () => {
         }
     }, [session]);
     useEffect(() => {
-        if ([0, 3].includes(nowStep)) {
+        if ([0, 3].includes(nowStep) && session?.user?.employeeCode) {
             fetchListBranch().then(r => setListBranch(r));
         } else {
             fetchEmployees().then(r => setListEmployee(r));
@@ -398,15 +402,15 @@ const CreatePackage = () => {
                         my: 3,
                         borderRadius: "10px",
                         boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
-                    }}/>
+                    }} />
                     <BoxInputInfo typeBox={"receiver"} xs={{
                         my: 3,
                         borderRadius: "10px",
                         boxShadow: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px',
-                    }}/>
+                    }} />
                 </Grid>
                 <Grid item lg={6} xs={12}>
-                    <FormGoodsInfo/>
+                    <FormGoodsInfo />
                 </Grid>
             </Grid>
             {/*Package Service*/}
@@ -427,7 +431,7 @@ const CreatePackage = () => {
                             borderTopRightRadius: 2
                         }}
                         >
-                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                            <Typography variant="h6" sx={{ p: 1, display: 'fit-content', color: "#fff" }}>
                                 Package Service
                             </Typography>
                         </Box>
@@ -453,17 +457,17 @@ const CreatePackage = () => {
                                                     setSelectedService(service);
                                                 }}
                                             >
-                                                <Typography variant="h6" sx={{fontWeight: 550}}>
+                                                <Typography variant="h6" sx={{ fontWeight: 550 }}>
                                                     {
                                                         // @ts-ignore
                                                         service.serviceName
                                                     }
                                                 </Typography>
-                                                <Typography variant="h6" sx={{fontWeight: 550}}>
+                                                <Typography variant="h6" sx={{ fontWeight: 550 }}>
                                                     ${
-                                                    // @ts-ignore
-                                                    service.feeCharge
-                                                }
+                                                        // @ts-ignore
+                                                        service.feeCharge
+                                                    }
                                                 </Typography>
                                             </Box>
                                         </Tooltip>
@@ -471,7 +475,7 @@ const CreatePackage = () => {
                                 })
                             ) : (
                                 <Typography
-                                    sx={{textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px'}}>
+                                    sx={{ textAlign: 'center', justifyContent: 'center', my: 1, fontSize: '15px' }}>
                                     No service available
                                 </Typography>
                             )}
@@ -494,7 +498,7 @@ const CreatePackage = () => {
                             borderTopRightRadius: 2
                         }}
                         >
-                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                            <Typography variant="h6" sx={{ p: 1, display: 'fit-content', color: "#fff" }}>
                                 Package Options
                             </Typography>
                         </Box>
@@ -515,7 +519,7 @@ const CreatePackage = () => {
                                     size={"small"}
                                     fullWidth={true}
                                     autoComplete={"off"}
-                                    sx={{my: 2}}
+                                    sx={{ my: 2 }}
                                 />
                             </Tooltip>
 
@@ -530,7 +534,7 @@ const CreatePackage = () => {
                                 }}
                                 fullWidth={true}
                                 autoComplete={"off"}
-                                sx={{my: 2}}
+                                sx={{ my: 2 }}
                             />
                         </CardContent>
                     </Card>
@@ -554,7 +558,7 @@ const CreatePackage = () => {
                             borderTopRightRadius: 2
                         }}
                         >
-                            <Typography variant="h6" sx={{p: 1, display: 'fit-content', color: "#fff"}}>
+                            <Typography variant="h6" sx={{ p: 1, display: 'fit-content', color: "#fff" }}>
                                 Employee Process
                             </Typography>
                         </Box>
@@ -568,23 +572,23 @@ const CreatePackage = () => {
                                         alignItems: 'center',
                                         my: 2,
                                     }}>
-                                        <ButtonUpload/>
+                                        <ButtonUpload />
                                         {preview ?
                                             <Image src={`${previewUrl}`}
-                                                   width={0}
-                                                   height={0}
-                                                   objectFit='contain'
-                                                   alt={"preview"}
-                                                   title={"preview"}
-                                                   style={{
-                                                       width: 'clamp(100px, 100%, 200px)',
-                                                       height: 'auto',
-                                                       margin: '20px'
-                                                   }}
+                                                width={0}
+                                                height={0}
+                                                objectFit='contain'
+                                                alt={"preview"}
+                                                title={"preview"}
+                                                style={{
+                                                    width: 'clamp(100px, 100%, 200px)',
+                                                    height: 'auto',
+                                                    margin: '20px'
+                                                }}
                                             /> :
                                             <img src={'https://dummyimage.com/500x500/c3c3c3/FFF.png&text=Upload Image'}
-                                                 alt={"preview"} title={"preview"} width={200} height={200}
-                                                 style={{margin: '20px'}}
+                                                alt={"preview"} title={"preview"} width={200} height={200}
+                                                style={{ margin: '20px' }}
                                             />
                                         }
                                     </Box>
@@ -606,7 +610,7 @@ const CreatePackage = () => {
                                                 disabled
                                                 size={"small"}
                                                 autoComplete={"off"}
-                                                sx={{my: 2}}
+                                                sx={{ my: 2 }}
                                                 fullWidth={true}
                                             />
                                         </Grid>
@@ -622,7 +626,7 @@ const CreatePackage = () => {
                                                 size={"small"}
                                                 autoComplete={"off"}
                                                 fullWidth={true}
-                                                sx={{my: 2}}
+                                                sx={{ my: 2 }}
                                             /></Grid>
                                         <Grid item xs={12} lg={6}>
                                             {[0, 3].includes(nowStep) ? (
@@ -644,7 +648,7 @@ const CreatePackage = () => {
                                                             size={"small"}
                                                             autoComplete={'none'}
                                                             fullWidth={true}
-                                                            sx={{my: 2}}
+                                                            sx={{ my: 2 }}
                                                         />
                                                     }
                                                 />
@@ -660,7 +664,7 @@ const CreatePackage = () => {
                                                     size={"small"}
                                                     autoComplete={"off"}
                                                     fullWidth={true}
-                                                    sx={{my: 2}}
+                                                    sx={{ my: 2 }}
                                                 />
                                             )}
                                         </Grid>
@@ -683,7 +687,7 @@ const CreatePackage = () => {
                                                         size={"small"}
                                                         autoComplete={'none'}
                                                         fullWidth={true}
-                                                        sx={{my: 2}}
+                                                        sx={{ my: 2 }}
                                                     />
                                                 }
                                             />
@@ -700,7 +704,7 @@ const CreatePackage = () => {
                                                 }}
                                                 fullWidth={true}
                                                 autoComplete={"off"}
-                                                sx={{my: 2}}
+                                                sx={{ my: 2 }}
                                             />
                                         </Grid>
                                     </Grid>
@@ -713,17 +717,17 @@ const CreatePackage = () => {
 
             {/*Action Confirm*/}
             <Grid container columns={12} spacing={2}
-                  sx={{position: 'sticky', bottom: 10, zIndex: 100, backgroundColor: {xs: '#fff', lg: 'transparent'},}}>
+                sx={{ position: 'sticky', bottom: 10, zIndex: 100, backgroundColor: { xs: '#fff', lg: 'transparent' }, }}>
                 <Grid item xs={6} lg={2}>
                     <Box
                         sx={{
                             backgroundColor: 'white',
                             borderRadius: '5px',
-                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            boxShadow: { lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none' },
                             p: 1,
                         }}>
                         <Typography
-                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            sx={{ my: 1, fontSize: '16px', fontWeight: 550 }}>
                             Weight
                         </Typography>
                         <Typography sx={{
@@ -741,11 +745,11 @@ const CreatePackage = () => {
                         sx={{
                             backgroundColor: 'white',
                             borderRadius: '5px',
-                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            boxShadow: { lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none' },
                             p: 1,
                         }}>
                         <Typography
-                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            sx={{ my: 1, fontSize: '16px', fontWeight: 550 }}>
                             COD
                         </Typography>
                         <Typography sx={{
@@ -763,11 +767,11 @@ const CreatePackage = () => {
                         sx={{
                             backgroundColor: 'white',
                             borderRadius: '5px',
-                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            boxShadow: { lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none' },
                             p: 1,
                         }}>
                         <Typography
-                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            sx={{ my: 1, fontSize: '16px', fontWeight: 550 }}>
                             Fee
                         </Typography>
                         <Typography sx={{
@@ -785,11 +789,11 @@ const CreatePackage = () => {
                         sx={{
                             backgroundColor: 'white',
                             borderRadius: '5px',
-                            boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                            boxShadow: { lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none' },
                             p: 1,
                         }}>
                         <Typography
-                            sx={{my: 1, fontSize: '16px', fontWeight: 550}}>
+                            sx={{ my: 1, fontSize: '16px', fontWeight: 550 }}>
                             Time Process
                         </Typography>
                         <Typography sx={{
@@ -798,10 +802,10 @@ const CreatePackage = () => {
                             my: 1,
                             fontSize: '15px'
                         }}>{
-                            timeProcess ? (
-                                timeProcess > 24 ? (timeProcess / 24).toFixed(1) + " days" : timeProcess + " hours"
-                            ) : "... hours"
-                        }
+                                timeProcess ? (
+                                    timeProcess > 24 ? (timeProcess / 24).toFixed(1) + " days" : timeProcess + " hours"
+                                ) : "... hours"
+                            }
                         </Typography>
                     </Box>
                 </Grid>
@@ -815,16 +819,16 @@ const CreatePackage = () => {
                         height: '100%',
                         backgroundColor: 'white',
                         borderRadius: '5px',
-                        boxShadow: {lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none'},
+                        boxShadow: { lg: 'rgba(76, 78, 100, 0.2) 0px 3px 13px 3px', xs: 'none' },
                         p: 1,
                     }}>
                         {   // @ts-ignore
                             selectedService.serviceId ?
                                 <Button
-                                    startIcon={<TextSnippetIcon/>}
+                                    startIcon={<TextSnippetIcon />}
                                     variant="contained"
                                     color={"success"}
-                                    onClick={()=>{
+                                    onClick={() => {
                                         setOnCreatePackage(true)
                                     }}
                                     disabled={onCreatePackage}
@@ -833,7 +837,7 @@ const CreatePackage = () => {
                                 </Button>
                                 :
                                 <Button
-                                    startIcon={<TextSnippetIcon/>}
+                                    startIcon={<TextSnippetIcon />}
                                     variant="outlined"
                                     onClick={handleSubmit(onSubmit)}
                                 >
@@ -851,10 +855,10 @@ const CreatePackage = () => {
                 </Grid>
             </Grid>
             <Backdrop
-                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={onCreatePackage}
             >
-                <CircularProgress color="inherit"/>
+                <CircularProgress color="inherit" />
             </Backdrop>
         </PackageCreateContext.Provider>
     )

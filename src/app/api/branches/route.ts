@@ -5,16 +5,11 @@ export async function GET(req: Request) {
 		const response = await fetch(`${api}/Branch/all`, {
 			cache: "no-store",
 		});
-
-		let data = null;
-		if (response.ok) {
-			data = await response.json();
-		}
-
+		const data = await response.json();
 		if (data.length === 0) {
 			return NextResponse.json({ message: "No data", status: 404 });
 		}
-		return NextResponse.json({ branches: data });
+		return NextResponse.json({ branchs: data });
 	} catch (error) {
 		return NextResponse.json({ error: "api backend error" });
 	}

@@ -9,21 +9,24 @@ import { toast } from 'sonner'
 
 export default function TrackingShipment() {
   const [trackingCode, setTrackingCode] = useState('')
+  const [phoneFrom, setPhoneFrom] = useState('')
   const router = useRouter()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrackingCode(event.target.value)
   }
-
+  const handlePhoneFromChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneFrom(event.target.value)
+  }
   const handleTraCuuButton = async () => {
     // Check if trackingCode is not empty
-    if (!trackingCode) {
-      toast.error('Please enter a tracking code')
+    if (!trackingCode || !phoneFrom) {
+      toast.error('Please enter a tracking code and phone number')
       return
     }
 
     try {
-      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}`)
+      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}/${phoneFrom}`)
       const data = await response.json()
 
       // Check if the response is successful
@@ -49,37 +52,39 @@ export default function TrackingShipment() {
   return (
     <>
       <Box>
-        <Grid container sx={{ p:4 }}>
+        <Grid container sx={{ p: 4 }}>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Typography sx={{ fontWeight:550, py:1 }}>
+              <Typography sx={{ fontWeight: 550, py: 1 }}>
                 Tracking Code
               </Typography>
               {/* <Typography sx={{ fontWeight:550, fontSize:'16px', py:1 }}>
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }}
+              <TextField sx={{ '& .MuiInputBase-input': { py: 1 }, width: '100%' }}
                 type="text"
                 placeholder='Example: 123456, 24563'
                 value={trackingCode}
                 onChange={handleInputChange}
               />
-              {/* <TextField
-                sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }}
+
+              <TextField
+                sx={{ '& .MuiInputBase-input': { py: 1 }, width: '100%', mt: 1 }}
                 type="text"
-                placeholder='Nhập số điện thoại'
-              /> */}
+                placeholder='Enter your phone number'
+                onChange={handlePhoneFromChange}
+              />
               <Button sx={{
-                my:2,
-                color:'white',
-                backgroundColor:'red',
-                borderRadius:1,
-                '&:hover':{
-                  backgroundColor:'red',
-                  color:'white'
+                my: 2,
+                color: 'white',
+                backgroundColor: 'red',
+                borderRadius: 1,
+                '&:hover': {
+                  backgroundColor: 'red',
+                  color: 'white'
                 }
               }}
-              onClick={handleTraCuuButton}
+                onClick={handleTraCuuButton}
               >
                 Search
               </Button>
@@ -87,7 +92,7 @@ export default function TrackingShipment() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Image priority src={trackingSvg} alt="tracking" style={{ display:'flex', marginLeft:'auto', marginRight:'auto' }}/>
+              <Image priority src={trackingSvg} alt="tracking" style={{ display: 'flex', marginLeft: 'auto', marginRight: 'auto' }} />
             </Box>
           </Grid>
         </Grid>
