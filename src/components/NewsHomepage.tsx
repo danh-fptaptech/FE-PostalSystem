@@ -4,9 +4,9 @@ import NewspaperIcon from '@mui/icons-material/Newspaper'
 import HomeIcon from '@mui/icons-material/Home'
 import WatchLaterIcon from '@mui/icons-material/WatchLater'
 import { BlogItem } from './interfaces'
+import moment from 'moment'
 import Link from 'next/link'
 import './NewsHomepage.css'
-import moment from "moment";
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -91,7 +91,7 @@ function NewsHomepage() {
                         <Box>
                           <Box sx={{ display:'flex', flexDirection:'row', ml:4 }}>
                             <WatchLaterIcon sx={{ fontSize:'18px', color:'#aeaeae', mt:0.4 }}/>
-                            <Typography>{moment(new Date(blog.createdAt)).format('DD/MM/YYYY')}</Typography>
+                            <Typography>{moment(new Date(blog.createdAt)).format('DD-MM-YYYY')}</Typography>
                           </Box>
                         </Box>
                         <Box sx={{ ml:4 }}>
@@ -131,7 +131,7 @@ function NewsHomepage() {
                         <Box>
                           <Box sx={{ display:'flex', flexDirection:'row', ml:4 }}>
                             <WatchLaterIcon sx={{ fontSize:'18px', color:'#aeaeae', mt:0.4 }}/>
-                            <Typography>{moment(new Date(blog.createdAt)).format('DD/MM/YYYY')}</Typography>
+                            <Typography>{moment(new Date(blog.createdAt)).format('DD-MM-YYYY')}</Typography>
                           </Box>
                         </Box>
                         <Box>

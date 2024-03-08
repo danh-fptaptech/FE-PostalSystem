@@ -22,6 +22,7 @@
     "@mui/material-nextjs": "^5.15.9",
     "@mui/x-data-grid": "^6.19.5",
     "aws-sdk": "^2.1563.0",
+    "bwip-js": "^4.2.0",
     "cookie": "^0.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

@@ -5,7 +5,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Grid, Typography, TextField, Button } from '@mui/material'
 import Image from 'next/image'
 import trackingSvg from '../../../../public/tracking-img.svg'
 import { toast } from 'sonner'
@@ -43,7 +43,17 @@ function Page() {
     8: 'Returned',
     9: 'Lost'
   }
+  const packageTypeMap = {
+    0: 'Document',
+    1: 'Package',
+    2: 'Money'
+  }
   const [trackingCode, setTrackingCode] = useState(data?.trackingCode || '')
+  const [phoneFrom, setPhoneFrom] = useState(data?.phoneFrom || '')
+  // Handle modal open/close
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   let formattedCreatedDate = ''
   if (data?.createdAt) {
@@ -67,15 +77,18 @@ function Page() {
   const handleTrackingCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTrackingCode(event.target.value)
   }
+  const handlePhoneFromChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneFrom(event.target.value)
+  }
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}`)
+      const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}/${phoneFrom}`)
       if (response.status === 200) {
         const data = await response.json()
         // Update the state with the fetched data
         setData(data)
-        // Store the data in the local storage
+        // Store the data in the local storage/
         const now = new Date()
         const item = {
           value: data,
@@ -116,7 +129,8 @@ function Page() {
   // 4. Use the useEffect hook to update the tracking code state
   useEffect(() => {
     setTrackingCode(data?.trackingCode || '')
-  }, [data?.trackingCode])
+    setPhoneFrom(data?.phoneFrom || '')
+  }, [data?.trackingCode, data?.phoneFrom])
 
   // TrackingBoard code section
   const [trackingData, setTrackingData] = useState<TrackingData | null>(null)
@@ -139,8 +153,7 @@ function Page() {
         <Stack>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
+            aria-label="breadcrumb">
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
@@ -156,7 +169,7 @@ function Page() {
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
               <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }} type="text" placeholder='Example: 123456' value={trackingCode} onChange={handleTrackingCodeChange}/>
-              {/* <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Enter phone number'/> */}
+              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }} type="text" placeholder='Enter phone number' value={phoneFrom} onChange={handlePhoneFromChange}/>
               <Button sx={{
                 my:2,
                 color:'white',
@@ -192,7 +205,7 @@ function Page() {
                     Tracking code:
                   </Typography>
                   <Typography sx={{ py:2 }}>
-                    Order Detail:
+                    Package Detail:
                   </Typography>
                   <Typography sx={{ py:2 }}>
                     Sender name:
@@ -205,8 +218,8 @@ function Page() {
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.trackingCode}
                   </Typography>
-                  <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    Xem them
+                  <Typography onClick={handleOpen} sx={{ textDecoration:'underline', textAlign:'right', pr:2, fontWeight:'550', py:2, cursor: 'pointer' }}>
+                    More detail
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {data?.nameFrom}
@@ -227,16 +240,22 @@ function Page() {
                   <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
                     Status:
                   </Typography>
+                  <Typography sx={{ py:2, pl:{ xs:0, sm:2 } }}>
+                    Package type:
+                  </Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {data.packageSize? data.packageSize : '1'}
+                    {data.items.reduce((total, item) => total + item.itemWeight, 0)} gram
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {data?.service?.serviceName}
+                    {data?.service?.serviceType?.serviceName}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {stepMapping[data?.step] || 'Lỗi rôi  !!'}
+                  </Typography>
+                  <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
+                    {packageTypeMap[data?.packageType as keyof typeof packageTypeMap]}
                   </Typography>
                 </Grid>
               </Grid>
@@ -269,6 +288,57 @@ function Page() {
         </Box>
         <HistoryLogs trackingData={trackingData} statusMapping={statusMapping} />
       </Box>
+
+      {/* Modal package detail */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%', // adjust as needed
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4
+          }}
+        >
+          <Typography variant="h6" id="modal-modal-title" sx={{ fontWeight: 550 }}>
+            Package Detail
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow >
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Name</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Quantity</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Weight(gram)</TableCell>
+                  <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Value</TableCell>
+                  {/* <TableCell style={{ color:'white', fontSize:'16px' }} align="center">Item Type</TableCell> */}
+                  {/* Add more columns as needed */}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.items.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemName}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemQuantity}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemWeight}</TableCell>
+                    <TableCell style={{ fontSize:'14px' }} align="right">{item.itemValue.toLocaleString()} VND</TableCell>
+                    {/* <TableCell style={{ fontSize:'14px' }} align="right">{itemTypeMap[item.itemType as keyof typeof itemTypeMap]}</TableCell> */}
+                    {/* Add more cells as needed */}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Modal>
     </>
   )
 }

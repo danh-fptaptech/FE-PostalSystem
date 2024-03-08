@@ -1,7 +1,7 @@
-import {NextResponse} from "next/server";
-import {withAuth} from "next-auth/middleware";
+import {NextResponse} from 'next/server';
+import {withAuth} from 'next-auth/middleware';
 
-const url = process.env.NEXT_PUBLIC_API_URL;
+const url = process.env.NEXT_PUBLIC_API_URL
 
 export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
@@ -11,7 +11,7 @@ export default withAuth(
         if (token) {
             const pathname = req.nextUrl.pathname;
 
-            const dynamicPaths = ["[id]", "[token]"];
+            const dynamicPaths = ['[id]', '[token]'];
             // Find a matching path with dynamic path handling
             const path = paths.find(p => {
                 if (dynamicPaths.some(dp => p.path.includes(dp))) {
@@ -72,7 +72,7 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          */
-        "/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|estimate-cost|tracking-shipment|reset-password|register|$).*)",
+        '/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|estimate-cost|tracking-shipment|reset-password|register|$).*)',
     ],
 };
 
@@ -155,19 +155,35 @@ const paths = [
         ],
     },
     {
-        path: "/app/branches",
-        permission: ["branches.view"],
+        path: '/app/branches',
+        permission: ['branches.view'],
     },
     {
-        path: "/app/branches/[id]",
-        permission: ["Admin","user.view"],
+        path: '/app/create-package',
+        permission: ['Admin','user.view'],
     },
     {
-        path: "/app/packages/[id]",
-        permission: ["package.view","packages.view"],
+        path:'/app/news-management',
+        permission: ['app.view'],
     },
     {
-        path: "/app/create-package",
-        permission: ["Admin","user.view","package.create"],
+        path:'/app/news-management/create',
+        permission: ['app.view'],
+    },
+    {
+        path: '/app/news-management/update/[id]',
+        permission: ['app.view'],
+    },
+    {
+        path: '/app/news-management/delete',
+        permission: ['app.view']
+    },
+    {
+        path:'/app/general-settings',
+        permission: ['app.view']
+    },
+    {
+        path:'/app/test-label-shipping',
+        permission: ['app.view']
     }
 ];

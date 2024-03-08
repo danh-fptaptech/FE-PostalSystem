@@ -3,8 +3,8 @@ import { Box, Breadcrumbs, Divider, Grid, Skeleton, Stack, Typography } from '@m
 import Link from '@mui/material/Link'
 import React, { useEffect, useState } from 'react'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import { format } from 'date-fns'
 import { BlogItem } from '@/components/interfaces'
+import moment from 'moment'
 
 function Page({ params }: { params: { blogId: string } }) {
   const [blog, setBlog] = useState<BlogItem | null>(null)
@@ -20,7 +20,7 @@ function Page({ params }: { params: { blogId: string } }) {
       setBlog(data.data)
     }
     fetchData()
-  }, [id])
+  }, [])
 
   //fetch all news
   useEffect(() => {
@@ -66,9 +66,7 @@ function Page({ params }: { params: { blogId: string } }) {
             )}
             <Box sx={{ ml:2 }}>
               <Typography>
-                {blog && !isNaN(Date.parse(blog.createdAt))
-                  ? format(new Date(blog.createdAt), 'dd/MM/yyyy')
-                  : 'Loading...'}
+                {blog && blog.createdAt ? moment(new Date(blog.createdAt)).format('DD-MM-YYYY') : 'Loading...'}
               </Typography>
             </Box>
             <Box sx={{ ml:2, my:2 }}>
@@ -88,7 +86,7 @@ function Page({ params }: { params: { blogId: string } }) {
                 <Skeleton animation="wave" variant="rectangular" width={300}/>
               </Box>
             ) : (
-              relatedNews.map((news, index) => (
+              relatedNews?.map((news, index) => (
                 <Box key={index} sx={{ my:1 }}>
                   <Link href={`/news/${news.id}`} underline="hover" color="inherit">
                     <Typography sx={{ fontWeight:'550', fontSize:'15px' }}>
@@ -96,9 +94,9 @@ function Page({ params }: { params: { blogId: string } }) {
                     </Typography>
                   </Link>
                   <Typography sx={{ fontSize:'12px', color:'#8d8dac' }}>
-                    {news.createdAt && !isNaN(Date.parse(news.createdAt))
-                      ? format(new Date(news.createdAt), 'dd/MM/yyyy')
-                      : 'Loading...'}
+                    <Typography>
+                      {blog && blog.createdAt ? moment(new Date(blog.createdAt)).format('DD-MM-YYYY') : 'Loading...'}
+                    </Typography>
                   </Typography>
                 </Box>
               ))
