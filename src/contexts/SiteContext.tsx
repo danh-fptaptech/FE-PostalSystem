@@ -4,28 +4,44 @@ import {toast} from "sonner"
 import {useContext} from "react"
 import { SiteContextType, SiteSetting } from "@/components/interfaces"
 
-//@ts-ignore
 const SiteContext = React.createContext<SiteContextType | undefined>(undefined)
 
-//@ts-ignore
+function convertData(data) {
+  const convertedData = {};
+
+  data.forEach(item => {
+    const { settingName, settingValue } = item;
+    convertedData[settingName] = settingValue;
+  });
+
+  convertedData.site_language = "vi";
+  convertedData.rateConvert = parseInt(convertedData.rateConvert);
+  convertedData.limitSize = parseInt(convertedData.limitSize);
+  convertedData.limitWeight = parseInt(convertedData.limitWeight);
+
+  return convertedData;
+}
+
 export const SiteProvider = ({ children }) => {
     const [siteSetting, setSiteSetting] = React.useState<SiteSetting[]>([])
-
+    const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => {
         const fetchSiteSetting = async () => {
-           try {
-               let res = await fetch('/api/general-setting')
-               let data = await res.json()
-               setSiteSetting(data.data)
-           } catch (error) {
+            try {
+                setLoading(true)
+                let res = await fetch('/api/general-setting')
+                let data = await res.json()
+                setSiteSetting(data.data)
+            } catch (error) {
                 console.log(error)
                 toast.error('Something went wrong')
-           }
+            } finally {
+                setLoading(false)
+            }
         }
         fetchSiteSetting()
     }, [])
-
 
     return (
         <SiteContext.Provider value={{ siteSetting }}>
@@ -40,4 +56,4 @@ export const useSiteSetting = (): SiteContextType => {
       throw new Error('useSiteSetting must be used within a SiteProvider')
     }
     return context
-  }
+}

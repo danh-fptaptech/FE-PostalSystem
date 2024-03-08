@@ -26,10 +26,10 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   const { data: session, status } = useSession()
   const { siteSetting } = useSiteSetting()
   // Find the setting with settingName equal to 'site_name'
-  const siteNameSetting = siteSetting.find(setting => setting.settingName === 'site_name');
+  // const siteNameSetting = siteSetting.find(setting => setting.settingName === 'site_name');
   
   // If siteNameSetting exists, use its settingValue, otherwise use a default value
-  const siteName = siteNameSetting ? siteNameSetting.settingValue : 'Default Site Name';
+  const siteName = siteSetting ? siteSetting.site_name : 'Default Site Name';
   const [open, setOpen] = React.useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
