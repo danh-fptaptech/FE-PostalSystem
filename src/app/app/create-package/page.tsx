@@ -311,7 +311,7 @@ const CreatePackage = () => {
         // @ts-ignore
         formData.list_items.forEach((item: Item) => {
             totalWeight += Number(item.itemWeight) * Number(item.itemQuantity);
-            totalValue += Number(item.itemValue);
+            totalValue += Number(item.itemValue) * Number(item.itemQuantity);
         });
         // @ts-ignore
         setFormData({...formData, total_weight: totalWeight, total_value: totalValue});

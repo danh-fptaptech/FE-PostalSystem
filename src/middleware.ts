@@ -72,7 +72,7 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          */
-        "/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|estimate-cost|tracking-shipment|reset-password|register|$).*)",
     ],
 };
 
@@ -159,7 +159,15 @@ const paths = [
         permission: ["branches.view"],
     },
     {
-        path: "/app/create-package",
+        path: "/app/branches/[id]",
         permission: ["Admin","user.view"],
+    },
+    {
+        path: "/app/packages/[id]",
+        permission: ["package.view","packages.view"],
+    },
+    {
+        path: "/app/create-package",
+        permission: ["Admin","user.view","package.create"],
     }
 ];

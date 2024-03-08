@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
 			},
 			async authorize(credentials, req) {
 				let url = "";
+
 				if (credentials?.role) {
 					url = `${process.env.NEXT_PUBLIC_API_URL}/Auth/Login`;
 				} else {
@@ -65,15 +66,14 @@ export const authOptions: NextAuthOptions = {
 								name: "User",
 								permissions: [
 									"user.view",
-									"password.change",
-									"packages.view",
+									"app.view",
+									"package.view",
 									"package.create",
 									"address.create",
 									"addresses.view",
 								],
 							};
 						}
-
 						return user;
 					}
 					return null;

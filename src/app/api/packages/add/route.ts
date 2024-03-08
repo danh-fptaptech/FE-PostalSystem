@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 			});
 		}
 		console.log("Unhandled server-side error in add package");
-
+		console.log(await res.text());
 		return NextResponse.json({
 			ok: false,
 			status: "error",

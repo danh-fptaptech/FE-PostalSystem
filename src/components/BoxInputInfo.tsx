@@ -18,7 +18,7 @@ import splitAddressAndWard from "@/helper/splitAddressAndWard";
 import {useSession} from "next-auth/react";
 
 const BoxInputInfo = (props: any) => {
-    const {data: session} = useSession();
+    const {data: session,status} = useSession();
     const {typeBox, xs} = props;
     // @ts-ignore
     const {register, errors, handleFormChange} = useContext(PackageCreateContext);
@@ -26,10 +26,9 @@ const BoxInputInfo = (props: any) => {
     const [chooseAddress, setChooseAddress] = React.useState('true');
     const fetchAddress = async () => {
         // @ts-ignore
-        if (!session?.user?.role.name === "User") {
+        if (session?.user?.role.name === "User") {
             const res = await fetch(`/api/user/address/getlist${typeBox}`);
             const data = await res.json();
-            console.log("Get list address")
             return data.data;
         }
         return [];
@@ -37,10 +36,10 @@ const BoxInputInfo = (props: any) => {
 
 
     React.useEffect(() => {
-        if (session?.user) {
+        if (status !== "loading") {
             fetchAddress().then(r => setListAddress(r));
         }
-    }, [session?.user]);
+    }, [status]);
 
     // @ts-ignore
     return (
