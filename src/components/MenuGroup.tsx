@@ -27,7 +27,7 @@ export default function MenuGroup(props: { item: any }) {
 				}
 			});
 		}
-	}, [open]);
+	}, [item.children, open, path]);
 	return !item.children ? (
 		<ListItemButton
 			selected={path === item.path}

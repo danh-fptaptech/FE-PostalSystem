@@ -88,18 +88,18 @@ function Page() {
   return (
     <>
       <Box>
-        <Paper elevation={1} sx={{ my: 3, p:1, borderRadius: '6px', boxSizing: 'border-box' }}>
-          <Box sx={{ m:2, display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
-            <Typography sx={{ fontSize:'24px', fontWeight:550 }}>Create News</Typography>
+        <Paper elevation={1} sx={{ my: 3, p: 1, borderRadius: '6px', boxSizing: 'border-box' }}>
+          <Box sx={{ m: 2, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Typography sx={{ fontSize: '24px', fontWeight: 550 }}>Create News</Typography>
             <Link href="/app/news-management">
               <Button variant="contained">Back</Button>
             </Link>
           </Box>
-          <Box sx={{ m:2 }}>
+          <Box sx={{ m: 2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  sx={{ my:1 }}
+                  sx={{ my: 1 }}
                   required
                   id='title'
                   name='title'
@@ -109,7 +109,7 @@ function Page() {
                   onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <FormControl fullWidth sx={{ my:1 }}>
+                <FormControl fullWidth sx={{ my: 1 }}>
                   <InputLabel id="demo-simple-select-label">Employee</InputLabel>
                   <Select
                     required
@@ -126,7 +126,7 @@ function Page() {
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl fullWidth sx={{ my:1 }}>
+                <FormControl fullWidth sx={{ my: 1 }}>
                   <InputLabel id="demo-simple-select-label">Status</InputLabel>
                   <Select
                     required
@@ -138,7 +138,7 @@ function Page() {
                   >
                     {[0, 1].map((value) => (
                       <MenuItem key={value} value={value}>
-                        {value? 'Active': 'Deactive'}
+                        {value ? 'Active' : 'Deactive'}
                       </MenuItem>
                     ))}
                   </Select>
@@ -146,7 +146,7 @@ function Page() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  sx={{ my:1 }}
+                  sx={{ my: 1 }}
                   required
                   id='slug'
                   name='slug'
@@ -156,7 +156,7 @@ function Page() {
                   onChange={(e) => setSlug(e.target.value)}
                 />
                 <TextField
-                  sx={{ my:1 }}
+                  sx={{ my: 1 }}
                   required
                   id='author'
                   name='author'
@@ -165,7 +165,7 @@ function Page() {
                   placeholder='Enter author'
                   onChange={(e) => setAuthor(e.target.value)}
                 />
-                <FormControl fullWidth sx={{ my:1 }}>
+                <FormControl fullWidth sx={{ my: 1 }}>
                   <InputLabel id="demo-simple-select-label">Category</InputLabel>
                   <Select
                     required
@@ -177,7 +177,7 @@ function Page() {
                   >
                     {[0, 1].map((value) => (
                       <MenuItem key={value} value={value}>
-                        {value? 'Guide': 'Promotion'}
+                        {value ? 'Guide' : 'Promotion'}
                       </MenuItem>
                     ))}
                   </Select>
@@ -185,22 +185,22 @@ function Page() {
               </Grid>
               <Grid item xs={12}>
                 <CKEditor
-                  editor={ ClassicEditor }
-                  onReady={ editor => {
+                  editor={ClassicEditor}
+                  onReady={editor => {
                     // You can store the "editor" and use when it is needed.
-                    console.log( 'Editor is ready to use!', editor )
-                  } }
-                  onChange={ ( event, editor ) => {
+                    console.log('Editor is ready to use!', editor)
+                  }}
+                  onChange={(event, editor) => {
                     const data = editor.getData()
-                    console.log( 'Data:', data )
+                    console.log('Data:', data)
                     setContent(data) // set the content state with the current data from the editor
-                  } }
-                  onBlur={ ( event, editor ) => {
-                    console.log( 'Blur.', editor )
-                  } }
-                  onFocus={ ( event, editor ) => {
-                    console.log( 'Focus.', editor )
-                  } }
+                  }}
+                  onBlur={(event, editor) => {
+                    console.log('Blur.', editor)
+                  }}
+                  onFocus={(event, editor) => {
+                    console.log('Focus.', editor)
+                  }}
                 >
                 </CKEditor>
                 {/* <TextField
@@ -214,7 +214,7 @@ function Page() {
                 /> */}
               </Grid>
             </Grid>
-            <Button sx={{ my:1 }} variant="contained" onClick={handleSubmit}>CREATE</Button>
+            <Button sx={{ my: 1 }} variant="contained" onClick={handleSubmit}>CREATE</Button>
           </Box>
         </Paper>
       </Box>

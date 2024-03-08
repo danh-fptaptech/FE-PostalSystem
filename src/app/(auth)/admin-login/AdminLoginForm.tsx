@@ -73,7 +73,7 @@ const AdminLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				router.push("/app/admin/employees");
+				router.push("/app");
 			} else {
 				setError("Invalid email or password");
 			}
@@ -85,6 +85,7 @@ const AdminLoginForm = () => {
 
 	return (
 		<Box
+			className="my-auto"
 			component="form"
 			onSubmit={handleSubmit(onSubmit)}
 			sx={{

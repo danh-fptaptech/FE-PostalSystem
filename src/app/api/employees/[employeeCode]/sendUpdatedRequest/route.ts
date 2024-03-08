@@ -28,7 +28,7 @@ export async function PUT(
 					"Send updated request successfully. Please wait for the admin accept.",
 			});
 		}
-		console.log(res);
+
 		return NextResponse.json({
 			ok: false,
 			status: "error",
