@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab'
 import { useTheme } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import { SiteSetting } from '@/components/interfaces'
+import { toast } from 'sonner'
 
 
 interface TabPanelProps {
@@ -91,62 +92,40 @@ function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/api/general-setting')
-      if (response.ok) {
-        const data = await response.json()
-        console.log('data', data) // Log the data to the console
-        const newSettings: { [key: string]: any } = {}
-        if (Array.isArray(data.data )) {
-          for (const setting of data.data as SiteSetting[]) {
-            newSettings[setting.settingName] = setting.settingValue
-            console.log('setting', setting)
-          }
+        const response = await fetch('/api/general-setting')
+        if (response.ok) {
+            const data = await response.json()
+            console.log('data', data) // Log the data to the console
+
+            // Directly assign the returned data to your state
+            setSettings({
+                site_name: data.data.site_name || '',
+                site_title: data.data.site_title || '',
+                site_description: data.data.site_description || '',
+                site_keywords: data.data.site_keywords || '',
+                site_author: data.data.site_author || '',
+                site_email: data.data.site_email || '',
+                site_phone: data.data.site_phone || '',
+                site_address: data.data.site_address || ''
+            })
+
+            setAdditionalSettings({
+                site_logo: data.data.site_logo || '',
+                site_favicon: data.data.site_favicon || '',
+                site_logo_bg: data.data.site_logo_bg || '',
+                site_language: data.data.site_language || '',
+                site_favicon_bg: data.data.site_favicon_bg || '',
+                rateConvert: data.data.rateConvert || '',
+                limitSize: data.data.limitSize || '',
+                limitWeight: data.data.limitWeight || ''
+            })
         } else {
-          console.error('data.data.data is not an array:', data.data.data)
+            console.error('Failed to fetch settings')
         }
-        setSettings({
-          site_name: newSettings.site_name || '',
-          site_title: newSettings.site_title || '',
-          site_description: newSettings.site_description || '',
-          site_keywords: newSettings.site_keywords || '',
-          site_author: newSettings.site_author || '',
-          site_email: newSettings.site_email || '',
-          site_phone: newSettings.site_phone || '',
-          site_address: newSettings.site_address || ''
-        })
-      } else {
-        console.error('Failed to fetch settings')
-      }
-      const responseAdditional = await fetch('/api/general-setting')
-      if (responseAdditional.ok) {
-        const data = await responseAdditional.json()
-        const newAdditionalSettings: { [key: string]: any } = {}
-        if (Array.isArray(data.data )) {
-          for (const setting of data.data as SiteSetting[]) {
-            newAdditionalSettings[setting.settingName] = setting.settingValue
-            console.log('AddionalSetting', setting)
-          }
-        } else {
-          console.error('data.data.data is not an array:', data.data.data)
-        }
-        setAdditionalSettings({
-          site_logo: newAdditionalSettings.site_logo || '',
-          site_favicon: newAdditionalSettings.site_favicon || '',
-          site_logo_bg: newAdditionalSettings.site_logo_bg || '',
-          site_language: newAdditionalSettings.site_language || '',
-          site_favicon_bg: newAdditionalSettings.site_favicon_bg || '',
-          rateConvert: newAdditionalSettings.rateConvert || '',
-          limitSize: newAdditionalSettings.limitSize || '',
-          limitWeight: newAdditionalSettings.limitWeight || ''
-        })
-      } else {
-        console.error('Failed to fetch additional settings')
-      }
-      setLoading(false)
+        setLoading(false)
     }
     fetchData()
-  }, [])
-
+}, [])
 
   if (loading) {
     return <div>Loading...</div> // Or return a spinner
@@ -273,6 +252,8 @@ function Page() {
                 },
                 body: JSON.stringify(settings)
               })
+            // Show a success toast
+              toast.success('Settings updated successfully')
             }}>Save</Button>
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>

@@ -13,10 +13,10 @@ const Layout = ({ children }: any) => {
   const { data: session, status } = useSession()
   const { siteSetting } = useSiteSetting()
   // Find the setting with settingName equal to 'site_name'
-  const siteNameSetting = siteSetting.find(setting => setting.settingName === 'site_name');
-  
+  // const siteNameSetting = siteSetting.find((setting) => setting.settingName === 'site_name')
   // If siteNameSetting exists, use its settingValue, otherwise use a default value
-  const siteName = siteNameSetting ? siteNameSetting.settingValue : 'Default Site Name';
+  console.log('siteSetting:', siteSetting)
+  const siteName = siteSetting.site_name || 'Default Site Name';
   return (
     <>
       <header>
