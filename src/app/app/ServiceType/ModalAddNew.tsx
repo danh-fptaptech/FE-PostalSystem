@@ -182,7 +182,7 @@ export default function ModalAddNew({
                 <Fade in={open}>
                     <Box sx={style}>
                         <Typography id="transition-modal-title" variant="h6" component="h2" style={{ textAlign: 'center' }}>
-                            Add Service Type
+                            {editItemId == null? 'Add Service Type' : 'Edit Service Type'}
                         </Typography>
                         <hr style={{ margin: '20px 50px' }} />
                     

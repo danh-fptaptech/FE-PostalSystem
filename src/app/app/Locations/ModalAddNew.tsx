@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import { FormControlLabel, InputLabel, MenuItem, FormControl, FormGroup, Switch, Grid } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { DataLocationType } from '@/helper/interface';
+import { Check } from '@mui/icons-material';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -64,6 +65,7 @@ export default function ModalAddNew({
             if (+value == 2) {
                 setProvinceOfSelect(0);
                 setdistrictOfSelect(0);
+                setPostalCode('');
             }
         }
         if (name == 'locationOfProvince') {
@@ -109,7 +111,7 @@ export default function ModalAddNew({
                 const requestBody = {
                     id: editItem.id,
                     locationName: locationName,
-                    postalCode: postalCode,
+                    postalCode: +locationLevel==2? null: postalCode,
                     locationLevel: locationLevel,
                     locationOf: locationOf,
                     status: status
@@ -121,22 +123,18 @@ export default function ModalAddNew({
                     },
                     body: JSON.stringify(requestBody)
                 });
-                if (response.ok) {
-                    setOpen(false);
+                const decode = await response.json();
+                console.log('response:',decode)
+                if (decode.ok) {
                     setIsEditing(false);
                     setEditItem({});
                     setErrors([]);
-                    console.log('Update Location successfully!');
+                    setOpen(false);
+                } 
+                if (decode.status === 400) {
+                        setErrors([...errors, 'Postal code already exists']);
                 } else {
-                    if (response.status === 400) {
-                        const error = await response.text();
-                        if (error=='Postal code already exists') {
-                            setErrors([...errors, 'Postal code already exists']);
-                        }
-                        console.error('Bad Request Error:', error);
-                    } else {
-                        console.error('Create Location Error', response.status);
-                    }
+                    console.error('Update Location Error', response.status);
                 }
             }catch(error){
                 console.error('Error', error);
@@ -146,16 +144,17 @@ export default function ModalAddNew({
             try {
                 const requestBody = {
                     locationName: locationName,
-                    postalCode: locationLevel==2?postalCode:null,
+                    postalCode: locationLevel==2?null:postalCode,
                     locationLevel: locationLevel,
                     locationOf: locationOf,
                     status: status
                 };
-                let checkValidate = validateLocation(locationName, postalCode,locationLevel);
+                let checkValidate = validateLocation(locationName, postalCode,locationLevel,locationOf);
                 if(checkValidate.length > 0){
                     setErrors(checkValidate);
                     return;
                 }
+               
                 const response = await fetch(`/api/Location`, {
                     method: 'POST',
                     headers: {
@@ -163,23 +162,18 @@ export default function ModalAddNew({
                     },
                     body: JSON.stringify(requestBody)
                 });
+                const decode = await response.json();
     
-                if (response.ok) {
-                    setOpen(false);
+                if (decode.ok) {
                     setIsEditing(false);
                     setEditItem({});
-                    console.log('Create a new Location successfully!');
                     setErrors([]);
+                    setOpen(false);
+                } 
+                if (decode.status === 400) {
+                    setErrors([...errors, 'Postal code already exists']);
                 } else {
-                    if (response.status === 400) {
-                        const error = await response.text();
-                        if (error=='Postal code already exists') {
-                            setErrors([...errors, 'Postal code already exists']);
-                        }
-                        console.error('Bad Request Error:', error);
-                    } else {
-                        console.error('Create Location Error', response.status);
-                    }
+                    console.error('Create Location Error', response.status);
                 }
             } catch (error) {
                 console.error('Error', error);
@@ -201,6 +195,14 @@ export default function ModalAddNew({
 
     React.useEffect(() => {
         fetchProvince();
+        if(!isEditing){
+            setLocationName('');
+            setPostalCode('');
+            setLocationLevel(0);
+            setProvinceOfSelect(0);
+            setdistrictOfSelect(0);
+            setStatus(1);
+        }
     }, []);
 
     const fetchDistrict = async () => {
@@ -265,6 +267,7 @@ export default function ModalAddNew({
             setdistrictOfSelect(0);
             setStatus(1);
         }
+        setErrors([])
     }, [isEditing])
 
     return (
@@ -290,7 +293,7 @@ export default function ModalAddNew({
                 <Fade in={open}>
                     <Box sx={style}>
                         <Typography id="transition-modal-title" variant="h6" component="h2">
-                            Add Locations
+                            {!isEditing?'Add Locations':'Edit Location'}
                         </Typography>
                         <hr />
                         <Box>
@@ -413,7 +416,7 @@ export default function ModalAddNew({
     );
 }
 
-function validateLocation (locationName:string, postalCode:string, locationLevel:number){
+function validateLocation (locationName:string, postalCode:string, locationLevel:number, locationOf:number | null | undefined){
     const errors = [];
     if(locationName.length === 0){
         errors.push('Location Name is required');
@@ -421,6 +424,11 @@ function validateLocation (locationName:string, postalCode:string, locationLevel
     if(locationLevel < 2){
         if(postalCode.length === 0){
             errors.push('Postal Code is required');
+        }
+    }
+    if(locationLevel != 0){
+        if(locationOf == null){
+            errors.push('Location Of is required');
         }
     }
     return errors;

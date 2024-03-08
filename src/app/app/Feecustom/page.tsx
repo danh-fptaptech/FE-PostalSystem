@@ -143,7 +143,7 @@ export default function FeeCustomPage({
             <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: "10px", padding: "15px"}}>
             <ChangeStatus />
 
-            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Service Types Managerment</h1>
+            <h1 className="text-4xl text-center antialiased font-semibold mt-5 mb-5"> Fees Managerment</h1>
             <hr />
             <Button
                 variant="contained"

@@ -1,7 +1,7 @@
-'use client'
-import Toolbar from '@mui/material/Toolbar'
-import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
+"use client";
+import Toolbar from "@mui/material/Toolbar";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
 import {
   AccountBoxOutlined,
   AppsOutlined,

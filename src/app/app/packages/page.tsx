@@ -23,6 +23,7 @@ import {
 import {toast} from "sonner";
 import {Branch} from "@/models/Branch";
 import splitAddressAndWard from "@/helper/splitAddressAndWard";
+import PackegesById from "@/components/PackagesById";
 
 interface Column {
     id: String;
@@ -42,47 +43,47 @@ const columns: readonly Column[] = [
 
 
 const App = () => {
-    const [packages , setPackages] = useState([] as any[]);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [reloadPackages, setReloadPackages] = useState(true);
+    // const [packages , setPackages] = useState([] as any[]);
+    // const [page, setPage] = useState(0);
+    // const [rowsPerPage, setRowsPerPage] = useState(10);
+    // const [reloadPackages, setReloadPackages] = useState(true);
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
+    // const handleChangePage = (event: unknown, newPage: number) => {
+    //     setPage(newPage);
+    // };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    // const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setRowsPerPage(+event.target.value);
+    //     setPage(0);
+    // };
 
-    const fetchBranches = async () => {
-        const response = await fetch("/api/packages/getall");
-        const data = await response.json();
-        setReloadPackages(false);
-        return data;
-    };
+    // const fetchBranches = async () => {
+    //     const response = await fetch("/api/packages/getall");
+    //     const data = await response.json();
+    //     setReloadPackages(false);
+    //     return data;
+    // };
 
 
-    useEffect(() => {
-        if (reloadPackages) {
-            fetchBranches().then((data) => {
-                console.log(data.packages);
-                setPackages(data.packages);
-            });
-        }
-    }, [reloadPackages]);
+    // useEffect(() => {
+    //     if (reloadPackages) {
+    //         fetchBranches().then((data) => {
+    //             console.log(data.packages);
+    //             setPackages(data.packages);
+    //         });
+    //     }
+    // }, [reloadPackages]);
 
-    const formatData = ({trackingCode, nameFrom, nameTo, addressFrom, addressTo, postalCodeFrom , postalCodeTo, service, totalFee}: any): any => {
-        return {
-            trackingCode,
-        };
-    };
+    // const formatData = ({trackingCode, nameFrom, nameTo, addressFrom, addressTo, postalCodeFrom , postalCodeTo, service, totalFee}: any): any => {
+    //     return {
+    //         trackingCode,
+    //     };
+    // };
 
 
     return (
-        <>
-            <Paper elevation={6} sx={{my: 3, borderRadius: "10px", boxSizing: "border-box"}}>
+        < >
+            {/* <Paper elevation={6} sx={{my: 3, borderRadius: "10px", boxSizing: "border-box"}}>
                 <Grid container>
                     <Grid item xs={12} sm={6} sx={{display: "flex", alignItems: "center", padding: "20px"}}>
                     </Grid>
@@ -135,7 +136,8 @@ const App = () => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-            </Paper>
+            </Paper> */}
+            <PackegesById id={1} />
         </>
     );
 };
