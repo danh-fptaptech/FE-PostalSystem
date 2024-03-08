@@ -200,5 +200,9 @@ const paths = [
     {
         path:'/app/general-settings',
         permission: ['app.view']
+    },
+    {
+        path:'/app/test-label-shipping',
+        permission: ['app.view']
     }
 ]
