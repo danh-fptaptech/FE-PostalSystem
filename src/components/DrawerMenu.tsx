@@ -67,7 +67,6 @@ export default function DrawerMenu() {
             createMenu("Service Type", TypeSpecimenOutlined, "/app/ServiceType", "servicetype.view"),
             createMenu("Services Manager", LanOutlined, "/app/Services", "servicetype.view"),
         ]),
-        createMenu("Locations", LocationOnOutlined, "/app/Locations", "locations.view"),
         createMenu("Check Fee", PaidOutlined, "/app/Feecustom/checkfee", "checkFee.view"),
         createMenu("Fee Custom", PaidOutlined, "/app/Feecustom", "feecustom", [
             createMenu("List Fee", FormatListBulletedOutlined, "/app/Feecustom", "fee.view"),

@@ -232,5 +232,18 @@ const paths = [
     }, {
         path: "/app/packages/[id]",
         permission: ["package.view"],
+    }, {
+        path: "/app/news-management/create",
+        permission: ["new.create"]
+    }
+    , {
+        path: "/app/news-management/update/[id]",
+        permission: ["new.update"]
+    }, {
+        path: "/app/news-management/delete/[id]",
+        permission: ["new.disable"]
+    }, {
+        path: "/app/Locations",
+        permission: ["locations.view"]
     }
 ];

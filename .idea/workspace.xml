@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
     </list>
@@ -58,24 +56,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "eslint.code.style.apply.dismiss": "true",
-    "git-widget-placeholder": "Final",
-    "last_opened_file_path": "G:/eProject/tars-delivery-fe",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ImportCost",
-    "ts.external.directory.path": "G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;eslint.code.style.apply.dismiss&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Final&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/eProject/tars-delivery-fe&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ImportCost&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;G:\\eProject\\tars-delivery-fe\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactBuddySettings">
     <option name="extensionsIgnore" value="true" />
   </component>
@@ -137,6 +135,8 @@
       <workItem from="1709649976146" duration="28032000" />
       <workItem from="1709831167173" duration="36637000" />
       <workItem from="1709890852488" duration="12604000" />
+      <workItem from="1709962741921" duration="300000" />
+      <workItem from="1709982444657" duration="2469000" />
     </task>
     <servers />
   </component>
