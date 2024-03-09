@@ -44,7 +44,7 @@ function Page({ params }: { params: { blogId: string } }) {
   ]
   return (
     <Box>
-      <Box sx={{ py:1, px:2 }}>
+      <Box sx={{ py: 1, px: 2 }}>
         <Stack>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -60,40 +60,40 @@ function Page({ params }: { params: { blogId: string } }) {
             {loading ? (
               <Skeleton animation='wave' variant="text" width={900} height={60} />
             ) : (
-              <Typography sx={{ fontWeight:'550', fontSize:'30px', ml:2 }}>
+              <Typography sx={{ fontWeight: '550', fontSize: '30px', ml: 2 }}>
                 {blog ? blog.title : 'Loading ...'}
               </Typography>
             )}
-            <Box sx={{ ml:2 }}>
+            <Box sx={{ ml: 2 }}>
               <Typography>
                 {blog && blog.createdAt ? moment(new Date(blog.createdAt)).format('DD-MM-YYYY') : 'Loading...'}
               </Typography>
             </Box>
-            <Box sx={{ ml:2, my:2 }}>
+            <Box sx={{ ml: 2, my: 2 }}>
               <div dangerouslySetInnerHTML={{ __html: blog ? blog.content : 'Loading ...' }} />
             </Box>
           </Box>
         </Grid>
         <Grid item xs={12} md={3.5}>
-          <Box sx={{ my:4, pl:2, backgroundColor:'#f5f5f5' }}>
+          <Box sx={{ my: 4, pl: 2, backgroundColor: '#f5f5f5' }}>
             <Box sx={{ my: 2 }}>
-              <Typography sx={{ fontWeight:'550', fontSize:'25px' }}>Related News</Typography>
+              <Typography sx={{ fontWeight: '550', fontSize: '25px' }}>Related News</Typography>
             </Box>
-            <Divider variant="middle"/>
+            <Divider variant="middle" />
             {loading ? (
               <Box sx={{ width: 300, height: 50, my: 1 }}>
                 <Skeleton animation="wave" variant="text" />
-                <Skeleton animation="wave" variant="rectangular" width={300}/>
+                <Skeleton animation="wave" variant="rectangular" width={300} />
               </Box>
             ) : (
               relatedNews?.map((news, index) => (
-                <Box key={index} sx={{ my:1 }}>
+                <Box key={index} sx={{ my: 1 }}>
                   <Link href={`/news/${news.id}`} underline="hover" color="inherit">
-                    <Typography sx={{ fontWeight:'550', fontSize:'15px' }}>
+                    <Typography sx={{ fontWeight: '550', fontSize: '15px' }}>
                       {news.title.length > 50 ? news.title.substring(0, 50) + '...' : news.title}
                     </Typography>
                   </Link>
-                  <Typography sx={{ fontSize:'12px', color:'#8d8dac' }}>
+                  <Typography sx={{ fontSize: '12px', color: '#8d8dac' }}>
                     <Typography>
                       {blog && blog.createdAt ? moment(new Date(blog.createdAt)).format('DD-MM-YYYY') : 'Loading...'}
                     </Typography>

@@ -62,10 +62,10 @@ export const fetchAddPermission = async (
 };
 
 export const fetchBranches = async () => {
-	const response = await fetch("/api/branches", {
+	const res = await fetch("/api/branches-new", {
 		method: "GET",
 	});
-	return response.json() as Promise<ApiResponse>;
+	return res.json() as Promise<ApiResponse>;
 };
 
 export const fetchLocations = async () => {

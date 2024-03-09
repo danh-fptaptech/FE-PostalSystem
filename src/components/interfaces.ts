@@ -43,17 +43,17 @@ interface User {
 }
 
 export interface Branch {
-  id: number;
-  branchName: string;
-  phoneNumber: string;
-  address: string;
-  createdAt: string;
-  district: string;
-  employees: any[]; // Replace with appropriate type
-  postalCode: string;
-  province: string;
-  status: number;
-  updatedAt: string;
+	id: number;
+	branchName: string;
+	phoneNumber: string;
+	address: string;
+	createdAt: string;
+	district: string;
+	employees: any[]; // Replace with appropriate type
+	postalCode: string;
+	province: string;
+	status: number;
+	updatedAt: string;
 }
 export interface HistoryLog {
   id: number;
@@ -73,17 +73,17 @@ export interface HistoryLog {
 }
 
 export interface Item {
-  id: number;
-  packageId: number;
-  itemName: string;
-  itemWeight: number;
-  itemQuantity: number;
-  itemType: number;
-  itemValue: number;
-  createdAt: string;
-  package: any; // Replace with appropriate type
-  status: number;
-  updatedAt: string;
+	id: number;
+	packageId: number;
+	itemName: string;
+	itemWeight: number;
+	itemQuantity: number;
+	itemType: number;
+	itemValue: number;
+	createdAt: string;
+	package: any; // Replace with appropriate type
+	status: number;
+	updatedAt: string;
 }
 
 export interface Service {
@@ -135,14 +135,14 @@ export interface Data {
 }
 
 export interface TrackingDataItem {
-  id: number;
-  service: Service;
-  feeCharge: number;
-  timeProcess: number;
-  status: number;
-  createdAt: string;
-  updatedAt: string;
-  serviceName: string;
+	id: number;
+	service: Service;
+	feeCharge: number;
+	timeProcess: number;
+	status: number;
+	createdAt: string;
+	updatedAt: string;
+	serviceName: string;
 }
 
 export interface TrackingData {
@@ -190,49 +190,49 @@ interface FeeCustom {
 }
 
 export interface Value {
-  id: number;
-  trackingCode: string;
-  nameFrom: string;
-  addressFrom: string;
-  postalCodeFrom: string;
-  nameTo: string;
-  addressTo: string;
-  postalCodeTo: string;
-  packageSize: null;
-  packageNote: string;
-  totalFee: number;
-  serviceId: number;
-  userId: number;
-  step: number;
-  createdAt: string;
-  updatedAt: string;
-  status: number;
-  user: null;
-  service: Service;
-  items: Item[];
-  historyLogs: HistoryLog[];
+	id: number;
+	trackingCode: string;
+	nameFrom: string;
+	addressFrom: string;
+	postalCodeFrom: string;
+	nameTo: string;
+	addressTo: string;
+	postalCodeTo: string;
+	packageSize: null;
+	packageNote: string;
+	totalFee: number;
+	serviceId: number;
+	userId: number;
+	step: number;
+	createdAt: string;
+	updatedAt: string;
+	status: number;
+	user: null;
+	service: Service;
+	items: Item[];
+	historyLogs: HistoryLog[];
 }
 export interface BlogItem {
-  id: number;
-  title: string;
-  slug: string;
-  content: string;
-  author: string;
-  category: number;
-  employeeId: number;
-  createdAt: string;
-  updatedAt: string;
-  status: number;
-  employee: Employee;
+	id: number;
+	title: string;
+	slug: string;
+	content: string;
+	author: string;
+	category: number;
+	employeeId: number;
+	createdAt: string;
+	updatedAt: string;
+	status: number;
+	employee: Employee;
 }
 
 export interface SiteSetting {
-  id: number;
-  settingName: string;
-  settingValue: string;
-  status: number;
+	id: number;
+	settingName: string;
+	settingValue: string;
+	status: number;
 }
 
 export interface SiteContextType {
-  siteSetting: SiteSetting[];
+	siteSetting: SiteSetting[];
 }

@@ -52,39 +52,39 @@ export default function TrackingShipment() {
   return (
     <>
       <Box>
-        <Grid container sx={{ p:4 }}>
+        <Grid container sx={{ p: 4 }}>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Typography sx={{ fontWeight:550, py:1 }}>
+              <Typography sx={{ fontWeight: 550, py: 1 }}>
                 Tracking Code
               </Typography>
               {/* <Typography sx={{ fontWeight:550, fontSize:'16px', py:1 }}>
                 (Tra nhiều bill bằng cách thêm dấu phẩy giữa các bill)
               </Typography> */}
-              <TextField sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%' }}
+              <TextField sx={{ '& .MuiInputBase-input': { py: 1 }, width: '100%' }}
                 type="text"
                 placeholder='Example: 123456, 24563'
                 value={trackingCode}
                 onChange={handleInputChange}
               />
-              
+
               <TextField
-                sx={{ '& .MuiInputBase-input':{ py:1 }, width:'100%', mt:1 }}
+                sx={{ '& .MuiInputBase-input': { py: 1 }, width: '100%', mt: 1 }}
                 type="text"
                 placeholder='Enter your phone number'
                 onChange={handlePhoneFromChange}
               />
               <Button sx={{
-                my:2,
-                color:'white',
-                backgroundColor:'red',
-                borderRadius:1,
-                '&:hover':{
-                  backgroundColor:'red',
-                  color:'white'
+                my: 2,
+                color: 'white',
+                backgroundColor: 'red',
+                borderRadius: 1,
+                '&:hover': {
+                  backgroundColor: 'red',
+                  color: 'white'
                 }
               }}
-              onClick={handleTraCuuButton}
+                onClick={handleTraCuuButton}
               >
                 Search
               </Button>
@@ -92,7 +92,7 @@ export default function TrackingShipment() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Image priority src={trackingSvg} alt="tracking" style={{ display:'flex', marginLeft:'auto', marginRight:'auto' }}/>
+              <Image priority src={trackingSvg} alt="tracking" style={{ display: 'flex', marginLeft: 'auto', marginRight: 'auto' }} />
             </Box>
           </Grid>
         </Grid>

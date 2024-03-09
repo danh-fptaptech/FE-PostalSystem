@@ -7,7 +7,14 @@ import {Controller} from "react-hook-form";
 const FormInfo = (props: any) => {
     const {type} = props;
     // @ts-ignore
-    const {register, errors, handleFormChange, control, handleMultipleFormChange, resetField} = useContext(PackageCreateContext);
+    const {
+        register,
+        errors,
+        handleFormChange,
+        control,
+        handleMultipleFormChange,
+        resetField
+    } = useContext(PackageCreateContext);
     const [provinces, setProvinces] = useState<{ locationName: string, id: number }[]>([]);
     const [districts, setDistricts] = useState<{ locationName: string, id: number }[]>([]);
     const [wards, setWards] = useState<{ locationName: string, id: number }[]>([]);
@@ -15,17 +22,17 @@ const FormInfo = (props: any) => {
     const fetchProvinces = async () => {
         const res = await fetch(`/api/locations/getlistprovince`);
         const data = await res.json();
-        return data.provinces;
+        return data.data;
     }
     const fetchDistricts = async (provinceId: number) => {
-        const res = await fetch(`/api/locations/getlocationsbyid/${provinceId}`);
+        const res = await fetch(`/api/Location/${provinceId}`);
         const data = await res.json();
-        return data.districts;
+        return data.data.childLocations;
     }
     const fetchWards = async (districtId: number) => {
-        const res = await fetch(`/api/locations/getlocationsbyid/${districtId}`);
+        const res = await fetch(`/api/Location/${districtId}`);
         const data = await res.json();
-        return data.districts;
+        return data.data.childLocations;
     }
 
 
@@ -85,7 +92,7 @@ const FormInfo = (props: any) => {
                     {...register(`address_${type}`, {
                         required: "Address is required",
                     })}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         e.target.value = e.target.value.replace(/[^0-9a-zA-Z//\s,+-]/g, '');
                         handleFormChange(e);
                     }}
@@ -110,9 +117,14 @@ const FormInfo = (props: any) => {
                                     disableClearable={true}
                                     onChange={(event, value) => {
                                         field.onChange(value);
-                                        if(value) {
+                                        if (value) {
                                             fetchDistricts(value.id).then(r => setDistricts(r));
-                                            handleFormChange({target: {name: `province_${type}`, value: value.locationName}});
+                                            handleFormChange({
+                                                target: {
+                                                    name: `province_${type}`,
+                                                    value: value.locationName
+                                                }
+                                            });
                                             setWards([]);
                                             resetField(`district_${type}`);
                                             resetField(`ward_${type}`);
@@ -148,7 +160,7 @@ const FormInfo = (props: any) => {
                                     getOptionLabel={(option) => option.locationName}
                                     onChange={(event, value) => {
                                         field.onChange(value);
-                                        if(value) {
+                                        if (value) {
                                             fetchWards(value.id).then(r => setWards(r));
                                             handleMultipleFormChange([
                                                 {name: `district_${type}`, value: value.locationName},
@@ -187,14 +199,7 @@ const FormInfo = (props: any) => {
                                     getOptionLabel={(option) => option.locationName}
                                     onChange={(event, value) => {
                                         field.onChange(value);
-                                        if(!value) {
-                                            setWards([]);
-                                            handleFormChange({target: {name: `ward_${type}`, value: null}});
-                                            return;
-                                        }else{
-                                            fetchWards(value.id).then(r => setWards(r));
-                                            handleFormChange({target: {name: `ward_${type}`, value: value.locationName}});
-                                        }
+                                        handleFormChange({target: {name: `ward_${type}`, value: value.locationName}});
                                     }}
                                     renderInput={(params) =>
                                         <TextField

@@ -86,6 +86,7 @@ function Page() {
       const response = await fetch(`http://localhost:5255/api/Package/getbytracking/${trackingCode}/${phoneFrom}`)
       if (response.status === 200) {
         const data = await response.json()
+        console.log("Du lieu",data)
         // Update the state with the fetched data
         setData(data)
         // Store the data in the local storage/
@@ -249,7 +250,7 @@ function Page() {
                     {data.items.reduce((total, item) => total + item.itemWeight, 0)} gram
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {data?.service?.serviceType?.serviceName}
+                    {data?.feeCustom?.service?.serviceType?.serviceName}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {stepMapping[data?.step] || 'Error  !!'}
