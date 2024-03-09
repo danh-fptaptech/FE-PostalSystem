@@ -207,4 +207,12 @@ const paths = [
 		path: "/app/Service",
 		permission: ["service.view", "emp.view"],
 	},
+    {
+        path: '/app/general-settings',
+        permission: ['app.view'],
+    },
+    {
+        path: '/app/news-management',
+        permission: ['app.view'],
+    }
 ];

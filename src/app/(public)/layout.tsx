@@ -28,7 +28,7 @@ const Layout = ({ children }: any) => {
         <Image src={banner} alt='Hong Kong Skyline' layout='responsive'/>
         <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center', textAlign:'center', position:'absolute', width:'100%', height:{ xs:'200px', md:'290px' }, top:'0' }}>
           <Box>
-            <Typography sx={{ fontWeight:550, fontSize:{ xs:18, md:25 }, color:'white', letterSpacing:5 }}>TARS PORTAL</Typography>
+            <Typography sx={{ fontWeight:550, fontSize:{ xs:18, md:25 }, color:'white', letterSpacing:5, textTransform:'uppercase' }}>{siteName}</Typography>
             <Typography sx={{ fontWeight:550, fontSize:{ xs:18, md:25 }, color:'white', letterSpacing:5 }}>FAST - FLEXIBLE - FRIENDLY</Typography>
           </Box>
         </Box>

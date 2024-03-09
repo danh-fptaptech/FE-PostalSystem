@@ -115,9 +115,9 @@ function Page() {
                 site_logo_bg: data.data.site_logo_bg || '',
                 site_language: data.data.site_language || '',
                 site_favicon_bg: data.data.site_favicon_bg || '',
-                rateConvert: data.data.rateConvert || '',
-                limitSize: data.data.limitSize || '',
-                limitWeight: data.data.limitWeight || ''
+                rateConvert: data.data.rateConvert || 0,
+                limitSize: data.data.limitSize || 0,
+                limitWeight: data.data.limitWeight || 0
             })
         } else {
             console.error('Failed to fetch settings')
@@ -325,6 +325,7 @@ function Page() {
                   <Box sx={{ my: 1 }}>
                     <Typography>Rate convert :</Typography>
                     <TextField
+                      type='number'
                       name='rateConvert'
                       required
                       fullWidth
@@ -337,6 +338,7 @@ function Page() {
                   <Box sx={{ my: 1 }}>
                     <Typography>Limit Size :</Typography>
                     <TextField
+                      type='number'
                       name='limitSize'
                       required
                       fullWidth
@@ -349,6 +351,7 @@ function Page() {
                   <Box sx={{ my: 1 }}>
                     <Typography>Limit Weight :</Typography>
                     <TextField
+                      type='number'
                       name='limitWeight'
                       required
                       fullWidth
