@@ -4,9 +4,9 @@ import {withAuth} from 'next-auth/middleware';
 const url = process.env.NEXT_PUBLIC_API_URL
 
 export default withAuth(
-	// `withAuth` augments your `Request` with the user's token.
-	async function middleware(req) {
-		const token = req.nextauth.token;
+    // `withAuth` augments your `Request` with the user's token.
+    async function middleware(req) {
+        const token = req.nextauth.token;
 
         if (token) {
             const pathname = req.nextUrl.pathname;
@@ -27,10 +27,10 @@ export default withAuth(
                 return NextResponse.redirect(new URL("/", req.url));
             }
 
-			const userPermissions = token.role.permissions || [];
-			const hasPermission = path.permission.some(p =>
-				userPermissions.includes(p)
-			);
+            const userPermissions = token.role.permissions || [];
+            const hasPermission = path.permission.some(p =>
+                userPermissions.includes(p)
+            );
 
             if (!hasPermission) {
                 return NextResponse.redirect(new URL("/access-denied", req.url));
@@ -77,65 +77,65 @@ export const config = {
 };
 
 const paths = [
-	{
-		path: "/app",
-		permission: ["app.view"],
-	},
-	{
-		path: "/app/user",
-		permission: ["user.view"],
-	},
-	{
-		path: "/app/employee",
-		permission: ["profile.view"],
-	},
-	{
-		path: "/app/user/change-password",
-		permission: ["password.change"],
-	},
-	{
-		path: "/app/packages",
-		permission: ["package.view", "emp.view"],
-	},
-	{
-		path: "/app/user/packages",
-		permission: ["package.view"],
-	},
-	{
-		path: "/app/user/create-package",
-		permission: ["package.create"],
-	},
-	{
-		path: "/app/user/add-address",
-		permission: ["address.create"],
-	},
-	{
-		path: "/app/user/addresses/receiver",
-		permission: ["addresses.view"],
-	},
-	{
-		path: "/app/user/addresses/sender",
-		permission: ["addresses.view"],
-	},
-	{
-		path: "/app/user/addresses",
-		permission: ["addresses.view"],
-	},
-	{
-		path: "/app/admin/employees",
-		permission: ["emp.view"],
-	},
-	{
-		path: "/app/admin/roles",
-		permission: ["role.view"],
-	},
-	{
-		path: "/app/admin/requests",
-		permission: ["request.view"],
-	},
     {
         path: "/app",
-        permission: ["Admin","package.view"],
+        permission: ["app.view"],
+    },
+    {
+        path: "/app/user",
+        permission: ["user.view"],
+    },
+    {
+        path: "/app/employee",
+        permission: ["profile.view"],
+    },
+    {
+        path: "/app/user/change-password",
+        permission: ["password.change"],
+    },
+    {
+        path: "/app/packages",
+        permission: ["package.view", "emp.view"],
+    },
+    {
+        path: "/app/user/packages",
+        permission: ["package.view"],
+    },
+    {
+        path: "/app/user/create-package",
+        permission: ["package.create"],
+    },
+    {
+        path: "/app/user/add-address",
+        permission: ["address.create"],
+    },
+    {
+        path: "/app/user/addresses/receiver",
+        permission: ["addresses.view"],
+    },
+    {
+        path: "/app/user/addresses/sender",
+        permission: ["addresses.view"],
+    },
+    {
+        path: "/app/user/addresses",
+        permission: ["addresses.view"],
+    },
+    {
+        path: "/app/admin/employees",
+        permission: ["emp.view"],
+    },
+    {
+        path: "/app/admin/roles",
+        permission: ["role.view"],
+    },
+    {
+        path: "/app/admin/requests",
+        permission: ["request.view"],
+    },
+    {
+        path: "/app",
+        permission: ["Admin", "package.view"],
     },
     {
         path: "/app/user",
@@ -171,48 +171,66 @@ const paths = [
     },
     {
         path: "/app/admin/users",
-        permission: ["Admin"],
+        permission: ["emp.view"],
     },
     {
         path: "/app/admin/employees",
-        permission: ["Admin", "Branch Manager"],
+        permission: ["emp.view", "manager.view"],
     },
     {
         path: "/app/admin/roles",
-        permission: ["Admin"],
+        permission: ["emp.view"],
     },
     {
         path: "/app/admin/requests",
-        permission: ["Admin"],
+        permission: ["emp.view"],
     },
 
-	{
-		path: "/app/admin/users",
-		permission: ["emp.view"],
-	},
-
-	{
-		path: "/app/historylogs",
-		permission: ["emp.view"],
-	},
-	{
-		path: "/app/branches",
-		permission: ["branches.view", "emp.view"],
-	},
-	{
-		path: "/app/create-package",
-		permission: ["Admin", "user.view"],
-	},
-	{
-		path: "/app/Service",
-		permission: ["service.view", "emp.view"],
-	},
     {
-        path: '/app/general-settings',
-        permission: ['app.view'],
+        path: "/app/admin/users",
+        permission: ["emp.view"],
+    },
+
+    {
+        path: "/app/historylogs",
+        permission: ["emp.view"],
     },
     {
-        path: '/app/news-management',
-        permission: ['app.view'],
+        path: "/app/branches",
+        permission: ["branches.view", "emp.view"],
+    },
+    {
+        path: "/app/create-package",
+        permission: ["emp.view", "user.view"],
+    },
+    {
+        path: "/app/Service",
+        permission: ["service.view", "emp.view"],
+    },
+    {
+        path: "/app/news-management",
+        permission: ["new.create"]
+    },
+    {
+        path: "/app/Feecustom",
+        permission: ["fee.view"]
+    },
+    {
+        path: "/app/Feecustom/Manager",
+        permission: ["fee.create"]
+    },
+    {
+        path: "/app/general-settings",
+        permission: ["emp.create"]
+    },
+    {
+        path: "/app/ServiceType",
+        permission: ["servicetype.view"]
+    }, {
+        path: "/app/Services",
+        permission: ["servicetype.view"]
+    }, {
+        path: "/app/packages/[id]",
+        permission: ["package.view"],
     }
 ];

@@ -66,15 +66,14 @@ export const authOptions: NextAuthOptions = {
 								name: "User",
 								permissions: [
 									"user.view",
-									"password.change",
-									"packages.view",
+									"app.view",
+									"package.view",
 									"package.create",
 									"address.create",
 									"addresses.view",
 								],
 							};
 						}
-						
 						return user;
 					}
 					return null;

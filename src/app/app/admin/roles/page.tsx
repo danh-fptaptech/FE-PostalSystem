@@ -262,7 +262,7 @@ export default function RoleManagement() {
 									</Box>
 
 									<Box className="my-2">
-										{role.roleHasPermissions.slice(0, 2).map(permission => (
+										{role.roleHasPermissions.map(permission => (
 											<Chip
 												key={permission}
 												label={permission}
@@ -275,17 +275,6 @@ export default function RoleManagement() {
 												}}
 											/>
 										))}
-
-										{role.roleHasPermissions.length > 2 && (
-											<Button
-												className="mb-3"
-												onClick={() => setSelectedRole(role)}
-												type="button"
-												variant="text"
-												color="info">
-												... more
-											</Button>
-										)}
 
 										{selectedRole && (
 											<Dialog
