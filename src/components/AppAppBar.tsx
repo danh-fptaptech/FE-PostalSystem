@@ -176,7 +176,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                 )}
               </div>
               <div>
-                <Button
+                {session ? null : <Button
                   startIcon={<PersonAddAlt fontSize='small' />}
                   variant='text'
                   color='primary'
@@ -184,7 +184,7 @@ function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
                   href='/register'
                 >
                   Register
-                </Button>
+                </Button>}
               </div>
               <div>
                 <Button

@@ -5,20 +5,41 @@ export interface Employee {
   password: string;
   fullname: string;
   address: string;
-  avatar: string;
-  branch: Branch;
-  branchId: number;
-  createdAt: string;
-  district: string;
-  historyLogs: any[]; // Replace with appropriate type
-  phoneNumber: string;
-  postalCode: string;
   province: string;
-  role: any; // Replace with appropriate type
+  district: string;
+  postalCode: string;
+  phoneNumber: string;
+  avatar: string;
+  submitedInfo: any | null;
+  branchId: number;
   roleId: number;
-  status: number;
-  submitedInfo: string;
+  createdAt: string;
   updatedAt: string;
+  status: number;
+  branch: any;
+  role: any | null;
+  historyLogs: any[];
+  blogs: any | null;
+  supportTickets: any | null;
+}
+
+interface User {
+  id: number;
+  fullname: string;
+  email: string;
+  password: string;
+  phone: string;
+  avatar: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  status: number;
+  refreshToken: string | null;
+  refreshTokenExpires: string | null;
+  passwordResetToken: string | null;
+  resetTokenExpires: string | null;
+  customers: any[];
+  packages: any[];
+  supportTickets: any | null;
 }
 
 export interface Branch {
@@ -40,15 +61,15 @@ export interface HistoryLog {
   employeeId: number;
   step: number;
   historyNote: string;
-  createdAt: string;
-  employee: Employee;
-  employeeIdNextStep: number;
-  employeeNextStep: any; // Replace with appropriate type
-  package: any; // Replace with appropriate type
   photos: string;
   processStep: number;
-  status: number;
+  employeeIdNextStep: number;
+  createdAt: string;
   updatedAt: string;
+  status: number;
+  package: any | null;
+  employee: Employee;
+  employeeNextStep: Employee | null;
 }
 
 export interface Item {
@@ -67,13 +88,13 @@ export interface Item {
 
 export interface Service {
   id: number;
-  serviceType: ServiceType;
   serviceTypeId: number;
-  status: number;
-  weightFrom: number;
-  weightTo: number;
+  weighFrom: number;
+  weighTo: number;
   createdAt: string;
   updatedAt: string;
+  status: number;
+  serviceType: ServiceType;
 }
 
 export interface ServiceType {
@@ -83,6 +104,7 @@ export interface ServiceType {
   status: number;
   createdAt: string;
   updatedAt: string;
+  services: any[];
 }
 
 export interface Data {
@@ -102,7 +124,7 @@ export interface Data {
   phoneFrom: string;
   postalCodeTo: string;
   service: Service;
-
+  timeProcess: number;
   serviceId: number;
   status: number;
   step: number;
@@ -124,29 +146,47 @@ export interface TrackingDataItem {
 }
 
 export interface TrackingData {
-  expiry: number;
-  value: Value;
-  addressFrom: string;
-  addressTo: string;
-  createdAt: string;
-  historyLogs: HistoryLog[];
   id: number;
-  items: Item[];
-  nameFrom: string;
-  nameTo: string;
-  packageNote: string;
-  packageSize: any; // Replace with appropriate type
-  postalCodeFrom: string;
-  postalCodeTo: string;
-  service: Service;
-  serviceId: number;
-  status: number;
-  step: number;
-  totalFee: number;
   trackingCode: string;
-  updatedAt: string;
-  user: any; // Replace with appropriate type
+  nameFrom: string;
+  addressFrom: string;
+  postalCodeFrom: string;
+  phoneFrom: string;
+  nameTo: string;
+  addressTo: string;
+  postalCodeTo: string;
+  phoneTo: string;
+  packageType: number;
+  packageSize: any | null;
+  packageNote: string;
+  totalFee: number;
+  cod: any | null;
+  feeCustomId: number;
   userId: number;
+  step: number;
+  createdAt: string;
+  updatedAt: string;
+  status: number;
+  user: User;
+  feeCustom: FeeCustom;
+  items: Item[];
+  historyLogs: HistoryLog[];
+}
+
+interface FeeCustom {
+  id: number;
+  serviceId: number;
+  locationIdFrom: number;
+  locationIdTo: number;
+  overWeightCharge: number;
+  feeCharge: number;
+  timeProcess: number;
+  createdAt: string;
+  updatedAt: string;
+  status: number;
+  service: Service;
+  locationFrom: any | null;
+  locationTo: any | null;
 }
 
 export interface Value {

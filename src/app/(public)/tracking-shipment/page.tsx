@@ -67,7 +67,7 @@ function Page() {
   let estimateDeleiveryDate = ''
   if (data?.createdAt) {
     const date = new Date(data.createdAt)
-    date.setDate(date.getDate() + 2)
+    date.setDate(date.getDate() + data.timeProcess)
     const day = String(date.getDate()).padStart(2, '0')
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const year = date.getFullYear()
@@ -252,7 +252,7 @@ function Page() {
                     {data?.service?.serviceType?.serviceName}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
-                    {stepMapping[data?.step] || 'Lỗi rôi  !!'}
+                    {stepMapping[data?.step] || 'Error  !!'}
                   </Typography>
                   <Typography sx={{ textAlign:'right', pr:2, fontWeight:'550', py:2 }}>
                     {packageTypeMap[data?.packageType as keyof typeof packageTypeMap]}
