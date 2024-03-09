@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 // POST
 export async function POST(req: Request) {
   const news = await req.json()
-  const url = `${process.env.NEXT_PUBLIC_API_URL}api/Blog/add`
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Blog/add`
   try {
     const res = await fetch(url, {
       method: 'POST',

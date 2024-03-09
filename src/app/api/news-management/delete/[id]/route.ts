@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 // DELETE
 export async function DELETE(req: Request, {params} : {params: {id: string}}) {
   const id = params.id
-  const url = `${process.env.NEXT_PUBLIC_API_URL}api/Blog/delete/${id}`
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Blog/delete/${id}`
   try {
     const res = await fetch(url, {
       method: 'DELETE',

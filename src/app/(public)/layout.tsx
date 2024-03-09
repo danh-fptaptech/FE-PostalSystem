@@ -16,7 +16,7 @@ const Layout = ({ children }: any) => {
   // const siteNameSetting = siteSetting.find((setting) => setting.settingName === 'site_name')
   // If siteNameSetting exists, use its settingValue, otherwise use a default value
   console.log('siteSetting:', siteSetting)
-  const siteName = siteSetting.site_name || 'Default Site Name';
+  const siteName = siteSetting?.site_name || 'Default Site Name';
   return (
     <>
       <header>

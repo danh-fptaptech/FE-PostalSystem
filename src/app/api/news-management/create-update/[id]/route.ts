@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 // PUT
 export async function PUT(req: Request) {
   const news = await req.json()
-  const url = `${process.env.NEXT_PUBLIC_API_URL}api/Blog/update/${news.id}`
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Blog/update/${news.id}`
   try {
     const res = await fetch(url, {
       method: 'PUT',
