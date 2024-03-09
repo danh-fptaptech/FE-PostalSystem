@@ -10,14 +10,12 @@ export async function POST(req: Request) {
 			},
 			body: JSON.stringify(data),
 		});
-		console.log("Response:", response);
 		return NextResponse.json({
 			data: response,
-			ok: true,
+			status: true,
 			message: "Package created successfully",
 		});
 	} catch (error) {
-		console.log("Error:", error);
 		return NextResponse.json({
 			status: false,
 			message: "Package creation failed",

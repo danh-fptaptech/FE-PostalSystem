@@ -216,7 +216,6 @@ const CreatePackage = () => {
         setFinalWeight(totalWeight);
         const response = await fetch(`/api/FeeCustom/GetFeeByPostalCodeWeight/${postalCodeSender}/${postalCodeReceiver}/${totalWeight}`);
         const data = await response.json();
-        console.log("Data service:", data.data);
         return data.data;
     }
 
@@ -313,6 +312,7 @@ const CreatePackage = () => {
         const size = formData?.package_size;
         // @ts-ignore
         const totalSize = size?.width * size?.height * size?.length;
+        // @ts-ignore
         const sizeConvert = totalSize / siteSetting.rateConvert;
         // @ts-ignore
         setFormData({ ...formData, size_convert: sizeConvert });
