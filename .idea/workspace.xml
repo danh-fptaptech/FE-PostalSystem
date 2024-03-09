@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="05f50687-0c16-425b-9f30-df604ddd0822" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(public)/tracking-shipment/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(public)/tracking-shipment/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/locations/getlocationsbyid/[id]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/locations/getlocationsbyid/[id]/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/create-package/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FormInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FormInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app/admin/roles/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerMenu.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Merge-6.3" />
+        <entry key="$PROJECT_DIR$" value="Merge-8.3" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -46,7 +45,7 @@
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -65,7 +64,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "eslint.code.style.apply.dismiss": "true",
-    "git-widget-placeholder": "Merge-8.3",
+    "git-widget-placeholder": "Final",
     "last_opened_file_path": "G:/eProject/tars-delivery-fe",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -137,7 +136,7 @@
       <workItem from="1709636591577" duration="4499000" />
       <workItem from="1709649976146" duration="28032000" />
       <workItem from="1709831167173" duration="36637000" />
-      <workItem from="1709890852488" duration="6074000" />
+      <workItem from="1709890852488" duration="12604000" />
     </task>
     <servers />
   </component>
