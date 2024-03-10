@@ -193,13 +193,13 @@ export default function Page({
                     <Grid item xs={12}>
                         <TableContainer>
                             <Table>
-                                <TableHead>
+                                <TableHead style={{ backgroundColor: 'white', border: '1px solid rgba(224, 224, 224, 1)' }}>
                                     <TableRow >
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Service Name</TableCell>
-                                        <TableCell>Service Description</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Acction</TableCell>
+                                        <TableCell align="center">ID</TableCell>
+                                        <TableCell align="center">Service Name</TableCell>
+                                        <TableCell align="center">Service Description</TableCell>
+                                        <TableCell align="center">Status</TableCell>
+                                        <TableCell align="center">Acction</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

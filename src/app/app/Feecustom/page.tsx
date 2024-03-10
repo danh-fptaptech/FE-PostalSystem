@@ -164,17 +164,17 @@ export default function FeeCustomPage({
                 <Grid item xs={12}>
                     <TableContainer>
                         <Table>
-                            <TableHead>
+                            <TableHead style={{ backgroundColor: 'white', border: '1px solid rgba(224, 224, 224, 1)' }}>
                                 <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Service</TableCell>
-                                    <TableCell>From</TableCell>
-                                    <TableCell>To</TableCell>
-                                    <TableCell>Weight (kg)</TableCell>
-                                    <TableCell>Over Weight {'($/Kg)'}</TableCell>
-                                    <TableCell>Fee Charge ($)</TableCell>
-                                    <TableCell>Time Process (h)</TableCell>
-                                    <TableCell>Status</TableCell>
+                                    <TableCell align="center">ID</TableCell>
+                                    <TableCell align="center">Service</TableCell>
+                                    <TableCell align="center">From</TableCell>
+                                    <TableCell align="center">To</TableCell>
+                                    <TableCell align="center">Weight (kg)</TableCell>
+                                    <TableCell align="center">Over Weight {'($/Kg)'}</TableCell>
+                                    <TableCell align="center">Fee Charge ($)</TableCell>
+                                    <TableCell align="center">Time Process (h)</TableCell>
+                                    <TableCell align="center">Status</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

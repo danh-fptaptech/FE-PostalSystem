@@ -14,6 +14,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/navigation'
 import Paper from '@mui/material/Paper';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { toast } from 'sonner'
 
 interface listServiceCustomType {
     id: number;
@@ -53,6 +55,8 @@ export default function ManagerFeeCustom() {
     const [selectedReceiverDistrict, setSelectedReceiverDistrict] = useState<DataLocationType | null>(null);
 
     const [editingItem, setEditingItem] = useState<listServiceCustomType>();
+    const [loading, setLoading] = useState (false);
+    const [saveId, setSaveId] = useState<number|null>(null);
 
     const handleOnchange = (e: SelectChangeEvent<string>) => {
         e.preventDefault();
@@ -79,7 +83,7 @@ export default function ManagerFeeCustom() {
         if (isLoading) {
             const fetchProvince = async () => {
                 const level = 'province';
-                const res = await fetch(`/api/Location/GetListLocationByLevel/${level}`);
+                const res = await fetch(`/api/Location/GetListLocationByLevelAll/${level}`);
                 const resData = await res.json();
                 const data = resData.data;
                 setListProvinces(data);
@@ -195,6 +199,9 @@ export default function ManagerFeeCustom() {
         return overWeightCharge;
     }
     const handleSave = async (item: listServiceCustomType) => {
+        setLoading(true);
+        setSaveId(item.id);
+
         const saveItem = {
             serviceId: item.id,
             locationIdFrom: parseInt(dataId.postalCodeFromId),
@@ -213,6 +220,11 @@ export default function ManagerFeeCustom() {
             body: JSON.stringify(saveItem)
         })
         console.log("res:", res);
+        setTimeout(() => {
+            setLoading(false);
+            setSaveId(null);
+            toast.success('Add news successfully')
+        }, 1000);
     }
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, item: listServiceCustomType) => {
         const { name, value } = e.target;
@@ -276,7 +288,7 @@ export default function ManagerFeeCustom() {
                             fullWidth
                         >
                             <MenuItem value="99">Choice Province</MenuItem>
-                            {listProvinces.length > 0 && listProvinces.map((province, index) => {
+                            {listProvinces && listProvinces.length > 0 && listProvinces.map((province, index) => {
                                 return (
                                     <MenuItem key={index} value={province.id}>{province.locationName}</MenuItem>
                                 )
@@ -406,13 +418,14 @@ export default function ManagerFeeCustom() {
                                             <TableCell>{item.weighFrom}g - {item.weighTo}g</TableCell>
                                             <TableCell>
                                                 <TextField
-                                                    error={item.overWeightCharge === 0 || item.overWeightCharge === undefined}
+                                                    error={(item.weighTo == 999999999 && item.overWeightCharge === 0)}
                                                     type='number'
                                                     label="overWeightCharge"
                                                     variant="standard"
                                                     name='overWeightCharge'
                                                     value={item.overWeightCharge}
                                                     onChange={(e) => handleOnChange(e, item)}
+                                                    disabled={item.weighTo != 999999999}
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -436,9 +449,22 @@ export default function ManagerFeeCustom() {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <Button variant="outlined" startIcon={<SaveIcon />} onClick={() => { handleSave(item) }}>
+                                            {
+                                                loading && saveId==item.id ? (
+                                                    <LoadingButton
+                                                    loading
+                                                    loadingPosition="start"
+                                                    startIcon={<SaveIcon />}
+                                                    variant="outlined"
+                                                    >
                                                     Save
-                                                </Button>
+                                                    </LoadingButton>
+                                                ) : (
+                                                    <Button variant="outlined" startIcon={<SaveIcon />} onClick={() => handleSave(item)}>
+                                                    Save
+                                                    </Button>
+                                                )
+                                            }
                                             </TableCell>
                                         </TableRow>
                                     )

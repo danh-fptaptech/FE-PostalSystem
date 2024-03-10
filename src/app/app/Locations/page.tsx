@@ -44,7 +44,9 @@ const LocationsPage = () => {
     const fetchProvince = async () => {
         try {
             const level = 'province';
-            const res = await fetch(`/api/Location/GetListLocationByLevel/${level}`);
+            const res = await fetch(`/api/Location/GetListLocationByLevelAll/${level}`,{
+                cache: 'no-store' 
+              });
             const resData = await res.json();
             const data = resData.data;
             setListProvince(data);
@@ -130,7 +132,7 @@ const LocationsPage = () => {
     }
 
     const Row = ({ row }: { row: DataLocationType }) => {
-        const [open, setOpen] = React.useState(false);
+        const [openD, setOpenD] = React.useState(false);
         const [openWard, setOpenWard] = React.useState(false);
         const [childLocations, setChildLocations] = React.useState<DataLocationType[]>([]);
         const [childWards, setChildWards] = React.useState<DataLocationType[]>([]);
@@ -141,7 +143,7 @@ const LocationsPage = () => {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Location/GetChildLocation/${id.toString()}`);
                 const data = await res.json();
                 setChildLocations(data.districs);
-                setOpen(!open);
+                setOpenD(!openD);
             } catch (error) {
                 console.error("Error fetching Districs locations:", error);
             }
@@ -167,7 +169,7 @@ const LocationsPage = () => {
                             size="small"
                             onClick={() => handleGetChild(row.id)}
                         >
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                            {openD ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
                     </TableCell>
                     <TableCell component="th" scope="row">{row.id}</TableCell>
@@ -189,7 +191,7 @@ const LocationsPage = () => {
                 </TableRow>
                 <TableRow>
                     <TableCell style={{ padding: 0 }} colSpan={9}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Collapse in={openD} timeout="auto" unmountOnExit>
                             <Box>
                                 <Table aria-label="purchases">
                                     <TableHead>
@@ -295,17 +297,17 @@ const LocationsPage = () => {
             <ChangeStatus />
             <TableContainer sx={{ marginTop: '10px' }}>
                 <Table aria-label="collapsible table">
-                    <TableHead>
+                    <TableHead style={{ backgroundColor: 'white', border: '1px solid rgba(224, 224, 224, 1)' }}>
                         <TableRow >
                             <TableCell />
                             <TableCell>Location Id</TableCell>
-                            <TableCell align="right">Location Name</TableCell>
-                            <TableCell align="right">Zip Code</TableCell>
-                            <TableCell align="right">Location Level</TableCell>
-                            <TableCell align="right">Created At</TableCell>
-                            <TableCell align="right">Updated At</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Action</TableCell>
+                            <TableCell align="center">Location Name</TableCell>
+                            <TableCell align="center">Zip Code</TableCell>
+                            <TableCell align="center">Location Level</TableCell>
+                            <TableCell align="center">Created At</TableCell>
+                            <TableCell align="center">Updated At</TableCell>
+                            <TableCell align="center">Status</TableCell>
+                            <TableCell align="center">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
