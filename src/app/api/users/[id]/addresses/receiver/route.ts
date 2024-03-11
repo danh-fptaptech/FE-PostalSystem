@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Users/All`, {
-		// header must have access token
-		headers: req.headers,
-		method: req.method,
-		credentials: req.credentials,
-	});
+export async function GET(
+	req: NextRequest,
+	{ params }: { params: { id: number } }
+) {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}/Addresses/Receiver`,
+		{
+			// header must have access token
+			headers: req.headers,
+			method: req.method,
+			credentials: req.credentials,
+		}
+	);
 	try {
 		const data = await res.json();
 
@@ -14,7 +20,7 @@ export async function GET(req: NextRequest) {
 			return NextResponse.json({
 				ok: true,
 				status: "success",
-				message: "Success to get users with all",
+				message: "Success to get user with addresses",
 				data,
 			});
 		}
@@ -35,28 +41,26 @@ export async function GET(req: NextRequest) {
 			});
 		}
 
-		console.log("Unhandled server-side error in get users with all");
+		console.log("Unhandled server-side error in get user with addresses");
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to get user",
+			message: "Error to get user with addresses",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in get users with all");
-
 		if (res.status === 401) {
 			return NextResponse.json({
 				ok: false,
 				status: "Unauthorized",
-				message: "Error to get users with all",
+				message: "Error to get user with addresses",
 			});
 		}
 
 		return NextResponse.json({
 			ok: false,
 			status: "error",
-			message: "Error to get users with all",
+			message: "Error to get user with addresses",
 		});
 	}
 }

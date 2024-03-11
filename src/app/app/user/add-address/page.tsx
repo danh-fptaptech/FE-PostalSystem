@@ -22,6 +22,8 @@ import { toast } from "sonner";
 import {
 	getProvinces,
 	getChildrenLocationsByParentId,
+	addAddressByUserId,
+	refreshToken,
 } from "@/app/_data/index";
 import { Province } from "@/types/types";
 
@@ -70,7 +72,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 const UserAddAddressPage = () => {
-	const { data: session, status } = useSession();
+	const { data: session, update } = useSession();
 	const [provinces, setProvinces] = React.useState<Province[]>([]);
 	const [districts, setDistricts] = React.useState<Province[]>([]);
 	const [wards, setWards] = React.useState<Province[]>([]);
@@ -141,24 +143,35 @@ const UserAddAddressPage = () => {
 		const ward = data.ward;
 		const postalCode = wards.find(w => w.locationName === ward)?.postalCode;
 		const newData = { ...data, postalCode };
-
-		const res = await fetch(`/api/users/${session?.user.id}/addresses`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${session?.token.accessToken}`,
-			},
-			body: JSON.stringify(newData),
-		});
-
-		const payload = await res.json();
-
-		toast.dismiss(loadingId);
-		if (payload.ok) {
-			toast.success(payload.message);
-		} else {
-			toast.error(payload.message);
+		if (session) {
+			addAddressByUserId(session.user.id, session.user.token, newData).then(
+				res => {
+					if (res.ok) {
+						toast.success(res.message);
+					} else if (res.status === "Unauthorized") {
+						refreshToken(session.user.token).then(res => {
+							if (res.ok) {
+								update({
+									token: res.data.token,
+								});
+								addAddressByUserId(
+									session.user.id,
+									res.data.token,
+									newData
+								).then(res => {
+									if (res.ok) {
+										toast.success(res.message);
+									} else {
+										toast.error(res.message);
+									}
+								});
+							}
+						});
+					}
+				}
+			);
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (

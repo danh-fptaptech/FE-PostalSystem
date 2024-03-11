@@ -16,7 +16,12 @@ export const getChildrenLocationsByParentId = async (id: number) => {
 	return res.json() as Promise<ApiResponse>;
 };
 
-// fetchData
+export const fetchUsers = async () => {
+	const res = await fetch("/api/user", {
+		method: "GET",
+	});
+	return res.json() as Promise<ApiResponse>;
+};
 
 export const fetchEmployees = async () => {
 	const res = await fetch("/api/employees", {
@@ -51,9 +56,7 @@ export const fetchAddPermission = async (
 			`/Role/${roleId}/Permission/${permissionId}`,
 		{
 			method: "POST",
-			next: {
-				revalidate: 1,
-			},
+			cache: "no-cache",
 		}
 	);
 };
@@ -79,21 +82,123 @@ export const fetchUpdatedRequests = async () => {
 	return res.json() as Promise<ApiResponse>;
 };
 
-export const fetchProvinces = async () => {
-	const res = await fetch("/api/provinces", {
-		method: "GET",
-	});
-	return res.json() as Promise<ApiResponse>;
-};
 export const fetchRoles = async () => {
 	const res = await fetch("/api/roles", {
 		method: "GET",
 	});
 	return res.json() as Promise<ApiResponse>;
 };
+
 export const fetchRolesWithPermission = async () => {
 	const res = await fetch("/api/roles/permissions", {
 		method: "GET",
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const fetchProvinces = async () => {
+	const res = await fetch("/api/provinces", {
+		method: "GET",
+	});
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const getReceiverAddressesByUserId = async (
+	id: number,
+	token: string
+) => {
+	const res = await fetch(`/api/users/${id}/addresses/receiver`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: "include",
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const getSenderAddressesByUserId = async (id: number, token: string) => {
+	const res = await fetch(`/api/users/${id}/addresses/sender`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: "include",
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const getUserById = async (id: number, token: string) => {
+	const res = await fetch(`/api/users/${id}`, {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: "include",
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const addAddressByUserId = async (
+	userId: number,
+	token: string,
+	data: {
+		postalCode: string | undefined;
+		name: string;
+		phoneNumber: string;
+		address: string;
+		city: string;
+		district: string;
+		ward: string;
+		typeInfo: number;
+	}
+) => {
+	const res = await fetch(`/api/users/${userId}/addresses`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+		credentials: "include",
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const updateUserById = async (
+	id: number,
+	token: string,
+	data: {
+		fullname: string;
+		email: string;
+		phone: string;
+	}
+) => {
+	const res = await fetch(`/api/users/${id}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: "include",
+		body: JSON.stringify(data),
+	});
+
+	return res.json() as Promise<ApiResponse>;
+};
+
+export const refreshToken = async (token: string) => {
+	const res = await fetch(`/api/users/refresh-token`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: "include",
 	});
 
 	return res.json() as Promise<ApiResponse>;

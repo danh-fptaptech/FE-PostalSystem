@@ -71,7 +71,7 @@ export default function UserChangePasswordPage() {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${session?.token.accessToken}`,
+				Authorization: `Bearer ${session?.user.token}`,
 			},
 			body: JSON.stringify({
 				oldPassword: formData.oldPassword,

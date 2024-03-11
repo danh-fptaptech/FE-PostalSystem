@@ -105,13 +105,13 @@ export default function UserPackagesPage() {
 			fetch(`/api/users/${session.user.id}/packages`, {
 				method: "GET",
 				headers: {
-					Authorization: `Bearer ${session.token.accessToken}`,
+					Authorization: `Bearer ${session.user.token}`,
 				},
 			})
 				.then(response => response.json())
 				.then(data => setUser(data.data));
 		}
-	}, [session?.user.id, session?.token.accessToken]);
+	}, [session?.user.id, session?.user.token]);
 
 	return (
 		<div style={{ height: 400, width: "100%" }}>

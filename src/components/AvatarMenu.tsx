@@ -19,6 +19,15 @@ export default function AvatarMenu() {
 		setAnchorEl(null);
 	};
 
+	const handleSignOut = () => {
+		fetch("/api/Users/revoke-token", {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${session?.user.token}`,
+			},
+		}).then(() => {});
+	};
+
 	if (status === "authenticated") {
 		return (
 			<div>

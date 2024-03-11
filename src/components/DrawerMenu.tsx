@@ -11,79 +11,131 @@ import {
 	NoteAddOutlined,
 	AccountBoxOutlined,
 	PasswordOutlined,
-	BadgeOutlined,
-	ManageAccountsOutlined,
-	DriveFileRenameOutlineOutlined,
 	GroupOutlined,
+	BadgeOutlined,
+	DriveFileRenameOutlineOutlined,
+	ManageAccountsOutlined,
+	BusinessOutlined,
+	OutboxOutlined,
+	MoveToInboxOutlined,
 	ViewListOutlined,
 } from "@mui/icons-material";
 import * as React from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { usePathname } from "next/navigation";
 import MenuGroup from "@/components/MenuGroup";
-import { useSession } from "next-auth/react";
+import PermissionCheck from "./PermissionCheck";
+
+// @ts-ignore
+function createMenu(
+	name: string,
+	icon: OverridableComponent<any>,
+	path: string,
+	permission: string,
+
+	children?: any[{
+		name: string;
+		icon: OverridableComponent<any>;
+		path: string;
+		permission: string;
+	}]
+) {
+	return { name, icon, path, permission, children };
+}
 
 export default function DrawerMenu() {
 	const path = usePathname();
 
-	// @ts-ignore
-	function createMenu(
-		name: string,
-		icon: OverridableComponent<any>,
-		path: string,
-		permission: [string],
-		children?: any[{
-			name: string;
-			icon: OverridableComponent<any>;
-			path: string;
-			permission: [string];
-		}]
-	) {
-		return { name, icon, path, permission, children };
-	}
-
 	const menu = [
-		createMenu("Dashboard", AppsOutlined, "/app", ["app.view"]),
-		createMenu("Create Package", NoteAddOutlined, "/app/create-package", [
-			"package.create",
-		]),
+		createMenu("Dashboard", AppsOutlined, "/app", "app.view"),
 		createMenu(
-			"Branches",
-			HomeWorkOutlined,
-			"/app/branches",
-			["branch"],
-			[
-				createMenu("List Branches", DomainOutlined, "/app/branches", [
-					"branch.view",
-				]),
-				createMenu("Create Branch", DomainAddOutlined, "/app/branches/create", [
-					"branch.create",
-				]),
-			]
+			"Create Package",
+			NoteAddOutlined,
+			"/app/create-package",
+			"package.create"
 		),
-		createMenu("Packages", Inventory2Outlined, "/app/packages", [
-			"package.view",
+		createMenu("Packages", Inventory2Outlined, "/app/packages", "package.view"),
+		createMenu("User Management", GroupOutlined, "/app/admin/users", "user"),
+		createMenu("Branches", HomeWorkOutlined, "/app/branches", "branch", [
+			createMenu(
+				"List Branches",
+				DomainOutlined,
+				"/app/branches",
+				"branch.view"
+			),
+			createMenu(
+				"Create Branch",
+				DomainAddOutlined,
+				"/app/branches/create",
+				"branch.create"
+			),
 		]),
 
-		createMenu("Profile", AccountBoxOutlined, "/app/user", ["user.view"]),
+		createMenu("Employee Management", BadgeOutlined, "/app/admin", "admin", [
+			createMenu(
+				"List Employees",
+				GroupOutlined,
+				"/app/admin/employees",
+				"admin.employee"
+			),
+			createMenu(
+				"Updated Requests",
+				DriveFileRenameOutlineOutlined,
+				"/app/admin/requests",
+				"admin.request"
+			),
+			createMenu(
+				"Role Management",
+				ManageAccountsOutlined,
+				"/app/admin/roles",
+				"admin.role"
+			),
+		]),
+		createMenu("Profile", AccountBoxOutlined, "/app/user", "user.view"),
 		createMenu(
 			"Change Password",
 			PasswordOutlined,
 			"/app/user/change-password",
-			["password.change"]
+			"password.change"
 		),
-		createMenu("Packages", Inventory2Outlined, "/app/user/packages", [
-			"packages.view",
-		]),
-		createMenu("Create Package", NoteAddOutlined, "/app/user/create-package", [
-			"package.create",
-		]),
-		createMenu("Add Address", NoteAddOutlined, "/app/user/add-address", [
-			"address.create",
-		]),
-		createMenu("Addresses", NoteAddOutlined, "/app/user/addresses", [
+		createMenu(
+			"Packages",
+			Inventory2Outlined,
+			"/app/user/packages",
+			"packages.view"
+		),
+		createMenu(
+			"Create Package",
+			NoteAddOutlined,
+			"/app/user/create-package",
+			"package.create"
+		),
+		createMenu(
+			"Addresses",
+			BusinessOutlined,
+			"/app/user/addresses",
 			"addresses.view",
-		]),
+			[
+				createMenu(
+					"Sender",
+					OutboxOutlined,
+					"/app/user/addresses/sender",
+					"addresses.view"
+				),
+				createMenu(
+					"Receiver",
+					MoveToInboxOutlined,
+					"/app/user/addresses/receiver",
+					"addresses.view"
+				),
+				createMenu(
+					"Add Address",
+					DomainAddOutlined,
+					"/app/user/add-address",
+					"address.create"
+				),
+			]
+		),
 	];
 
 	return (
@@ -92,10 +144,12 @@ export default function DrawerMenu() {
 			<Divider />
 			<List>
 				{menu.map((item, index) => (
-					<MenuGroup
-						item={item}
+					<PermissionCheck
+						permission={item.permission}
 						key={index}
-					></MenuGroup>
+					>
+						<MenuGroup item={item}></MenuGroup>
+					</PermissionCheck>
 				))}
 			</List>
 		</div>

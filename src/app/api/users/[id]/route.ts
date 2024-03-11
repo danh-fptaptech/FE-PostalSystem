@@ -4,18 +4,19 @@ export async function PUT(
 	req: NextRequest,
 	{ params }: { params: { id: number } }
 ) {
+	const formData = await req.json();
+
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}`,
+		{
+			headers: req.headers,
+			method: req.method,
+			credentials: req.credentials,
+			body: JSON.stringify(formData),
+		}
+	);
+
 	try {
-		const formData = await req.json();
-
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}`,
-			{
-				headers: req.headers,
-				method: req.method,
-				body: JSON.stringify(formData),
-			}
-		);
-
 		if (res.ok) {
 			return NextResponse.json({
 				ok: true,
@@ -58,7 +59,15 @@ export async function PUT(
 			message: "Error to change password",
 		});
 	} catch (error: any) {
-		console.log("Unhandled client-side error in update user", error);
+		console.log("Unhandled client-side error in update user");
+
+		if (res.status === 401) {
+			return NextResponse.json({
+				ok: false,
+				status: "Unauthorized",
+				message: "Error to update user",
+			});
+		}
 
 		return NextResponse.json({
 			ok: false,
@@ -72,16 +81,16 @@ export async function GET(
 	req: NextRequest,
 	{ params }: { params: { id: number } }
 ) {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}`,
+		{
+			// header must have access token
+			headers: req.headers,
+			method: req.method,
+			credentials: req.credentials,
+		}
+	);
 	try {
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/Users/${params.id}`,
-			{
-				// header must have access token
-				headers: req.headers,
-				method: req.method,
-			}
-		);
-
 		const data = await res.json();
 
 		if (res.ok) {
@@ -118,6 +127,13 @@ export async function GET(
 		});
 	} catch (error: any) {
 		//console.log("Unhandled client-side error in get user", error);
+		if (res.status === 401) {
+			return NextResponse.json({
+				ok: false,
+				status: "Unauthorized",
+				message: "Error to get user",
+			});
+		}
 
 		return NextResponse.json({
 			ok: false,

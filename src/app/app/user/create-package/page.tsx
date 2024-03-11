@@ -50,13 +50,13 @@ const UserCreatePackagePage = () => {
 			fetch(`/api/users/${session.user.id}/addresses`, {
 				method: "GET",
 				headers: {
-					Authorization: `Bearer ${session.token.accessToken}`,
+					Authorization: `Bearer ${session.user.token}`,
 				},
 			})
 				.then(response => response.json())
 				.then(data => setAddresses(data.data));
 		}
-	}, [session?.user.id, session?.token.accessToken]);
+	}, [session?.user.id, session?.user.token]);
 
 	const onSubmit = async (data: Schema) => {
 		const loadingId = toast.loading("Creating...");
@@ -79,7 +79,7 @@ const UserCreatePackagePage = () => {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${session?.token.accessToken}`,
+				Authorization: `Bearer ${session?.user.token}`,
 			},
 			body: JSON.stringify(newData),
 		});

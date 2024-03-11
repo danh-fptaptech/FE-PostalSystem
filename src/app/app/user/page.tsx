@@ -9,6 +9,7 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import { Box, Typography, Button } from "@mui/material";
 import { toast } from "sonner";
+import { getUserById, refreshToken, updateUserById } from "@/app/_data";
 
 const schema = z.object({
 	fullname: z
@@ -35,7 +36,8 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 const UserProfile = () => {
-	const { data: session, status } = useSession();
+	const [user, setUser] = React.useState<Schema | null>(null);
+	const { data: session, update } = useSession();
 
 	const {
 		register,
@@ -45,26 +47,57 @@ const UserProfile = () => {
 		resolver: zodResolver(schema),
 	});
 
+	React.useEffect(() => {
+		if (session) {
+			getUserById(session.user.id, session.user.token).then(res => {
+				if (res.ok) {
+					setUser(res.data);
+				} else if (res.status === "Unauthorized") {
+					refreshToken(session.user.token).then(res => {
+						if (res.ok) {
+							update({
+								token: res.data.token,
+							});
+						}
+					});
+				}
+			});
+		}
+	}, [session, update]);
+
 	const onSubmit = async (data: Schema) => {
 		const loadingId = toast.loading("Changing...");
 
-		const res = await fetch(`/api/users/${session?.user.id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${session?.token.accessToken}`,
-			},
-			body: JSON.stringify(data),
-		});
-
-		const payload = await res.json();
+		if (session) {
+			updateUserById(session.user.id, session.user.token, data).then(res => {
+				if (res.ok) {
+					setUser(data);
+					toast.success(res.message);
+				} else if (res.status === "Unauthorized") {
+					refreshToken(session.user.token).then(res => {
+						if (res.ok) {
+							update({
+								token: res.data.token,
+							});
+							updateUserById(session.user.id, res.data.token, data).then(
+								res => {
+									if (res.ok) {
+										setUser(data);
+										toast.success(res.message);
+									} else {
+										toast.error(res.message);
+									}
+								}
+							);
+						}
+					});
+				} else {
+					toast.error(res.message);
+				}
+			});
+		}
 
 		toast.dismiss(loadingId);
-		if (payload.ok) {
-			toast.success(payload.message);
-		} else {
-			toast.error(payload.message);
-		}
 	};
 
 	return (
@@ -88,8 +121,8 @@ const UserProfile = () => {
 				Profile
 			</Typography>
 			<TextField
+				defaultValue={user?.fullname}
 				variant="outlined"
-				defaultValue={session?.user.fullname}
 				fullWidth
 				label="Fullname"
 				{...register("fullname", {
@@ -98,10 +131,11 @@ const UserProfile = () => {
 				error={!!errors.fullname}
 				helperText={errors.fullname?.message}
 				margin="normal"
+				InputLabelProps={{ shrink: true }}
 			/>
 			<TextField
+				defaultValue={user?.email}
 				variant="outlined"
-				defaultValue={session?.user.email}
 				fullWidth
 				label="Email"
 				{...register("email", {
@@ -110,13 +144,15 @@ const UserProfile = () => {
 				error={!!errors.email}
 				helperText={errors.email?.message}
 				margin="normal"
+				disabled
 				InputProps={{
 					readOnly: true,
 				}}
+				InputLabelProps={{ shrink: true }}
 			/>
 			<TextField
+				defaultValue={user?.phone}
 				variant="outlined"
-				defaultValue={session?.user.phone}
 				fullWidth
 				label="Phone"
 				{...register("phone", {
@@ -125,9 +161,7 @@ const UserProfile = () => {
 				error={!!errors.phone}
 				helperText={errors.phone?.message}
 				margin="normal"
-				InputProps={{
-					readOnly: true,
-				}}
+				InputLabelProps={{ shrink: true }}
 			/>
 
 			<Button

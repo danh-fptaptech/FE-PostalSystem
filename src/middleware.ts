@@ -74,7 +74,6 @@ export const config = {
 		 * - favicon.ico (favicon file)
 		 */
 		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
-		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
 	],
 };
 
@@ -104,12 +103,16 @@ const paths = [
 		permission: ["address.create"],
 	},
 	{
-		path: "/app/user/addresses",
+		path: "/app/user/addresses/receiver",
 		permission: ["addresses.view"],
 	},
 	{
-		path: "/register",
-		permission: ["user.access", "user.all", "home.access"],
+		path: "/app/user/addresses/sender",
+		permission: ["addresses.view"],
+	},
+	{
+		path: "/app/user/addresses",
+		permission: ["addresses.view"],
 	},
 	{
 		path: "/app/admin/users",
@@ -140,7 +143,7 @@ const paths = [
 
 	{
 		path: "/app/employee",
-		permission: ["user.access", "Employee", "Branch Manager"],
+		permission: ["user.access", "Employee", "Branch Manager", "Delivery"],
 	},
 	{
 		path: "/app/historylogs",
@@ -152,11 +155,6 @@ const paths = [
 			"Warehouse",
 		],
 	},
-	{
-		path: "/app/user",
-		permission: ["user.access", "User"],
-	},
-
 	{
 		path: "/app/branches",
 		permission: ["user.access", "Admin"],

@@ -72,7 +72,6 @@ const UserLoginForm = () => {
 					redirect: false,
 					username: data.userId,
 					password: data.password,
-					role: "User",
 				}),
 				{
 					success(data) {
@@ -101,8 +100,6 @@ const UserLoginForm = () => {
 				backgroundColor: "white",
 			}}
 		>
-			}}
-		>
 			{error && (
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -112,8 +109,6 @@ const UserLoginForm = () => {
 			<Typography
 				variant="h5"
 				component="div"
-				sx={{ mb: 2 }}
-			>
 				sx={{ mb: 2 }}
 			>
 				Login Your Account
@@ -134,8 +129,6 @@ const UserLoginForm = () => {
 				margin="normal"
 				error={!!errors.password}
 			>
-				error={!!errors.password}
-			>
 				<InputLabel htmlFor="password">Password</InputLabel>
 				<OutlinedInput
 					label="Password"
@@ -154,8 +147,6 @@ const UserLoginForm = () => {
 								onMouseUp={handleMouseEvents}
 								edge="end"
 							>
-								edge="end"
-							>
 								{showPassword ? <VisibilityOff /> : <Visibility />}
 							</IconButton>
 						</InputAdornment>
@@ -169,8 +160,6 @@ const UserLoginForm = () => {
 				variant="contained"
 				color="error"
 				fullWidth
-				sx={{ mt: 2 }}
-			>
 				sx={{ mt: 2 }}
 			>
 				Login
