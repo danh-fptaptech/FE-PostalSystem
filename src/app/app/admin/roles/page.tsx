@@ -47,6 +47,7 @@ export default function RoleManagement() {
 	const [openAddPermisson, setOpenAddPermisson] = React.useState(false);
 	const [openAddRole, setOpenAddRole] = React.useState(false);
 	const [createPermission, setCreatePermission] = React.useState(false);
+
 	const {
 		register: roleRegister,
 		handleSubmit: roleHandleSubmit,
@@ -92,41 +93,50 @@ export default function RoleManagement() {
 
 	// Add new role
 	async function AddRole(role: CreateRoleRequest) {
-		const res = await fetch("/api/roles/", {
-			method: "POST",
-			body: JSON.stringify(role),
-		});
+		const loadingId = toast.loading("Loading...");
+		try {
+			const res = await fetch("/api/roles/", {
+				method: "POST",
+				body: JSON.stringify(role),
+			});
 
-		const payload = (await res.json()) as ApiResponse;
+			const payload = (await res.json()) as ApiResponse;
 
-		if (payload.ok) {
-			const response = await fetchRolesWithPermission();
-			setRoles(await response.data);
-			setOpenAddRole(false);
-			toast.success(payload.message);
-		} else {
-			toast.error(payload.message);
+			if (payload.ok) {
+				const response = await fetchRolesWithPermission();
+				setRoles(await response.data);
+				setOpenAddRole(false);
+				toast.success(payload.message);
+			} else {
+				toast.error(payload.message);
+			}
+		} catch (error) {
+			console.log(error);
 		}
+		toast.dismiss(loadingId);
 	}
 	// Remove role
 	const handleDeleteRole = async (roleId: number) => {
+		const loadingId = toast.loading("Loading...");
 		const response = await fetch(`/api/roles/${roleId}`, {
 			method: "DELETE",
 		});
 
 		const payload = (await response.json()) as ApiResponse;
 
-		if (roleId <= 3 && payload.ok) {
+		if (roleId <= 4 && payload.ok) {
 			toast.error("Failed to delete! The role is one of system roles.");
-		} else if (roleId > 3 && payload.ok) {
+		} else if (roleId > 4 && payload.ok) {
 			setRoles(pre => pre.filter(role => role.id !== roleId));
 			toast.success(payload.message);
 		} else {
 			toast.error(payload.message);
 		}
+		toast.dismiss(loadingId);
 	};
 	//Create permission
 	async function createOnePermission(formData: CreatePermission) {
+		const loadingId = toast.loading("Loading...");
 		const res = await fetch(`/api/permissions`, {
 			method: "POST",
 			body: JSON.stringify(formData),
@@ -142,9 +152,11 @@ export default function RoleManagement() {
 		} else {
 			toast.error(payload.message);
 		}
+		toast.dismiss(loadingId);
 	}
 	// Add permissions into role
 	async function AddPermission(formData: CreatePermissionRequest) {
+		const loadingId = toast.loading("Loading...");
 		const res = await fetch(`/api/roles/${selectedRoleId}/permission`, {
 			method: "POST",
 			body: JSON.stringify(formData),
@@ -166,10 +178,12 @@ export default function RoleManagement() {
 		} else {
 			toast.error(payload.message);
 		}
+		toast.dismiss(loadingId);
 	}
 
 	// Remove permission from role
 	const handleDelete = async (roleId: number, permissionName: string) => {
+		const loadingId = toast.loading("Loading...");
 		const res = await fetch(
 			`/api/roles/${roleId}/permission/${permissionName}`,
 			{
@@ -195,6 +209,7 @@ export default function RoleManagement() {
 		} else {
 			toast.error(payload.message);
 		}
+		toast.dismiss(loadingId);
 	};
 
 	return (

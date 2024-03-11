@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import EmployeeInfoPage from "./[employeeCode]/EmployeeInfo";
 import ChangePasswordPage from "./[employeeCode]/ChangePassword";
-import HistoryLogsPage from "./[employeeCode]/HistoryLogs";
+import HistoryLogsPage from "../historylogs/page";
 
 export default function EmployeeInfo() {
 	const [value, setValue] = React.useState(0);
@@ -36,14 +36,9 @@ export default function EmployeeInfo() {
 						value={1}
 						label="Change Password"
 					/>
-					<Tab
-						value={2}
-						label="History Logs"
-					/>
 				</Tabs>
 				{value === 0 && <EmployeeInfoPage />}
 				{value === 1 && <ChangePasswordPage />}
-				{value === 2 && <HistoryLogsPage />}
 			</Box>
 		</>
 	);

@@ -18,6 +18,16 @@ export interface Province {
 	postalCode: string;
 }
 
+export interface User {
+	id: number;
+	fullname: string;
+	avatar: string;
+	email: string;
+	phoneNumber: string;
+	status: number;
+	createAt: string;
+}
+
 export interface Employee {
 	id: number;
 	employeeCode: string;
@@ -40,10 +50,11 @@ export interface Employee {
 		{
 			id: number;
 			packageId: number;
+			employeeId: number;
 			photos: string[];
 			historyNote: string;
 			step: number;
-			prcessStep: number[];
+			processStep: number;
 			updatedAt: string;
 		}
 	];
@@ -89,6 +100,7 @@ export interface CreatePermissionRequest {
 }
 export interface CreateRoleRequest {
 	name: string;
+	status: 1;
 }
 export interface CreatePermission {
 	name: string;

@@ -6,6 +6,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Avatar } from "@mui/material";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function AvatarMenu() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -31,10 +32,7 @@ export default function AvatarMenu() {
 					>
 						<Avatar src="">a</Avatar>
 					</Button>
-					<div className="flex">
-						<p>Welcome</p>
-						<p className="uppercase px-2">{session.user.fullname}</p>
-					</div>
+					<div className="flex"></div>
 				</div>
 				<Menu
 					id="basic-menu"
@@ -45,7 +43,20 @@ export default function AvatarMenu() {
 						"aria-labelledby": "basic-button",
 					}}
 				>
-					<MenuItem onClick={handleClose}>Profile</MenuItem>
+					<MenuItem>
+						<p className="uppercase">{session.user.fullname}</p>
+					</MenuItem>
+					<MenuItem
+						color="black"
+						onClick={handleClose}
+					>
+						<Link
+							href="/app/employee"
+							className="text-decoration-none py-1 text-dark"
+						>
+							Profiles
+						</Link>
+					</MenuItem>
 					<MenuItem onClick={() => signOut()}>Logout</MenuItem>
 				</Menu>
 			</div>

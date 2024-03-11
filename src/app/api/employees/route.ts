@@ -41,7 +41,7 @@ export async function GET() {
 // POST
 export async function POST(req: Request) {
 	const employee = await req.json();
-	employee.avatar = "asssa";
+	employee.avatar = "avatar.jpg";
 	try {
 		const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/Employee`, {
 			method: "POST",

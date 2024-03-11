@@ -22,7 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "@mui/material/Alert";
-import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const schema = z.object({
 	userId: z.string({
@@ -38,8 +38,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-const EmployeeLoginForm = () => {
-	const { data: session } = useSession();
+const AdminLoginForm = () => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [error, setError] = React.useState("");
 	const router = useRouter();
@@ -63,6 +62,7 @@ const EmployeeLoginForm = () => {
 	};
 
 	const onSubmit = async (data: Schema) => {
+		const loadingId = toast.loading("Loading ... ");
 		try {
 			const employeeRes = await signIn("credentials", {
 				redirect: false,
@@ -73,25 +73,15 @@ const EmployeeLoginForm = () => {
 			});
 
 			if (!employeeRes?.error) {
-				router.push("/app/employee");
+				router.push("/app/admin/employees");
 			} else {
 				setError("Invalid email or password");
 			}
 		} catch (error) {
 			setError("An unexpected error happened");
 		}
+		toast.dismiss(loadingId);
 	};
-
-	// React.useEffect(() => {
-	// 	if (session?.user) {
-	// 		if (session.user.role.name === "Branch Manager") {
-	// 			router.push("/app/branch-manager");
-	// 		}
-	// 		if (session.user.role.name === "Employee") {
-	// 			router.push("/app/employee");
-	// 		}
-	// 	}
-	// }, [session, router]);
 
 	return (
 		<Box
@@ -178,4 +168,4 @@ const EmployeeLoginForm = () => {
 	);
 };
 
-export default EmployeeLoginForm;
+export default AdminLoginForm;

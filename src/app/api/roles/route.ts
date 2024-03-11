@@ -37,6 +37,7 @@ export async function GET() {
 // API add role
 export async function POST(req: Request) {
 	const role = await req.json();
+	role.status = 1;
 	try {
 		const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/Role`, {
 			method: "POST",

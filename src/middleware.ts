@@ -74,7 +74,7 @@ export const config = {
 		 * - _next/image (image optimization files)
 		 * - favicon.ico (favicon file)
 		 */
-		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|$).*)",
+		"/((?!api|_next/static|_next/image|favicon.ico|auth/|access-denied|forgot-password|reset-password|register|$).*)",
 	],
 };
 
@@ -83,9 +83,14 @@ const paths = [
 		path: "/register",
 		permission: ["user.access", "user.all", "home.access"],
 	},
+
+	{
+		path: "/app/admin/users",
+		permission: ["Admin"],
+	},
 	{
 		path: "/app/admin/employees",
-		permission: ["Admin"],
+		permission: ["Admin", "Branch Manager"],
 	},
 	{
 		path: "/app/admin/roles",
@@ -102,17 +107,27 @@ const paths = [
 	},
 
 	{
+		path: "/app/packages",
+		permission: ["user.access", "Employee", "Branch Manager", "Admin"],
+	},
+
+	{
 		path: "/app/employee",
 		permission: ["user.access", "Employee", "Branch Manager"],
 	},
 	{
+		path: "/app/historylogs",
+		permission: [
+			"user.access",
+			"Employee",
+			"Branch Manager",
+			"Delivery",
+			"Warehouse",
+		],
+	},
+	{
 		path: "/app/user",
 		permission: ["user.access", "User"],
-	},
-
-	{
-		path: "/app/users",
-		permission: ["user.access", "user.all", "home.access"],
 	},
 
 	{

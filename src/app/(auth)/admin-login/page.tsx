@@ -1,9 +1,10 @@
 "use client";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import React from "react";
 import { useSession } from "next-auth/react";
 import AdminLoginForm from "./AdminLoginForm";
+import { Metadata } from "next";
+import React from "react";
 
 export default function LoginPage() {
 	const [value, setValue] = React.useState(0);

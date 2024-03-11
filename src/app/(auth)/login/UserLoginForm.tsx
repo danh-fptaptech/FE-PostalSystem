@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import LinkBehaviour from "../../../components/LinkBehaviour";
+import LinkBehaviour from "@/components/LinkBehaviour";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -70,12 +70,13 @@ const UserLoginForm = () => {
 				redirect: false,
 				username: data.userId,
 				password: data.password,
+				role: "User",
 				//			callbackUrl,
 			});
 
 			if (!res?.error) {
 				//router.push(callbackUrl);
-				router.push("/app/dashboard");
+				router.push("/app/user");
 			} else {
 				setError("Invalid email or password");
 			}
@@ -108,7 +109,7 @@ const UserLoginForm = () => {
 				component="div"
 				sx={{ mb: 2 }}
 			>
-				Login Form
+				Login Your Account
 			</Typography>
 			<TextField
 				fullWidth
@@ -166,6 +167,7 @@ const UserLoginForm = () => {
 					component={LinkBehaviour}
 					href="/forgot-password"
 					variant="body2"
+					className="text-decoration-none"
 				>
 					Forgot Password?
 				</Link>
@@ -174,6 +176,7 @@ const UserLoginForm = () => {
 						component={LinkBehaviour}
 						href="/register"
 						variant="body2"
+						className="text-decoration-none hover:font-semibold"
 					>
 						Don&apos;t have an account? Sign Up
 					</Link>

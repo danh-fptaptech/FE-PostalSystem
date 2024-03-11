@@ -21,7 +21,6 @@ export default function LoginPage() {
 				centered
 			>
 				<Tab label="User" />
-				<Tab label="Employee" />
 			</Tabs>
 
 			{value === 0 && <UserLoginForm />}

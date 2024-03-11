@@ -2,12 +2,17 @@
 
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { fetchLocations } from "@/app/_data/index";
+import {
+	fetchLocations,
+	getChildrenLocationsByParentId,
+	getProvinces,
+} from "@/app/_data/index";
 import React from "react";
 import {
 	ApiResponse,
 	Employee,
 	Location,
+	Province,
 	UpdateInfoRequest,
 } from "@/types/types";
 import { toast } from "sonner";
@@ -25,11 +30,13 @@ import {
 	Box,
 } from "@mui/material";
 import Loading from "@/components/Loading";
+import { register } from "module";
 
 export default function EmployeeInfoPage() {
 	const [employee, setEmployee] = React.useState<Employee>();
-	const [locations, setLocations] = React.useState<Location[]>([]);
 	const [loading, setLoading] = React.useState(true);
+	const [provinces, setProvinces] = React.useState<Province[]>([]);
+	const [districts, setDistricts] = React.useState<Province[]>([]);
 	const [openDialogUpdatedResquest, setOpenDialogUpdatedResquest] =
 		React.useState(false);
 
@@ -38,7 +45,10 @@ export default function EmployeeInfoPage() {
 		register: updatedRegister,
 		handleSubmit: handleUpdatedSubmit,
 		formState: { errors: updatedErrors },
+		setValue,
+		watch,
 	} = useForm<UpdateInfoRequest>();
+	const province = watch("province");
 
 	// handle send updated  request
 	async function SendUpdatedRequest(data: UpdateInfoRequest) {
@@ -65,20 +75,41 @@ export default function EmployeeInfoPage() {
 	}
 
 	React.useEffect(() => {
+		const provinceId = provinces.find(p => p.locationName === province)?.id;
+
+		if (!provinceId) {
+			setDistricts([]);
+		} else {
+			getChildrenLocationsByParentId(provinceId).then(res => {
+				if (res.ok) {
+					if (res.data.districs) {
+						setDistricts(res.data.districs);
+					} else {
+						setDistricts([]);
+					}
+				} else {
+					setDistricts([]);
+				}
+			});
+		}
+	}, [province, provinces]);
+
+	React.useEffect(() => {
 		const fetchData = () => {
 			Promise.all([
 				fetch(`/api/employees/${session?.user.employeeCode}`),
-				fetchLocations(),
+				getProvinces(),
+				,
 			]).then(res => {
-				const [empRes, locRes] = res;
+				const [empRes, provinceRes] = res;
 				empRes.json().then(payload => {
 					if (payload.ok) {
 						setEmployee(payload.data);
 					}
 				});
 
-				if (locRes.ok) {
-					setLocations(locRes.data);
+				if (provinceRes.ok) {
+					setProvinces(provinceRes.data);
 				}
 
 				setLoading(false);
@@ -144,9 +175,9 @@ export default function EmployeeInfoPage() {
 							</Box>
 
 							<Box className="flex items-center">
-								<InputLabel className="mr-2">Postal Code:</InputLabel>
+								<InputLabel className="mr-2">Role:</InputLabel>
 								<Typography className="text-sm">
-									{employee?.postalCode ? employee?.postalCode : "... updating"}
+									{employee?.roleName}
 								</Typography>
 							</Box>
 						</Box>
@@ -205,13 +236,8 @@ export default function EmployeeInfoPage() {
 								<div className="my-3">
 									<label className="font-semibold">Email:</label>
 									<input
-										{...updatedRegister("email", {
-											required: "Email is required.",
-											pattern: {
-												value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-												message: "Invalid email address format.",
-											},
-										})}
+										readOnly
+										disabled
 										defaultValue={employee?.email}
 										className="min-w-[300px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 									/>
@@ -248,18 +274,15 @@ export default function EmployeeInfoPage() {
 										<select
 											{...updatedRegister("province")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
-											id="province"
-											defaultValue={employee?.province}>
-											<option>Select province</option>
-											{locations
-												.filter(location => location.locationLevel === 0)
-												.map(province => (
-													<option
-														key={province.id}
-														value={province.locationName}>
-														{province.locationName}
-													</option>
-												))}
+											id="province">
+											<option value="">Select province</option>
+											{provinces.map(province => (
+												<option
+													key={province.id}
+													value={province.locationName}>
+													{province.locationName}
+												</option>
+											))}
 										</select>
 									</div>
 
@@ -269,17 +292,15 @@ export default function EmployeeInfoPage() {
 											{...updatedRegister("district")}
 											className="min-w-[150px] border rounded-md p-[10px] cursor-pointer border-slate-500 w-full hover:border-green-700"
 											id="district"
-											defaultValue={employee?.district}>
-											<option>Select district</option>
-											{locations
-												.filter(location => location.locationLevel === 1)
-												.map(district => (
-													<option
-														key={district.id}
-														value={district.locationName}>
-														{district.locationName}
-													</option>
-												))}
+											disabled={districts.length === 0}>
+											<option value="">Select district</option>
+											{districts.map(district => (
+												<option
+													key={district.id}
+													value={district.locationName}>
+													{district.locationName}
+												</option>
+											))}
 										</select>
 									</div>
 								</div>
